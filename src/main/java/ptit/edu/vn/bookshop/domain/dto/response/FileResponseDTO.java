@@ -14,5 +14,6 @@ import java.time.Instant;
 @AllArgsConstructor
 public class FileResponseDTO {
     private String fileName;
+    private String urlFile;
     private Instant uploadAt;
 }

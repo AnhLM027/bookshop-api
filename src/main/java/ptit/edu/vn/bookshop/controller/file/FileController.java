@@ -32,7 +32,7 @@ public class FileController {
     private String baseURI;
 
     @PostMapping("/files")
-    @ApiMessage("upload single file")
+    @ApiMessage("File uploaded successfully")
     public ResponseEntity<FileResponseDTO> uploadFile(
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "folder", required = false) String folder) throws URISyntaxException, IOException, StorageException {
@@ -50,9 +50,7 @@ public class FileController {
         // create folder
         this.fileService.createUploadedFile(baseURI + folder);
         // store file in folder
-        String uploadFile = this.fileService.storeFile(file, folder);
-
-        FileResponseDTO fileResponseDTO = new FileResponseDTO(uploadFile, Instant.now());
+        FileResponseDTO fileResponseDTO = this.fileService.storeFile(file, folder);
         return ResponseEntity.ok().body(fileResponseDTO);
     }
 }

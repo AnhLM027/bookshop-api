@@ -1,5 +1,6 @@
 package ptit.edu.vn.bookshop.service.impl;
 
+import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
 import ptit.edu.vn.bookshop.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -42,7 +44,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String storeFile(MultipartFile file, String folder) throws IOException, URISyntaxException {
+    public FileResponseDTO storeFile(MultipartFile file, String folder) throws IOException, URISyntaxException {
         //chuẩn hóa tên avatar
         String safeName = file.getOriginalFilename();
         if (safeName != null) {
@@ -58,6 +60,10 @@ public class FileServiceImpl implements FileService {
             Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
         }
         log.info("Stored file at: {}", path.toAbsolutePath());
-        return finalName;
+        FileResponseDTO response = new FileResponseDTO();
+        response.setFileName(finalName);
+        response.setUrlFile(uri.toString());
+        response.setUploadAt(Instant.now());
+        return response;
     }
 }
