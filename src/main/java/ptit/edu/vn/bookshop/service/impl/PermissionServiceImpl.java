@@ -51,12 +51,7 @@ public class PermissionServiceImpl implements PermissionService {
         if (!permissionOptional.isPresent()) {
             throw new IdInvalidException("Permission Id is invalid");
         }
-        if (permissionRequestDTO.getApiPath() != null && !permissionRequestDTO.getApiPath().isEmpty()
-                && permissionRequestDTO.getModule() != null && !permissionRequestDTO.getModule().isEmpty()
-                && permissionRequestDTO.getMethod() != null && !permissionRequestDTO.getMethod().isEmpty()
-                && this.permissionRepository.existsByModuleAndApiPathAndMethod(permissionRequestDTO.getModule(), permissionRequestDTO.getApiPath(), permissionRequestDTO.getMethod())) {
-            throw new DataIntegrityViolationException("Permission already exists with same module, apiPath and method");
-        }
+
         Permission permission = permissionOptional.get();
         if (permissionRequestDTO.getName() != null) permission.setName(permissionRequestDTO.getName());
         if (permissionRequestDTO.getApiPath() != null) permission.setApiPath(permissionRequestDTO.getApiPath());
