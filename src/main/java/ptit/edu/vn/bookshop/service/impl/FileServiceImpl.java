@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
+import java.util.UUID;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -25,19 +26,16 @@ public class FileServiceImpl implements FileService {
     private static final Logger log = LoggerFactory.getLogger(FileServiceImpl.class);
 
     @Value("${app.upload-file.base-path}")
-    private String baseURI;
+    private String basePath;
 
-    public void createUploadedFile(String folder) throws URISyntaxException {
-        URI uri = new URI(folder);
-        Path path = Paths.get(uri);
-        File file = path.toFile();
-        if (!file.isDirectory()) {
-            try {
-                Files.createDirectories(path);
-                log.info("Created upload directory at: {}", path.toAbsolutePath());
-            } catch (IOException ex) {
-                log.error("Failed to create upload directory at: {}", path.toAbsolutePath(), ex);
-            }
+    @Value("${app.domain}")
+    private String domain;
+
+    public void createUploadedFile(String folder) throws URISyntaxException, IOException {
+        Path path = Paths.get(basePath+ folder+"/");
+        if (!Files.exists(path)) {
+            Files.createDirectories(path);
+            log.info("Created upload directory at: {}", path.toAbsolutePath());
         } else {
             log.info("Upload directory already exists at: {}", path.toAbsolutePath());
         }
@@ -47,22 +45,27 @@ public class FileServiceImpl implements FileService {
     public FileResponseDTO storeFile(MultipartFile file, String folder) throws IOException, URISyntaxException {
         //chuẩn hóa tên avatar
         String safeName = file.getOriginalFilename();
-        if (safeName != null) {
-            safeName = safeName.replaceAll(" ", "");
+        String extension = "";
+
+        int dotIndex = safeName.lastIndexOf('.');
+        if (dotIndex > 0) {
+            extension = safeName.substring(dotIndex);
         }
+        safeName = UUID.randomUUID().toString();
 
         // create unique fileName
-        String finalName = System.currentTimeMillis() + "_" + safeName;
+        String finalName = safeName+extension;
 
-        URI uri = new URI(baseURI + folder + "/" + finalName);
-        Path path = Paths.get(uri);
+        Path path = Paths.get(basePath, folder);
+        Path filePath = path.resolve(finalName);
+        Files.createDirectories(path);
         try (InputStream inputStream = file.getInputStream()) {
-            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }
         log.info("Stored file at: {}", path.toAbsolutePath());
         FileResponseDTO response = new FileResponseDTO();
         response.setFileName(finalName);
-        response.setUrlFile(uri.toString());
+        response.setUrlFile(domain+"/api/v1/files/" + folder + "/" + finalName);
         response.setUploadAt(Instant.now());
         return response;
     }
