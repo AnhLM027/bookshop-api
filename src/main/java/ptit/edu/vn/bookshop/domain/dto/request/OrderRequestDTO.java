@@ -21,7 +21,10 @@ public class OrderRequestDTO {
     public static class ShippingAddress {
         private String name;
         private String phone;
-        private String address;
+        private String street;
+        private String ward;
+        private String district;
+        private String city;
     }
 
     @Getter

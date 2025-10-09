@@ -11,14 +11,12 @@ import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
-import ptit.edu.vn.bookshop.domain.entity.Permission;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
 import ptit.edu.vn.bookshop.domain.entity.UserToken;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
-import ptit.edu.vn.bookshop.repository.PermissionRepository;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.UserRepository;
 import ptit.edu.vn.bookshop.repository.UserTokenRepository;
@@ -51,17 +49,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final EmailService emailService;
     private final UserTokenRepository userTokenRepository;
 
-    public UserServiceImpl(EmailService emailService, UserRepository userRepository, RoleRepository roleRepository, PermissionRepository permissionRepository,
+    public UserServiceImpl(EmailService emailService, UserRepository userRepository, RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder, UserMapper userMapper, UserTokenRepository userTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.emailService = emailService;
@@ -89,6 +85,12 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = this.passwordEncoder.encode(userRequestDTO.getPassword());
         user.setPassword(encodedPassword);
 
+        // Kiểm tra avatar
+        if (userRequestDTO.getAvatar() != null && !userRequestDTO.getAvatar().isEmpty()) {
+            // Có thể build url từ fileName
+            String avatarUrl = "http://localhost:8080/storage/avatar/" + userRequestDTO.getAvatar();
+            user.setAvatar(avatarUrl);
+        }
         return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
     }
 
@@ -113,12 +115,19 @@ public class UserServiceImpl implements UserService {
         if (userRequestDTO.getGender() != null) user.setGender(userRequestDTO.getGender());
         if (userRequestDTO.getStatus() != null) user.setStatus(userRequestDTO.getStatus());
         if (userRequestDTO.getAvatar() != null) user.setAvatar(userRequestDTO.getAvatar());
-        if (userRequestDTO.getRole() != null) {
-            Role role = roleRepository.findById(userRequestDTO.getRole().getId())
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
-            user.setRole(role);
-        }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            if (userRequestDTO.getStatus() != null) user.setStatus(userRequestDTO.getStatus());
+            if (userRequestDTO.getRole() != null) {
+                Role role = roleRepository.findById(userRequestDTO.getRole().getId())
+                        .orElseThrow(() -> new RuntimeException("Role not found"));
+                user.setRole(role);
+            }
+        }
 
         return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
     }

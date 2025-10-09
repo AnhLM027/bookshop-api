@@ -19,7 +19,7 @@ public class OrderMapper {
         OrderResponseDTO.ShippingInfo shippingInfo = new OrderResponseDTO.ShippingInfo();
         shippingInfo.setReceiverName(order.getReceiverName());
         shippingInfo.setReceiverPhone(order.getReceiverPhone());
-        shippingInfo.setReceiverAddress(order.getReceiverAddress());
+//        shippingInfo.setReceiverAddress(order.getReceiverAddress());
 
         // Payment
 

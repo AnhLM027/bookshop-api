@@ -15,7 +15,6 @@ import java.time.LocalDate;
 public class UserUpdateRequestDTO {
     private String name;
     private String email;
-    private String address;
     private LocalDate dateOfBirth;
     private String phone;
     @Enumerated(EnumType.STRING)

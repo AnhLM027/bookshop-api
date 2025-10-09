@@ -22,7 +22,6 @@ public class UserResponseDTO {
     private Long id;
     private String name;
     private String email;
-    private String address;
     private String phone;
     private LocalDate dateOfBirth;
     private GenderEnum gender;

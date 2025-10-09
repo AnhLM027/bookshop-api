@@ -54,10 +54,6 @@ public class User implements Serializable {
     @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
     private String password;
 
-    @Column(name = "address", length = 200)
-    @Size(max = 200, message = "Address must be at most 200 characters")
-    private String address;
-
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
@@ -103,6 +99,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<UserToken> userTokens;
+
+    @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Address> addresses;
 
     @PrePersist
     public void handleBeforeCreate() {

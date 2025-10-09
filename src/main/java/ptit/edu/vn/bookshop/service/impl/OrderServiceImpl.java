@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         order.setReceiverName(orderRequestDTO.getShippingAddress().getName());
         order.setReceiverPhone(orderRequestDTO.getShippingAddress().getPhone());
-        order.setReceiverAddress(orderRequestDTO.getShippingAddress().getAddress());
+//        order.setReceiverAddress(orderRequestDTO.getShippingAddress().getAddress());
         order.setOrderDate(Instant.now());
         order.setPaymentMethod("CASH");
         order.setNotes(orderRequestDTO.getNote());
