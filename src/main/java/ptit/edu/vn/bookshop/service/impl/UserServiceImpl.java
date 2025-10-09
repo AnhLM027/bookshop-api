@@ -109,26 +109,11 @@ public class UserServiceImpl implements UserService {
 
         if (userRequestDTO.getName() != null) user.setName(userRequestDTO.getName());
         if (userRequestDTO.getEmail() != null) user.setEmail(userRequestDTO.getEmail());
-        if (userRequestDTO.getAddress() != null) user.setAddress(userRequestDTO.getAddress());
         if (userRequestDTO.getDateOfBirth() != null) user.setDateOfBirth(userRequestDTO.getDateOfBirth());
         if (userRequestDTO.getPhone() != null) user.setPhone(userRequestDTO.getPhone());
         if (userRequestDTO.getGender() != null) user.setGender(userRequestDTO.getGender());
         if (userRequestDTO.getStatus() != null) user.setStatus(userRequestDTO.getStatus());
         if (userRequestDTO.getAvatar() != null) user.setAvatar(userRequestDTO.getAvatar());
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-
-        if (isAdmin) {
-            if (userRequestDTO.getStatus() != null) user.setStatus(userRequestDTO.getStatus());
-            if (userRequestDTO.getRole() != null) {
-                Role role = roleRepository.findById(userRequestDTO.getRole().getId())
-                        .orElseThrow(() -> new RuntimeException("Role not found"));
-                user.setRole(role);
-            }
-        }
-
         return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
     }
 
