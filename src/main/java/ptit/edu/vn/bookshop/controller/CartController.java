@@ -2,17 +2,13 @@ package ptit.edu.vn.bookshop.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ptit.edu.vn.bookshop.domain.dto.request.AddCartItemRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.CartUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CartResponseDTO;
 import ptit.edu.vn.bookshop.service.CartService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")

@@ -28,5 +28,5 @@ public class AuthorResponseDTO {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     private Instant createdAt;
-    private String createdBy;
+    private Instant updateAt;
 }

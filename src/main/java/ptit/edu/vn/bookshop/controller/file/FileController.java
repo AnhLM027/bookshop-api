@@ -64,7 +64,7 @@ public class FileController {
         return ResponseEntity.ok().body(fileResponseDTO);
     }
 
-    @GetMapping("files/{folder}/{filename}")
+    @GetMapping("/files/{folder}/{filename}")
     public ResponseEntity<Resource> serveFile(@PathVariable String folder, @PathVariable String filename) throws IOException {
         Path file = Paths.get(basePath, folder, filename);
         Resource resource = new UrlResource(file.toUri());

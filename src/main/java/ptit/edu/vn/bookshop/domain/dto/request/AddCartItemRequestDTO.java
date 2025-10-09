@@ -1,13 +1,18 @@
 package ptit.edu.vn.bookshop.domain.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class AddCartItemRequestDTO {
+
+    @NotNull(message = "Product ID is required")
+    @Min(value = 1, message = "Product ID must be a positive number")
     private Long productId;
-    @Min(1)
-    private int quantity;
+
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private Integer quantity;
+
 }

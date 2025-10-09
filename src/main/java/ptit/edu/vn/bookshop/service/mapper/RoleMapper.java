@@ -1,6 +1,6 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
-import ptit.edu.vn.bookshop.domain.dto.request.RoleCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.RoleRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.RoleResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class RoleMapper {
 
-    public Role mapRoleRequestDtoToRole(RoleCreateRequestDTO dto) {
+    public Role mapRoleRequestDtoToRole(RoleRequestDTO dto) {
         Role role = new Role();
         role.setName(dto.getName());
         role.setDescription(dto.getDescription());
@@ -26,6 +26,8 @@ public class RoleMapper {
         roleResponseDTO.setStatus(role.getStatus());
         roleResponseDTO.setCreatedBy(role.getCreatedBy());
         roleResponseDTO.setCreatedAt(role.getCreatedAt());
+        roleResponseDTO.setUpdatedAt(role.getUpdatedAt());
+        roleResponseDTO.setUpdatedBy(role.getUpdatedBy());
         if (role.getPermissions() != null) {
             List<RoleResponseDTO.RolePermissionResponseDTO> permissions = role.getPermissions()
                     .stream()

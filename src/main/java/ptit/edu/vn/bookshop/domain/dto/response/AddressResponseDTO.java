@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,4 +25,6 @@ public class AddressResponseDTO {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     private Boolean isDefault;
+    private Instant createdAt;
+    private Instant updateAt;
 }

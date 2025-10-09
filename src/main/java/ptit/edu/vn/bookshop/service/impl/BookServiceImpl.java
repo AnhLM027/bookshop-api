@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.bookshop.domain.constant.BookStatusEnum;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.BookCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.BookUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.BookRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.BookResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.BookPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Author;
@@ -45,7 +44,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookResponseDTO createBook(BookCreateRequestDTO bookRequestDTO) {
+    public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
         Book book = this.bookMapper.mapBookRequestDtoToBook(bookRequestDTO);
         Long category_id = bookRequestDTO.getCategory().getId();
         Long author_id = bookRequestDTO.getAuthor().getId();
@@ -88,7 +87,6 @@ public class BookServiceImpl implements BookService {
             String bookImageUrl = "http://localhost:8080/storage/book/" + bookRequestDTO.getImage();
             book.setImage(bookImageUrl);
         }
-        book.setStatus(bookRequestDTO.getQuantity() > 0 ? BookStatusEnum.AVAILABLE : BookStatusEnum.OUT_OF_STOCK);
         book.setCategory(category);
         book.setAuthor(author);
         book.setPublisher(publisher);
@@ -96,7 +94,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookResponseDTO updateBook(BookUpdateRequestDTO bookRequestDTO, Long id) {
+    public BookResponseDTO updateBook(BookRequestDTO bookRequestDTO, Long id) {
         Book book = this.bookRepository.findById(id)
                 .orElseThrow(() -> new IdInvalidException("Book does not exists"));
 

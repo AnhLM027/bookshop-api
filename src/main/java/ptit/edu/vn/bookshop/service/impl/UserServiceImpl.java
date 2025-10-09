@@ -1,19 +1,13 @@
 package ptit.edu.vn.bookshop.service.impl;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.constant.TokenType;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.ForgotPasswordRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.PasswordChangeRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.UserRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
-import ptit.edu.vn.bookshop.domain.entity.UserToken;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
@@ -35,8 +29,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +60,7 @@ public class UserServiceImpl implements UserService {
     private String baseURI;
 
     @Override
-    public UserResponseDTO createUser(UserCreateRequestDTO userRequestDTO) {
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         // Kiểm tra email đã tồn tại
         if (userRequestDTO.getEmail() != null && this.userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists");
@@ -85,17 +77,11 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = this.passwordEncoder.encode(userRequestDTO.getPassword());
         user.setPassword(encodedPassword);
 
-        // Kiểm tra avatar
-        if (userRequestDTO.getAvatar() != null && !userRequestDTO.getAvatar().isEmpty()) {
-            // Có thể build url từ fileName
-            String avatarUrl = "http://localhost:8080/storage/avatar/" + userRequestDTO.getAvatar();
-            user.setAvatar(avatarUrl);
-        }
         return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
     }
 
     @Override
-    public UserResponseDTO updateUser(UserUpdateRequestDTO userRequestDTO, Long id) {
+    public UserResponseDTO updateUser(UserRequestDTO userRequestDTO, Long id) {
         Optional<User> userOptional = this.userRepository.findById(id);
         if (!userOptional.isPresent()) {
             throw new IdInvalidException("User not found");

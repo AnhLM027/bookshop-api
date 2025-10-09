@@ -16,10 +16,12 @@ public class AddressMapper {
         dto.setWard(address.getWard());
         dto.setDistrict(address.getDistrict());
         dto.setCity(address.getCity());
-//        dto.setProvince(address.getProvince()); // ✅ nếu có
+//        dto.setProvince(address.getProvince());
 //        dto.setPostalCode(address.getPostalCode());
         dto.setIsDefault(address.getIsDefault());
         dto.setStatus(address.getStatus());
+        dto.setCreatedAt(address.getCreatedAt());
+        dto.setUpdateAt(address.getUpdatedAt());
         return dto;
     }
 }

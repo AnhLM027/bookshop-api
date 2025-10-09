@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
+import ptit.edu.vn.bookshop.domain.dto.request.UserRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.RegisterRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public User mapperUserCreateDtoToUser(UserCreateRequestDTO dto) {
+    public User mapperUserCreateDtoToUser(UserRequestDTO dto) {
         User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
@@ -40,6 +40,8 @@ public class UserMapper {
         userResponseDTO.setAvatarUrl(userEntity.getAvatar());
         userResponseDTO.setCreatedBy(userEntity.getCreatedBy());
         userResponseDTO.setCreatedAt(userEntity.getCreatedAt());
+        userResponseDTO.setUpdatedBy(userEntity.getUpdatedBy());
+        userResponseDTO.setUpdatedAt(userEntity.getUpdatedAt());
         if (userEntity.getRole() != null) {
             UserResponseDTO.UserRoleResponseDTO role = new UserResponseDTO.UserRoleResponseDTO();
             role.setId(userEntity.getRole().getId());

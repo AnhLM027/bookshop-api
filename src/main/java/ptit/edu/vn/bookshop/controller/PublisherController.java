@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.PublisherCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.PublisherUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PublisherRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PublisherResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.PublisherPageResponseDTO;
 import ptit.edu.vn.bookshop.service.PublisherService;
@@ -24,14 +22,14 @@ public class PublisherController {
 
     @PostMapping("/publishers")
     @ApiMessage("Publisher created successfully")
-    public ResponseEntity<PublisherResponseDTO> createPublisher(@Valid @RequestBody PublisherCreateRequestDTO publisherRequestDTO) {
+    public ResponseEntity<PublisherResponseDTO> createPublisher(@Valid @RequestBody PublisherRequestDTO publisherRequestDTO) {
         PublisherResponseDTO publisherResponseDTO = this.publisherService.createPublisher(publisherRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(publisherResponseDTO);
     }
 
     @PutMapping("/publishers/{id}")
     @ApiMessage("Publisher updated successfully")
-    public ResponseEntity<PublisherResponseDTO> updatePublisher(@Valid @RequestBody PublisherUpdateRequestDTO publisherRequestDTO, @PathVariable Long id) {
+    public ResponseEntity<PublisherResponseDTO> updatePublisher(@Valid @RequestBody PublisherRequestDTO publisherRequestDTO, @PathVariable Long id) {
         PublisherResponseDTO publisherResponseDTO = this.publisherService.updatePublisher(publisherRequestDTO, id);
         return ResponseEntity.ok().body(publisherResponseDTO);
     }

@@ -24,6 +24,8 @@ public class RoleResponseDTO {
     private String description;
     private Instant createdAt;
     private String createdBy;
+    private Instant updatedAt;
+    private String updatedBy;
     private List<RolePermissionResponseDTO> permissions;
 
     @Getter

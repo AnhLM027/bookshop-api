@@ -26,7 +26,6 @@ public class Book implements Serializable{
     private Long id;
 
     @Column(name = "name", length = 200)
-    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(name = "title")
@@ -39,18 +38,15 @@ public class Book implements Serializable{
     private String language;
 
     @Column(name = "price")
-    @NotNull(message = "Price must not be null")
     private BigDecimal price;
 
     @Column(name = "quantity")
-    @NotNull(message = "Quantity must not be null")
     private Integer quantity;
 
     @Column(name = "discount")
     private BigDecimal discount;
 
     @Column(name = "impage")
-    @NotBlank(message = "Image must not be blank")
     private String image;
 
     @Column(name = "status")
@@ -97,6 +93,14 @@ public class Book implements Serializable{
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            if (this.quantity != null && this.quantity > 0) {
+                this.status = BookStatusEnum.AVAILABLE;
+            } else {
+                this.status = BookStatusEnum.OUT_OF_STOCK;
+            }
+        }
     }
 
     @PreUpdate

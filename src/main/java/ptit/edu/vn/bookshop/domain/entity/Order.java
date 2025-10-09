@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
+import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -67,11 +69,18 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private Instant orderDate;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    @Column(name = "created_by", length = 100)
+    private String createdBy;
+
+    @Column(name = "updated_by", length = 100)
+    private String updatedBy;
+
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
@@ -87,15 +96,17 @@ public class Order {
 
     @PrePersist
     public void handleBeforeCreate() {
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
-        this.orderDate = Instant.now(); // tự gán ngày đặt hàng khi tạo
-//        if (this.status == null) {
-//            this.status = OrderStatusEnum.PENDING; // mặc định khi mới tạo đơn
-//        }
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            this.status = OrderStatusEnum.PENDING;
+        }
     }
 
     @PreUpdate
     public void handleBeforeUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.updatedAt = Instant.now();
     }
 }

@@ -22,7 +22,6 @@ public class Category implements Serializable {
     private Long id;
 
     @Column(name = "name", length = 200, nullable = false)
-    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -52,6 +51,9 @@ public class Category implements Serializable {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        if (this.status == null) {
+            this.status = StatusEnum.ACTIVE;
+        }
     }
 
     @PreUpdate

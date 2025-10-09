@@ -19,6 +19,7 @@ public class OrderResponseDTO {
     private Long id;
     private OrderStatusEnum status;
     private Instant createdAt;
+    private Instant updateAt;
     private ShippingInfo shippingInfo;
     private String paymentMethod;
     private List<OrderItemResponse> items;

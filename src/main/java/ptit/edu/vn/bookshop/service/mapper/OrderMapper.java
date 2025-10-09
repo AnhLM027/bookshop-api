@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class OrderMapper {
@@ -19,9 +22,18 @@ public class OrderMapper {
         OrderResponseDTO.ShippingInfo shippingInfo = new OrderResponseDTO.ShippingInfo();
         shippingInfo.setReceiverName(order.getReceiverName());
         shippingInfo.setReceiverPhone(order.getReceiverPhone());
-//        shippingInfo.setReceiverAddress(order.getReceiverAddress());
+        String fullAddress  = Stream.of(
+                        order.getStreet(),
+                        order.getWard(),
+                        order.getDistrict(),
+                        order.getCity()
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(", "));
+        shippingInfo.setReceiverAddress(fullAddress);
 
         // Payment
+
 
         // Summary
         OrderResponseDTO.Summary summary = new OrderResponseDTO.Summary();
@@ -61,6 +73,9 @@ public class OrderMapper {
         responseDTO.setShippingInfo(shippingInfo);
         responseDTO.setSummary(summary);
         responseDTO.setItems(orderItemResponseList);
+
+        //payment
+        responseDTO.setPaymentMethod(order.getPaymentMethod());
 
         return responseDTO;
     }

@@ -30,6 +30,8 @@ public class UserResponseDTO {
     private String avatarUrl;
     private Instant createdAt;
     private String createdBy;
+    private Instant updatedAt;
+    private String updatedBy;
     private UserRoleResponseDTO role;
 
     @Getter

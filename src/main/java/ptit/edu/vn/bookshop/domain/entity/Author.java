@@ -26,12 +26,9 @@ public class Author implements Serializable {
     private Long id;
 
     @Column(name = "name", length = 200, nullable = false)
-    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(name = "date_of_birth")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @Column(name = "gender")
@@ -69,6 +66,10 @@ public class Author implements Serializable {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            this.status = StatusEnum.ACTIVE;
+        }
     }
 
     @PreUpdate

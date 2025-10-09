@@ -10,22 +10,9 @@ import java.util.List;
 @Getter
 public class OrderRequestDTO {
     private List<ItemRequestDTO> cartItems;
-    private ShippingAddress shippingAddress;
-   // private String paymentMethod;
+//    private String paymentMethod;
     private String note;
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ShippingAddress {
-        private String name;
-        private String phone;
-        private String street;
-        private String ward;
-        private String district;
-        private String city;
-    }
 
     @Getter
     @Setter

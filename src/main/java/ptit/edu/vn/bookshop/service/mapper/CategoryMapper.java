@@ -1,6 +1,6 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.CategoryRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CategoryResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Category;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryMapper {
 
-    public Category mapCategoryRequestDTOtoCategory(CategoryCreateRequestDTO categoryRequestDTO) {
+    public Category mapCategoryRequestDTOtoCategory(CategoryRequestDTO categoryRequestDTO) {
         Category category = new Category();
         category.setName(categoryRequestDTO.getName());
         category.setDescription(categoryRequestDTO.getDescription());
@@ -21,8 +21,8 @@ public class CategoryMapper {
         categoryResponseDTO.setName(category.getName());
         categoryResponseDTO.setDescription(category.getDescription());
         categoryResponseDTO.setStatus(category.getStatus());
-        categoryResponseDTO.setCreatedBy(category.getCreatedBy());
         categoryResponseDTO.setCreatedAt(category.getCreatedAt());
+        categoryResponseDTO.setUpdateAt(category.getUpdatedAt());
         return categoryResponseDTO;
     }
 }

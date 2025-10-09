@@ -41,6 +41,7 @@ public class OrderItem {
     @PrePersist
     public void handleBeforeCreate() {
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
     }
 
     @PreUpdate

@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PermissionRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PermissionResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.PermissionPageResponseDTO;
 import ptit.edu.vn.bookshop.service.PermissionService;
@@ -24,14 +23,14 @@ public class PermissionController {
 
     @PostMapping("/permissions")
     @ApiMessage("Permission created successfully")
-    public ResponseEntity<PermissionResponseDTO> createPermission(@Valid @RequestBody PermissionCreateRequestDTO permissionRequestDTO){
+    public ResponseEntity<PermissionResponseDTO> createPermission(@Valid @RequestBody PermissionRequestDTO permissionRequestDTO){
         PermissionResponseDTO permissionResponseDTO = this.permissionService.createPermission(permissionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(permissionResponseDTO);
     }
 
     @PutMapping("/permissions/{id}")
     @ApiMessage("Permission updated successfully")
-    public ResponseEntity<PermissionResponseDTO> updatePermission(@Valid @RequestBody PermissionUpdateRequestDTO permissionRequestDTO, @PathVariable Long id){
+    public ResponseEntity<PermissionResponseDTO> updatePermission(@Valid @RequestBody PermissionRequestDTO permissionRequestDTO, @PathVariable Long id){
         PermissionResponseDTO permissionResponseDTO = this.permissionService.updatePermission(permissionRequestDTO, id);
         return ResponseEntity.ok().body(permissionResponseDTO);
     }

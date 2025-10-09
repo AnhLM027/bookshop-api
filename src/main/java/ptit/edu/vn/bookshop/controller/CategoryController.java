@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.CategoryRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CategoryResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.CategoryPageResponseDTO;
 import ptit.edu.vn.bookshop.service.CategoryService;
@@ -25,14 +23,14 @@ public class CategoryController {
 
     @PostMapping("/categories")
     @ApiMessage("Category created successfully")
-    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryCreateRequestDTO categoryRequestDTO){
+    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO){
         CategoryResponseDTO categoryResponseDTO = this.categoryService.createCategory(categoryRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponseDTO);
     }
 
     @PutMapping("/categories/{id}")
     @ApiMessage("Category updated successfully")
-    public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid @RequestBody CategoryUpdateRequestDTO categoryRequestDTO, @PathVariable Long id){
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO, @PathVariable Long id){
         CategoryResponseDTO categoryResponseDTO = this.categoryService.updateCategory(categoryRequestDTO, id);
         return ResponseEntity.ok().body(categoryResponseDTO);
     }

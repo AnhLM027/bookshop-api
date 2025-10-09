@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.AuthorRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.AuthorResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.AuthorPageResponseDTO;
 import ptit.edu.vn.bookshop.service.AuthorService;
@@ -24,14 +22,14 @@ public class AuthorController {
 
     @PostMapping("/authors")
     @ApiMessage("Author created successfully")
-    public ResponseEntity<AuthorResponseDTO> createAuthor(@Valid @RequestBody AuthorCreateRequestDTO authorRequestDTO) {
+    public ResponseEntity<AuthorResponseDTO> createAuthor(@Valid @RequestBody AuthorRequestDTO authorRequestDTO) {
         AuthorResponseDTO authorResponseDTO = this.authorService.createAuthor(authorRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(authorResponseDTO);
     }
 
     @PutMapping("/authors/{id}")
     @ApiMessage("Author updated successfully")
-    public ResponseEntity<AuthorResponseDTO> updateAuthor(@Valid @RequestBody AuthorUpdateRequestDTO authorRequestDTO, @PathVariable Long id) {
+    public ResponseEntity<AuthorResponseDTO> updateAuthor(@Valid @RequestBody AuthorRequestDTO authorRequestDTO, @PathVariable Long id) {
         AuthorResponseDTO authorResponseDTO = this.authorService.updateAuthor(authorRequestDTO, id);
         return ResponseEntity.ok().body(authorResponseDTO);
     }

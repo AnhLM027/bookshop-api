@@ -25,14 +25,12 @@ public class Publisher implements Serializable {
     private Long id;
 
     @Column(name = "name", length = 200, nullable = false)
-    @NotBlank(message = "Publisher name must not be blank")
     private String name;
 
     @Column(name = "address", length = 300)
     private String address;
 
     @Column(name = "phone", length = 20)
-    @Pattern(regexp = "^[0-9\\-\\+]{9,15}$", message = "Phone number is not valid")
     private String phone;
 
     @Column(name = "email", length = 200, unique = true)
@@ -43,10 +41,10 @@ public class Publisher implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -64,6 +62,10 @@ public class Publisher implements Serializable {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            this.status = StatusEnum.ACTIVE;
+        }
     }
 
     @PreUpdate

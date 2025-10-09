@@ -1,13 +1,13 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
 import org.springframework.stereotype.Component;
-import ptit.edu.vn.bookshop.domain.dto.request.PublisherCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PublisherRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PublisherResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Publisher;
 
 @Component
 public class PublisherMapper {
-    public Publisher mapPublisherRequestDTOToPublisher(PublisherCreateRequestDTO requestDTO) {
+    public Publisher mapPublisherRequestDTOToPublisher(PublisherRequestDTO requestDTO) {
         Publisher publisher = new Publisher();
         publisher.setName(requestDTO.getName());
         publisher.setAddress(requestDTO.getAddress());
@@ -25,7 +25,7 @@ public class PublisherMapper {
         publisherResponseDTO.setPhone(publisher.getPhone());
         publisherResponseDTO.setStatus(publisher.getStatus());
         publisherResponseDTO.setCreatedAt(publisher.getCreatedAt());
-        publisherResponseDTO.setCreatedBy(publisher.getCreatedBy());
+        publisherResponseDTO.setUpdateAt(publisher.getUpdatedAt());
         return publisherResponseDTO;
     }
 }
