@@ -3,8 +3,7 @@ package ptit.edu.vn.bookshop.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.CategoryRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CategoryResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.CategoryPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Category;
@@ -33,17 +32,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponseDTO createCategory(CategoryCreateRequestDTO categoryRequestDTO) {
+    public CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO) {
         if (this.categoryRepository.existsByName(categoryRequestDTO.getName())) {
             throw new DataIntegrityViolationException("Category already exists with same name!");
         }
         Category category = this.categoryMapper.mapCategoryRequestDTOtoCategory(categoryRequestDTO);
-        category.setStatus(StatusEnum.ACTIVE);
         return this.categoryMapper.mapCategorytoCategoryResponseDTO(this.categoryRepository.save(category));
     }
 
     @Override
-    public CategoryResponseDTO updateCategory(CategoryUpdateRequestDTO categoryRequestDTO, Long id) {
+    public CategoryResponseDTO updateCategory(CategoryRequestDTO categoryRequestDTO, Long id) {
         Optional<Category> categoryOptional = this.categoryRepository.findById(id);
         if (!categoryOptional.isPresent()) {
             throw new IdInvalidException("Category does not exist!");

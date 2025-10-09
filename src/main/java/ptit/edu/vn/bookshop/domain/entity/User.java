@@ -29,20 +29,12 @@ public class User implements Serializable {
     private Long id;
 
     @Column(name = "name", length = 200, nullable = false)
-    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(name = "date_of_birth")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @Column(name = "email", length = 200, unique = true, nullable = false)
-    @NotBlank(message = "Email must not be blank")
-    @Pattern(
-            regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.(com|vn)$",
-            message = "Email must end with .com or .vn"
-    )
     private String email;
 
     @Column(name = "gender")
@@ -50,29 +42,22 @@ public class User implements Serializable {
     private GenderEnum gender;
 
     @Column(name = "password", length = 200, nullable = false)
-    @NotBlank(message = "Password must not be blank")
-    @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
     private String password;
-
-    @Column(name = "address", length = 200)
-    @Size(max = 200, message = "Address must be at most 200 characters")
-    private String address;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
     @Column(name = "phone", length = 20, nullable = false)
-    @Pattern(regexp = "^[0-9\\-\\+]{9,15}$", message = "Phone number is not valid")
     private String phone;
 
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -104,10 +89,18 @@ public class User implements Serializable {
     @JsonIgnore
     private List<UserToken> userTokens;
 
+    @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Address> addresses;
+
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            this.status = StatusEnum.ACTIVE;
+        }
     }
 
     @PreUpdate

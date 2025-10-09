@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.UserRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.service.UserService;
@@ -25,15 +24,15 @@ public class UserController {
 
     @PostMapping("/users")
     @ApiMessage("User created successfully")
-    public ResponseEntity<UserResponseDTO> addUser(@Valid @RequestBody UserCreateRequestDTO userCreateRequestDTO) {
-        UserResponseDTO userResponseDTO = this.userService.createUser(userCreateRequestDTO);
+    public ResponseEntity<UserResponseDTO> addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        UserResponseDTO userResponseDTO = this.userService.createUser(userRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
 
     @PutMapping("/users/{id}")
     @ApiMessage("User updated successfully")
-    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserUpdateRequestDTO userUpdateRequestDTO, @PathVariable Long id) {
-        UserResponseDTO userResponseDTO = this.userService.updateUser(userUpdateRequestDTO, id);
+    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRequestDTO userRequestDTO, @PathVariable Long id) {
+        UserResponseDTO userResponseDTO = this.userService.updateUser(userRequestDTO, id);
         return ResponseEntity.ok().body(userResponseDTO);
     }
 

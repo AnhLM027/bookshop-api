@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.RoleCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.RoleUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.RoleRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.RoleResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.RolePageResponseDTO;
 import ptit.edu.vn.bookshop.service.RoleService;
@@ -24,14 +23,14 @@ public class RoleController {
 
     @PostMapping("/roles")
     @ApiMessage("Role created successfully")
-    public ResponseEntity<RoleResponseDTO> createRole(@Valid @RequestBody RoleCreateRequestDTO roleRequestDTO) {
+    public ResponseEntity<RoleResponseDTO> createRole(@Valid @RequestBody RoleRequestDTO roleRequestDTO) {
         RoleResponseDTO roleResponseDTO = this.roleService.createRole(roleRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(roleResponseDTO);
     }
 
     @PutMapping("/roles/{id}")
     @ApiMessage("Role updated successfully")
-    public ResponseEntity<RoleResponseDTO> updateRole(@PathVariable Long id, @Valid @RequestBody RoleUpdateRequestDTO roleRequestDTO) {
+    public ResponseEntity<RoleResponseDTO> updateRole(@PathVariable Long id, @Valid @RequestBody RoleRequestDTO roleRequestDTO) {
         RoleResponseDTO roleResponseDTO = this.roleService.updateRole(roleRequestDTO, id);
         return ResponseEntity.ok().body(roleResponseDTO);
     }

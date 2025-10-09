@@ -1,24 +1,16 @@
 package ptit.edu.vn.bookshop.service.impl;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.constant.TokenType;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.ForgotPasswordRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.PasswordChangeRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.UserRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
-import ptit.edu.vn.bookshop.domain.entity.Permission;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
-import ptit.edu.vn.bookshop.domain.entity.UserToken;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
-import ptit.edu.vn.bookshop.repository.PermissionRepository;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.UserRepository;
 import ptit.edu.vn.bookshop.repository.UserTokenRepository;
@@ -37,8 +29,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,17 +41,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final EmailService emailService;
     private final UserTokenRepository userTokenRepository;
 
-    public UserServiceImpl(EmailService emailService, UserRepository userRepository, RoleRepository roleRepository, PermissionRepository permissionRepository,
+    public UserServiceImpl(EmailService emailService, UserRepository userRepository, RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder, UserMapper userMapper, UserTokenRepository userTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.emailService = emailService;
@@ -72,7 +60,7 @@ public class UserServiceImpl implements UserService {
     private String baseURI;
 
     @Override
-    public UserResponseDTO createUser(UserCreateRequestDTO userRequestDTO) {
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         // Kiểm tra email đã tồn tại
         if (userRequestDTO.getEmail() != null && this.userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists");
@@ -93,7 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateUser(UserUpdateRequestDTO userRequestDTO, Long id) {
+    public UserResponseDTO updateUser(UserRequestDTO userRequestDTO, Long id) {
         Optional<User> userOptional = this.userRepository.findById(id);
         if (!userOptional.isPresent()) {
             throw new IdInvalidException("User not found");
@@ -107,19 +95,11 @@ public class UserServiceImpl implements UserService {
 
         if (userRequestDTO.getName() != null) user.setName(userRequestDTO.getName());
         if (userRequestDTO.getEmail() != null) user.setEmail(userRequestDTO.getEmail());
-        if (userRequestDTO.getAddress() != null) user.setAddress(userRequestDTO.getAddress());
         if (userRequestDTO.getDateOfBirth() != null) user.setDateOfBirth(userRequestDTO.getDateOfBirth());
         if (userRequestDTO.getPhone() != null) user.setPhone(userRequestDTO.getPhone());
         if (userRequestDTO.getGender() != null) user.setGender(userRequestDTO.getGender());
         if (userRequestDTO.getStatus() != null) user.setStatus(userRequestDTO.getStatus());
         if (userRequestDTO.getAvatar() != null) user.setAvatar(userRequestDTO.getAvatar());
-        if (userRequestDTO.getRole() != null) {
-            Role role = roleRepository.findById(userRequestDTO.getRole().getId())
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
-            user.setRole(role);
-        }
-
-
         return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
     }
 

@@ -1,27 +1,32 @@
 package ptit.edu.vn.bookshop.controller.file;
 
 import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
 import ptit.edu.vn.bookshop.exception.StorageException;
 import ptit.edu.vn.bookshop.service.FileService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.io.FileNotFoundException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -58,11 +63,9 @@ public class FileController {
         FileResponseDTO fileResponseDTO = this.fileService.storeFile(file, folder);
         return ResponseEntity.ok().body(fileResponseDTO);
     }
-    @GetMapping("files/{folder}/{filename}")
-    public ResponseEntity<Resource> serveFile(
-            @PathVariable String folder,
-            @PathVariable String filename
-    ) throws IOException {
+
+    @GetMapping("/files/{folder}/{filename}")
+    public ResponseEntity<Resource> serveFile(@PathVariable String folder, @PathVariable String filename) throws IOException {
         Path file = Paths.get(basePath, folder, filename);
         Resource resource = new UrlResource(file.toUri());
         String contentType = Files.probeContentType(file);

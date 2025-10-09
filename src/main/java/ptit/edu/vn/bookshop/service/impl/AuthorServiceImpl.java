@@ -3,8 +3,7 @@ package ptit.edu.vn.bookshop.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.AuthorRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.AuthorResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.AuthorPageResponseDTO;
 import ptit.edu.vn.bookshop.repository.specification.AuthorSpecificationBuilder;
@@ -32,14 +31,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorResponseDTO createAuthor(AuthorCreateRequestDTO authorRequestDTO) {
+    public AuthorResponseDTO createAuthor(AuthorRequestDTO authorRequestDTO) {
         Author author = this.authorMapper.mapAuthorRequestDtoToAuthor(authorRequestDTO);
-        author.setStatus(StatusEnum.ACTIVE);
         return this.authorMapper.mapAuthorToAuthorResponseDTO(this.authorRepository.save(author));
     }
 
     @Override
-    public AuthorResponseDTO updateAuthor(AuthorUpdateRequestDTO authorRequestDTO, Long id) {
+    public AuthorResponseDTO updateAuthor(AuthorRequestDTO authorRequestDTO, Long id) {
         Optional<Author> authorOptional = this.authorRepository.findById(id);
         if (!authorOptional.isPresent()) {
             throw new IdInvalidException("Author id not found");

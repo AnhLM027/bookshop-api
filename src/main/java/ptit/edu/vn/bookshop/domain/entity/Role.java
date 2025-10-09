@@ -27,22 +27,26 @@ public class Role implements Serializable {
     private Long id;
 
     @Column(name = "name", length = 200, nullable = false)
-    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(name = "status")
-    @NotNull(message = "Active status must not be null")
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
     @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private String description;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
     private String createdBy;
+
+    @Column(name = "updated_by", length = 100)
+    private String updatedBy;
 
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
@@ -61,6 +65,16 @@ public class Role implements Serializable {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            this.status = StatusEnum.ACTIVE;
+        }
+    }
+
+    @PreUpdate
+    public void handleBeforeUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        this.updatedAt = Instant.now();
     }
 
 }

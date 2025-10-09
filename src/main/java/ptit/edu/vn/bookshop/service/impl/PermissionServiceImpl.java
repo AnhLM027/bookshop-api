@@ -3,8 +3,7 @@ package ptit.edu.vn.bookshop.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PermissionRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.PermissionPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PermissionResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Permission;
@@ -33,7 +32,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public PermissionResponseDTO createPermission(PermissionCreateRequestDTO permissionRequestDTO) {
+    public PermissionResponseDTO createPermission(PermissionRequestDTO permissionRequestDTO) {
         if (permissionRequestDTO.getApiPath() != null && !permissionRequestDTO.getApiPath().isEmpty()
                 && permissionRequestDTO.getModule() != null && !permissionRequestDTO.getModule().isEmpty()
                 && permissionRequestDTO.getMethod() != null && !permissionRequestDTO.getMethod().isEmpty()
@@ -41,12 +40,11 @@ public class PermissionServiceImpl implements PermissionService {
             throw new DataIntegrityViolationException("Permission already exists with same module, apiPath and method");
         }
         Permission permission = this.permissonMapper.mapperPermissionRequestDtoToPerMission(permissionRequestDTO);
-        permission.setStatus(StatusEnum.ACTIVE);
         return this.permissonMapper.mapperPermissionToPermissionResponse(this.permissionRepository.save(permission));
     }
 
     @Override
-    public PermissionResponseDTO updatePermission(PermissionUpdateRequestDTO permissionRequestDTO, Long id) {
+    public PermissionResponseDTO updatePermission(PermissionRequestDTO permissionRequestDTO, Long id) {
         Optional<Permission> permissionOptional = this.permissionRepository.findById(id);
         if (!permissionOptional.isPresent()) {
             throw new IdInvalidException("Permission Id is invalid");
@@ -68,7 +66,7 @@ public class PermissionServiceImpl implements PermissionService {
             throw new IdInvalidException("Permission Id is invalid");
         }
         Permission permission = permissionOptional.get();
-        permission.setStatus(StatusEnum.INACTIVE);
+        permission.setStatus(StatusEnum.DELETED);
         this.permissionRepository.save(permission);
     }
 

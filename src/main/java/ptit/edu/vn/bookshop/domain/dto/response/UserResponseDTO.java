@@ -22,7 +22,6 @@ public class UserResponseDTO {
     private Long id;
     private String name;
     private String email;
-    private String address;
     private String phone;
     private LocalDate dateOfBirth;
     private GenderEnum gender;
@@ -31,6 +30,8 @@ public class UserResponseDTO {
     private String avatarUrl;
     private Instant createdAt;
     private String createdBy;
+    private Instant updatedAt;
+    private String updatedBy;
     private UserRoleResponseDTO role;
 
     @Getter

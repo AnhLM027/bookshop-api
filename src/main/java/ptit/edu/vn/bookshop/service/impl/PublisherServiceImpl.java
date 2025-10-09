@@ -3,8 +3,7 @@ package ptit.edu.vn.bookshop.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.PublisherCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.PublisherUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PublisherRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PublisherResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.PublisherPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Publisher;
@@ -32,17 +31,16 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    public PublisherResponseDTO createPublisher(PublisherCreateRequestDTO publisherRequestDTO) {
+    public PublisherResponseDTO createPublisher(PublisherRequestDTO publisherRequestDTO) {
         if (publisherRequestDTO.getEmail() != null && this.publisherRepository.existsByEmail(publisherRequestDTO.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
         Publisher publisher = this.publisherMapper.mapPublisherRequestDTOToPublisher(publisherRequestDTO);
-        publisher.setStatus(StatusEnum.ACTIVE);
         return this.publisherMapper.mapPublisherToPublisherResponseDTO(this.publisherRepository.save(publisher));
     }
 
     @Override
-    public PublisherResponseDTO updatePublisher(PublisherUpdateRequestDTO publisherRequestDTO, Long id) {
+    public PublisherResponseDTO updatePublisher(PublisherRequestDTO publisherRequestDTO, Long id) {
         Optional<Publisher> publisherOptional = this.publisherRepository.findById(id);
         if (!publisherOptional.isPresent()) {
             throw new IdInvalidException("Publisher not found");

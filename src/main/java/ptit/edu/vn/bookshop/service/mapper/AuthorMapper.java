@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
 
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.AuthorRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.AuthorResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Author;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorMapper {
 
-    public Author mapAuthorRequestDtoToAuthor(AuthorCreateRequestDTO dto) {
+    public Author mapAuthorRequestDtoToAuthor(AuthorRequestDTO dto) {
         Author author = new Author();
         author.setName(dto.getName());
         author.setDateOfBirth(dto.getDateOfBirth());
@@ -28,8 +28,8 @@ public class AuthorMapper {
         authorResponseDTO.setCountry(author.getCountry());
         authorResponseDTO.setBiography(author.getBiography());
         authorResponseDTO.setStatus(author.getStatus());
-        authorResponseDTO.setCreatedBy(author.getCreatedBy());
         authorResponseDTO.setCreatedAt(author.getCreatedAt());
+        authorResponseDTO.setUpdateAt(author.getUpdatedAt());
         return authorResponseDTO;
     }
 }

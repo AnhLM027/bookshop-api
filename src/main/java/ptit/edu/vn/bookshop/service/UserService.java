@@ -1,10 +1,7 @@
 package ptit.edu.vn.bookshop.service;
 
-import ptit.edu.vn.bookshop.domain.dto.request.auth.ForgotPasswordRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.PasswordChangeRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.RegisterRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.UserRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
@@ -12,8 +9,8 @@ import ptit.edu.vn.bookshop.domain.entity.User;
 import org.springframework.data.domain.Pageable;
 
 public interface UserService {
-    UserResponseDTO createUser(UserCreateRequestDTO userRequestDTO);
-    UserResponseDTO updateUser(UserUpdateRequestDTO userRequestDTO, Long id);
+    UserResponseDTO createUser(UserRequestDTO userRequestDTO);
+    UserResponseDTO updateUser(UserRequestDTO userRequestDTO, Long id);
     void deleteUser(Long id);
     UserResponseDTO fetchUser(Long id);
     UserPageResponseDTO fetchAllUsers(Pageable pageable, String[] user) ;

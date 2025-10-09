@@ -18,7 +18,7 @@ import java.util.List;
 public class CheckOutResponseDTO {
     private ShippingAddress shippingAddress;
     private List<CartResponseDTO.CartItemResponseDTO> items;
-//    private List<PaymentMethod> paymentMethods;
+    private String paymentMethods;
     private SummaryCheckout summary;
 
     @Getter

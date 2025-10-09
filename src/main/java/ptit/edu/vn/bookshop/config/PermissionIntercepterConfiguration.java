@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
-@Configuration
-public class PermissionIntercepterConfiguration implements WebMvcConfigurer {
+//
+//@Configuration
+//public class PermissionIntercepterConfiguration implements WebMvcConfigurer {
 //
 //    @Bean
 //    PermissionIntercepter permissionIntercepter() {
@@ -24,6 +24,7 @@ public class PermissionIntercepterConfiguration implements WebMvcConfigurer {
 //                "/api/v1/auth/account",
 //                "/api/v1/auth/login",
 //                "/api/v1/auth/logout",
+//                "/api/v1/files/**",
 //                "/api/v1/auth/verify",
 //                "/api/v1/auth/forgot-password",
 //                "/api/v1/auth/verify-otp",
@@ -38,5 +39,5 @@ public class PermissionIntercepterConfiguration implements WebMvcConfigurer {
 //                .addPathPatterns("/**")          // Áp dụng cho tất cả request
 //                .excludePathPatterns(whiteList); // Bỏ qua các API public
 //    }
-}
-
+//}
+//

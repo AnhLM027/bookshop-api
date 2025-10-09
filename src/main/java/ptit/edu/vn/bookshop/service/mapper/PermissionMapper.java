@@ -1,13 +1,13 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PermissionRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PermissionResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Permission;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PermissionMapper {
-    public Permission mapperPermissionRequestDtoToPerMission(PermissionCreateRequestDTO dto) {
+    public Permission mapperPermissionRequestDtoToPerMission(PermissionRequestDTO dto) {
         Permission permission = new Permission();
         permission.setName(dto.getName());
         permission.setModule(dto.getModule());
@@ -26,6 +26,8 @@ public class PermissionMapper {
         permissionResponseDTO.setStatus(entity.getStatus());
         permissionResponseDTO.setCreatedBy(entity.getCreatedBy());
         permissionResponseDTO.setCreatedAt(entity.getCreatedAt());
+        permissionResponseDTO.setUpdatedBy(entity.getUpdatedBy());
+        permissionResponseDTO.setUpdatedAt(entity.getUpdatedAt());
         return permissionResponseDTO;
     }
 

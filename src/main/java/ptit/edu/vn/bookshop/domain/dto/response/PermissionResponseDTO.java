@@ -25,4 +25,6 @@ public class PermissionResponseDTO {
     private StatusEnum status;
     private Instant createdAt;
     private String createdBy;
+    private Instant updatedAt;
+    private String updatedBy;
 }

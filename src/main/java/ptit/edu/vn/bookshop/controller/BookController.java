@@ -4,10 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.BookCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.BookUpdateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.BookRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.BookResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.BookPageResponseDTO;
 import ptit.edu.vn.bookshop.service.BookService;
@@ -25,14 +23,14 @@ public class BookController {
 
     @PostMapping("/books")
     @ApiMessage("Book created successfully")
-    public ResponseEntity<BookResponseDTO> createBook(@Valid @RequestBody BookCreateRequestDTO bookRequestDTO) {
+    public ResponseEntity<BookResponseDTO> createBook(@Valid @RequestBody BookRequestDTO bookRequestDTO) {
         BookResponseDTO bookResponseDTO = this.bookService.createBook(bookRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookResponseDTO);
     }
 
     @PutMapping("/books/{id}")
     @ApiMessage("Book updated successfully")
-    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @Valid @RequestBody BookUpdateRequestDTO bookRequestDTO) {
+    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @Valid @RequestBody BookRequestDTO bookRequestDTO) {
         BookResponseDTO bookResponseDTO = this.bookService.updateBook(bookRequestDTO, id);
         return ResponseEntity.ok(bookResponseDTO);
     }

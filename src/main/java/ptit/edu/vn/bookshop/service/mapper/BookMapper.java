@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
 import org.springframework.stereotype.Component;
-import ptit.edu.vn.bookshop.domain.dto.request.BookCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.BookRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.BookResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Author;
 import ptit.edu.vn.bookshop.domain.entity.Book;
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 @Component
 public class BookMapper {
-    public Book mapBookRequestDtoToBook(BookCreateRequestDTO requestDTO) {
+    public Book mapBookRequestDtoToBook(BookRequestDTO requestDTO) {
         Book book = new Book();
         book.setName(requestDTO.getName());
         book.setTitle(requestDTO.getTitle());
@@ -54,7 +54,7 @@ public class BookMapper {
         response.setStatus(book.getStatus());
         response.setImage(book.getImage());
         response.setCreatedAt(book.getCreatedAt());
-        response.setCreatedBy(book.getCreatedBy());
+        response.setUpdateAt(book.getUpdatedAt());
         if (book.getCategory() != null) {
             BookResponseDTO.BookCategoryResponseDTO category = new BookResponseDTO.BookCategoryResponseDTO();
             category.setId(book.getCategory().getId());

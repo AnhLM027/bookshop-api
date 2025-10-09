@@ -31,7 +31,7 @@ public class BookResponseDTO {
     private BookStatusEnum status;
     private String image;
     private Instant createdAt;
-    private String createdBy;
+    private Instant updateAt;
     private BookCategoryResponseDTO category;
     private BookAuthorResponseDTO author;
     private BookPublisherResponseDTO publisher;

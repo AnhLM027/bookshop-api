@@ -26,11 +26,9 @@ public class OrderController {
         return ResponseEntity.ok().body(orderResponseDTO);
     }
 
-//    @GetMapping("/orders/{id}")
+//    @PutMapping("/orders/{id}")
 //    @ApiMessage("")
 //    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable String id){}
 
-
-//    @GetMapping("/orders")
 
 }

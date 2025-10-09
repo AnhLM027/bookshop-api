@@ -8,10 +8,7 @@ import ptit.edu.vn.bookshop.domain.dto.request.OrderRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.OrderResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.*;
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
-import ptit.edu.vn.bookshop.repository.BookRepository;
-import ptit.edu.vn.bookshop.repository.CartItemRepository;
-import ptit.edu.vn.bookshop.repository.CartRepository;
-import ptit.edu.vn.bookshop.repository.OrderRepository;
+import ptit.edu.vn.bookshop.repository.*;
 import ptit.edu.vn.bookshop.service.OrderService;
 import ptit.edu.vn.bookshop.service.UserService;
 import ptit.edu.vn.bookshop.service.mapper.OrderMapper;
@@ -21,6 +18,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -30,15 +30,17 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderMapper orderMapper;
     private final BookRepository bookRepository;
-
+    private final AddressRepository addressRepository;
     public OrderServiceImpl(UserService userService, CartRepository cartRepository, OrderRepository orderRepository,
-                            CartItemRepository cartItemRepository, OrderMapper orderMapper, BookRepository bookRepository) {
+                            CartItemRepository cartItemRepository, OrderMapper orderMapper, BookRepository bookRepository,
+                            AddressRepository addressRepository) {
         this.userService = userService;
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderMapper = orderMapper;
         this.bookRepository = bookRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
@@ -62,13 +64,20 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Some cart items are invalid or do not belong to the current cart");
         }
 
+        Address address = this.addressRepository.findByUserAndIsDefaultTrue(user)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found for user"));
+
         Order order = new Order();
         order.setUser(user);
-        order.setReceiverName(orderRequestDTO.getShippingAddress().getName());
-        order.setReceiverPhone(orderRequestDTO.getShippingAddress().getPhone());
-        order.setReceiverAddress(orderRequestDTO.getShippingAddress().getAddress());
+        order.setReceiverName(address.getReceiverName());
+        order.setReceiverPhone(address.getPhone());
+        order.setCity(address.getCity());
+        order.setDistrict(address.getDistrict());
+        order.setWard(address.getWard());
+        order.setStreet(address.getStreet());
+
         order.setOrderDate(Instant.now());
-        order.setPaymentMethod("CASH");
+        order.setPaymentMethod("COD");
         order.setNotes(orderRequestDTO.getNote());
         order.setStatus(OrderStatusEnum.PENDING);
 

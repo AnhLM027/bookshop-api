@@ -60,6 +60,7 @@ public class FileServiceImpl implements FileService {
         Path path = Paths.get(basePath, folder);
         Path filePath = path.resolve(finalName);
         Files.createDirectories(path);
+
         try (InputStream inputStream = file.getInputStream()) {
             Thumbnails.of(inputStream)
                 .size(640, 360)

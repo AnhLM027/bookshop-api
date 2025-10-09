@@ -23,30 +23,32 @@ public class Permission implements Serializable {
     private Long id;
 
     @Column(name = "name", length = 200, nullable = false)
-    @NotBlank(message = "Name must not be blank")
     private String name;
 
     @Column(name = "api_path", length = 300, nullable = false)
-    @NotBlank(message = "API path must not be blank")
     private String apiPath;
 
     @Column(name = "method", length = 20, nullable = false)
-    @NotBlank(message = "HTTP method must not be blank")
     private String method;
 
     @Column(name = "module", length = 100, nullable = false)
-    @NotBlank(message = "Module must not be blank")
     private String module;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
     private String createdBy;
+
+    @Column(name = "updated_by", length = 100)
+    private String updatedBy;
 
 
     @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
@@ -58,6 +60,16 @@ public class Permission implements Serializable {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+        if (this.status == null) {
+            this.status = StatusEnum.ACTIVE;
+        }
+    }
+
+    @PreUpdate
+    public void handleBeforeUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
+        this.updatedAt = Instant.now();
     }
 
 }
