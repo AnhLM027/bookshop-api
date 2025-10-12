@@ -1,5 +1,6 @@
 package ptit.edu.vn.bookshop.service.impl;
 
+import net.coobird.thumbnailator.Thumbnails;
 import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
 import ptit.edu.vn.bookshop.service.FileService;
 import org.slf4j.Logger;
@@ -61,7 +62,10 @@ public class FileServiceImpl implements FileService {
         Files.createDirectories(path);
 
         try (InputStream inputStream = file.getInputStream()) {
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            Thumbnails.of(inputStream)
+                .size(640, 360)
+                .outputQuality(0.8f)
+                .toFile(filePath.toFile());
         }
         log.info("Stored file at: {}", path.toAbsolutePath());
         FileResponseDTO response = new FileResponseDTO();
