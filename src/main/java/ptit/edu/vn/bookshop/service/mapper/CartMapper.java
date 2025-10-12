@@ -25,6 +25,7 @@ public class CartMapper {
         dto.setUnitPrice(item.getUnitPrice());
         dto.setQuantity(item.getQuantity());
         BigDecimal discount = item.getItemDiscount();
+        dto.setDiscount(discount);
         BigDecimal discountedPrice;
         if (discount != null && discount.compareTo(BigDecimal.ZERO) > 0) {
             // Tính giá sau khi giảm

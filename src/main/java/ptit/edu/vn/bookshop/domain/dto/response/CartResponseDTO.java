@@ -37,6 +37,7 @@ public class CartResponseDTO {
         private String imageUrl;
         private BigDecimal unitPrice;
         private Integer quantity;
+        private BigDecimal discount;
         private BigDecimal discountedPrice;
         private BigDecimal totalPrice;
     }

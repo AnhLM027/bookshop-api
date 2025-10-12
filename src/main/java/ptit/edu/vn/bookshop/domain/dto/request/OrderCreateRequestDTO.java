@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-public class OrderRequestDTO {
+public class OrderCreateRequestDTO {
     private List<ItemRequestDTO> cartItems;
 //    private String paymentMethod;
     private String note;

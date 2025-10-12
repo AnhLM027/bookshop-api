@@ -18,10 +18,10 @@ public class AddressResponseDTO {
     private Long id;
     private String name;
     private String phone;
-    private String street;
-    private String ward;
-    private String district;
     private String city;
+    private String district;
+    private String ward;
+    private String street;
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     private Boolean isDefault;

@@ -1,7 +1,6 @@
 package ptit.edu.vn.bookshop.service.mapper;
 
 import org.springframework.stereotype.Component;
-import ptit.edu.vn.bookshop.domain.dto.request.OrderRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.OrderResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Order;
 import ptit.edu.vn.bookshop.domain.entity.OrderItem;
@@ -22,7 +21,7 @@ public class OrderMapper {
         OrderResponseDTO.ShippingInfo shippingInfo = new OrderResponseDTO.ShippingInfo();
         shippingInfo.setReceiverName(order.getReceiverName());
         shippingInfo.setReceiverPhone(order.getReceiverPhone());
-        String fullAddress  = Stream.of(
+        String fullAddress = Stream.of(
                         order.getStreet(),
                         order.getWard(),
                         order.getDistrict(),
@@ -44,25 +43,9 @@ public class OrderMapper {
 
         // Items
         List<OrderResponseDTO.OrderItemResponse> orderItemResponseList = new ArrayList<>();
-        for (OrderItem orderItem : order.getOrderItems()) {
-            OrderResponseDTO.OrderItemResponse itemResponse = new OrderResponseDTO.OrderItemResponse();
-
-            itemResponse.setId(orderItem.getId());
-            itemResponse.setProductId(orderItem.getBook().getId());
-            itemResponse.setProductName(orderItem.getBook().getName());
-            itemResponse.setImageUrl(orderItem.getBook().getImage());
-            itemResponse.setQuantity(orderItem.getQuantity());
-            itemResponse.setUnitPrice(orderItem.getBook().getPrice());
-            itemResponse.setDiscount(orderItem.getBook().getDiscount());
-
-            BigDecimal discountedPrice = orderItem.getBook().getPrice()
-                    .multiply(BigDecimal.ONE.subtract(orderItem.getBook().getDiscount()));
-            itemResponse.setDiscountedPrice(discountedPrice);
-
-            BigDecimal totalPrice = discountedPrice.multiply(BigDecimal.valueOf(orderItem.getQuantity()));
-            itemResponse.setTotalPrice(totalPrice);
-
-            orderItemResponseList.add(itemResponse);
+        for(OrderItem item : order.getOrderItems()) {
+            OrderResponseDTO.OrderItemResponse orderItemResponse = toOrderItemResponse(item, order);
+            orderItemResponseList.add(orderItemResponse);
         }
 
         // Final response
@@ -78,5 +61,26 @@ public class OrderMapper {
         responseDTO.setPaymentMethod(order.getPaymentMethod());
 
         return responseDTO;
+    }
+
+    public OrderResponseDTO.OrderItemResponse toOrderItemResponse(OrderItem orderItem, Order order) {
+
+        OrderResponseDTO.OrderItemResponse itemResponse = new OrderResponseDTO.OrderItemResponse();
+
+        itemResponse.setId(orderItem.getId());
+        itemResponse.setProductId(orderItem.getBook().getId());
+        itemResponse.setProductName(orderItem.getBook().getName());
+        itemResponse.setImageUrl(orderItem.getBook().getImage());
+        itemResponse.setQuantity(orderItem.getQuantity());
+        itemResponse.setUnitPrice(orderItem.getBook().getPrice());
+        itemResponse.setDiscount(orderItem.getBook().getDiscount());
+
+        BigDecimal discountedPrice = orderItem.getBook().getPrice()
+                .multiply(BigDecimal.ONE.subtract(orderItem.getBook().getDiscount()));
+        itemResponse.setDiscountedPrice(discountedPrice);
+
+        BigDecimal totalPrice = discountedPrice.multiply(BigDecimal.valueOf(orderItem.getQuantity()));
+        itemResponse.setTotalPrice(totalPrice);
+        return itemResponse;
     }
 }
