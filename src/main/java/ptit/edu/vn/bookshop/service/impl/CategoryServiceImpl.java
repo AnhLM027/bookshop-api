@@ -11,7 +11,7 @@ import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.CategoryRepository;
 import ptit.edu.vn.bookshop.repository.specification.CategorySpecificationBuilder;
 import ptit.edu.vn.bookshop.service.CategoryService;
-import ptit.edu.vn.bookshop.service.mapper.CategoryMapper;
+import ptit.edu.vn.bookshop.mapper.CategoryMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (this.categoryRepository.existsByName(categoryRequestDTO.getName())) {
             throw new DataIntegrityViolationException("Category already exists with same name!");
         }
-        Category category = this.categoryMapper.mapCategoryRequestDTOtoCategory(categoryRequestDTO);
-        return this.categoryMapper.mapCategorytoCategoryResponseDTO(this.categoryRepository.save(category));
+        Category category = this.categoryMapper.toEntity(categoryRequestDTO);
+        return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRequestDTO.getName() != null) category.setName(categoryRequestDTO.getName());
         if (categoryRequestDTO.getDescription() != null) category.setDescription(categoryRequestDTO.getDescription());
         if (categoryRequestDTO.getStatus() != null) category.setStatus(categoryRequestDTO.getStatus());
-        return this.categoryMapper.mapCategorytoCategoryResponseDTO(this.categoryRepository.save(category));
+        return this.categoryMapper.toResponseDTO(this.categoryRepository.save(category));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
         if(!isAdmin && category.getStatus().equals(StatusEnum.DELETED)){
             throw new IllegalStateException("Category does not exist");
         }
-        return this.categoryMapper.mapCategorytoCategoryResponseDTO(category);
+        return this.categoryMapper.toResponseDTO(category);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class CategoryServiceImpl implements CategoryService {
         responseDTO.setPageSize(pageable.getPageSize());
         responseDTO.setTotal(categoryPage.getTotalElements());
         responseDTO.setPages(categoryPage.getTotalPages());
-        responseDTO.setCategories(categoryPage.stream().map(categoryMapper::mapCategorytoCategoryResponseDTO).collect(Collectors.toList()));
+        responseDTO.setCategories(categoryPage.stream().map(categoryMapper::toResponseDTO).collect(Collectors.toList()));
         return responseDTO;
     }
 

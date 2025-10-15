@@ -14,7 +14,7 @@ import ptit.edu.vn.bookshop.exception.BadRequestException;
 import ptit.edu.vn.bookshop.repository.AddressRepository;
 import ptit.edu.vn.bookshop.service.AddressService;
 import ptit.edu.vn.bookshop.service.UserService;
-import ptit.edu.vn.bookshop.service.mapper.AddressMapper;
+import ptit.edu.vn.bookshop.mapper.AddressMapper;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.util.List;

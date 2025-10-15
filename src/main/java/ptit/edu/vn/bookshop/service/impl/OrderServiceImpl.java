@@ -18,7 +18,7 @@ import ptit.edu.vn.bookshop.repository.*;
 import ptit.edu.vn.bookshop.repository.specification.OrderSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.OrderService;
 import ptit.edu.vn.bookshop.service.UserService;
-import ptit.edu.vn.bookshop.service.mapper.OrderMapper;
+import ptit.edu.vn.bookshop.mapper.OrderMapper;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.math.BigDecimal;
@@ -223,6 +223,4 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(updateStatusRequestDTO.getStatus());
         return this.orderMapper.toOrderResponseDTO(this.orderRepository.save(order));
     }
-
-
 }

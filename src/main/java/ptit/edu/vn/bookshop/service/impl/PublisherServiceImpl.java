@@ -12,7 +12,7 @@ import ptit.edu.vn.bookshop.repository.PublisherRepository;
 import ptit.edu.vn.bookshop.repository.specification.PublisherSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.PublisherService;
 import org.springframework.stereotype.Service;
-import ptit.edu.vn.bookshop.service.mapper.PublisherMapper;
+import ptit.edu.vn.bookshop.mapper.PublisherMapper;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -35,8 +35,8 @@ public class PublisherServiceImpl implements PublisherService {
         if (publisherRequestDTO.getEmail() != null && this.publisherRepository.existsByEmail(publisherRequestDTO.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
-        Publisher publisher = this.publisherMapper.mapPublisherRequestDTOToPublisher(publisherRequestDTO);
-        return this.publisherMapper.mapPublisherToPublisherResponseDTO(this.publisherRepository.save(publisher));
+        Publisher publisher = this.publisherMapper.toEntity(publisherRequestDTO);
+        return this.publisherMapper.toResponseDto(this.publisherRepository.save(publisher));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PublisherServiceImpl implements PublisherService {
         if (publisherRequestDTO.getEmail() != null) publisher.setEmail(publisherRequestDTO.getEmail());
         if (publisherRequestDTO.getPhone() != null) publisher.setPhone(publisherRequestDTO.getPhone());
         if (publisherRequestDTO.getStatus() != null) publisher.setStatus(publisherRequestDTO.getStatus());
-        return this.publisherMapper.mapPublisherToPublisherResponseDTO(this.publisherRepository.save(publisher));
+        return this.publisherMapper.toResponseDto(this.publisherRepository.save(publisher));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class PublisherServiceImpl implements PublisherService {
         if(!isAdmin && publisher.getStatus().equals(StatusEnum.DELETED)){
             throw new IllegalStateException("Publisher not found");
         }
-        return this.publisherMapper.mapPublisherToPublisherResponseDTO(publisher);
+        return this.publisherMapper.toResponseDto(publisher);
     }
 
 
@@ -109,7 +109,7 @@ public class PublisherServiceImpl implements PublisherService {
         res.setPages(publisherPage.getTotalPages());
         res.setPageSize(publisherPage.getSize());
         res.setTotal(publisherPage.getTotalElements());
-        res.setPublishers(publisherPage.stream().map(publisherMapper::mapPublisherToPublisherResponseDTO).collect(Collectors.toList()));
+        res.setPublishers(publisherPage.stream().map(publisherMapper::toResponseDto).collect(Collectors.toList()));
         return res;
     }
 

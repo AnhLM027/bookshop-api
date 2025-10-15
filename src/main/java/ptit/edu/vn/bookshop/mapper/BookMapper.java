@@ -1,4 +1,4 @@
-package ptit.edu.vn.bookshop.service.mapper;
+package ptit.edu.vn.bookshop.mapper;
 
 import org.springframework.stereotype.Component;
 import ptit.edu.vn.bookshop.domain.dto.request.BookRequestDTO;

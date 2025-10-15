@@ -16,7 +16,7 @@ import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.*;
 import ptit.edu.vn.bookshop.repository.specification.BookSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.BookService;
-import ptit.edu.vn.bookshop.service.mapper.BookMapper;
+import ptit.edu.vn.bookshop.mapper.BookMapper;
 
 import java.math.BigDecimal;
 import java.util.regex.Matcher;

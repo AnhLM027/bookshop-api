@@ -11,7 +11,7 @@ import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.PermissionRepository;
 import ptit.edu.vn.bookshop.repository.specification.PermissionSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.PermissionService;
-import ptit.edu.vn.bookshop.service.mapper.PermissionMapper;
+import ptit.edu.vn.bookshop.mapper.PermissionMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +39,8 @@ public class PermissionServiceImpl implements PermissionService {
                 && this.permissionRepository.existsByModuleAndApiPathAndMethod(permissionRequestDTO.getModule(), permissionRequestDTO.getApiPath(), permissionRequestDTO.getMethod())) {
             throw new DataIntegrityViolationException("Permission already exists with same module, apiPath and method");
         }
-        Permission permission = this.permissonMapper.mapperPermissionRequestDtoToPerMission(permissionRequestDTO);
-        return this.permissonMapper.mapperPermissionToPermissionResponse(this.permissionRepository.save(permission));
+        Permission permission = this.permissonMapper.toEntity(permissionRequestDTO);
+        return this.permissonMapper.toResponseDTO(this.permissionRepository.save(permission));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PermissionServiceImpl implements PermissionService {
         if (permissionRequestDTO.getMethod() != null) permission.setMethod(permissionRequestDTO.getMethod());
         if (permissionRequestDTO.getModule() != null) permission.setModule(permissionRequestDTO.getModule());
         if (permissionRequestDTO.getStatus() != null) permission.setStatus(permissionRequestDTO.getStatus());
-        return this.permissonMapper.mapperPermissionToPermissionResponse(this.permissionRepository.save(permission));
+        return this.permissonMapper.toResponseDTO(this.permissionRepository.save(permission));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class PermissionServiceImpl implements PermissionService {
             throw new IdInvalidException("Permission Id is invalid");
         }
         Permission permission = permissionOptional.get();
-        return this.permissonMapper.mapperPermissionToPermissionResponse(permission);
+        return this.permissonMapper.toResponseDTO(permission);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class PermissionServiceImpl implements PermissionService {
         responseDTO.setPageSize(pageable.getPageSize());
         responseDTO.setTotal(permissionPage.getTotalElements());
         responseDTO.setPages(permissionPage.getTotalPages());
-        responseDTO.setPermissions(permissionPage.stream().map(permissonMapper::mapperPermissionToPermissionResponse).collect(Collectors.toList()));
+        responseDTO.setPermissions(permissionPage.stream().map(permissonMapper::toResponseDTO).collect(Collectors.toList()));
         return responseDTO;
     }
 }

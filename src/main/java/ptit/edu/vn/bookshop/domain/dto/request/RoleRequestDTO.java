@@ -11,7 +11,6 @@ import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 import java.util.List;
 
 @Getter
-@Setter
 public class RoleRequestDTO {
 
     @NotBlank(message = "Role name is required")

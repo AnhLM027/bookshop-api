@@ -10,14 +10,13 @@ import ptit.edu.vn.bookshop.domain.dto.response.RoleResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Permission;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
+import ptit.edu.vn.bookshop.mapper.RoleMapper;
 import ptit.edu.vn.bookshop.repository.PermissionRepository;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.specification.RoleSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.RoleService;
-import ptit.edu.vn.bookshop.service.mapper.RoleMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -42,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
         if (this.roleRepository.existsByName(roleRequestDTO.getName())) {
             throw new DataIntegrityViolationException("Role already exists with same name!");
         }
-        Role role = this.roleMapper.mapRoleRequestDtoToRole(roleRequestDTO);
+        Role role = this.roleMapper.toEntity(roleRequestDTO);
         role.setName(roleRequestDTO.getName().toUpperCase());
         if (roleRequestDTO.getPermissions() != null && !roleRequestDTO.getPermissions().isEmpty()) {
             List<Long> permissionIds = roleRequestDTO
@@ -54,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
             List<Permission> dbPermissions = permissionRepository.findByIdIn(permissionIds);
             role.setPermissions(dbPermissions);
         }
-        return this.roleMapper.mapRoleToRoleResponseDto(this.roleRepository.save(role));
+        return this.roleMapper.toResponseDto(this.roleRepository.save(role));
     }
 
     @Override
@@ -78,7 +77,7 @@ public class RoleServiceImpl implements RoleService {
             List<Permission> dbPermissions = permissionRepository.findByIdIn(permissions);
             role.setPermissions(dbPermissions);
         }
-        return this.roleMapper.mapRoleToRoleResponseDto(this.roleRepository.save(role));
+        return this.roleMapper.toResponseDto(this.roleRepository.save(role));
     }
 
     @Override
@@ -88,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
             throw new IdInvalidException("Role does not exist!");
         }
         Role role = roleOptional.get();
-        return this.roleMapper.mapRoleToRoleResponseDto(role);
+        return this.roleMapper.toResponseDto(role);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class RoleServiceImpl implements RoleService {
         response.setPageSize(rolePage.getSize());
         response.setPages(rolePage.getTotalPages());
         response.setTotal(rolePage.getTotalElements());
-        response.setRoles(rolePage.getContent().stream().map(roleMapper::mapRoleToRoleResponseDto).collect(Collectors.toList()));
+        response.setRoles(rolePage.getContent().stream().map(roleMapper::toResponseDto).collect(Collectors.toList()));
         return response;
     }
 

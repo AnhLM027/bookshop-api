@@ -11,7 +11,7 @@ import ptit.edu.vn.bookshop.domain.entity.Author;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.AuthorRepository;
 import ptit.edu.vn.bookshop.service.AuthorService;
-import ptit.edu.vn.bookshop.service.mapper.AuthorMapper;
+import ptit.edu.vn.bookshop.mapper.AuthorMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -32,8 +32,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorResponseDTO createAuthor(AuthorRequestDTO authorRequestDTO) {
-        Author author = this.authorMapper.mapAuthorRequestDtoToAuthor(authorRequestDTO);
-        return this.authorMapper.mapAuthorToAuthorResponseDTO(this.authorRepository.save(author));
+        Author author = this.authorMapper.toEntity(authorRequestDTO);
+        return this.authorMapper.toResponseDTO(this.authorRepository.save(author));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (authorRequestDTO.getCountry() != null) author.setCountry(authorRequestDTO.getCountry());
         if (authorRequestDTO.getBiography() != null) author.setBiography(authorRequestDTO.getBiography());
         if (authorRequestDTO.getStatus() != null) author.setStatus(authorRequestDTO.getStatus());
-        return this.authorMapper.mapAuthorToAuthorResponseDTO(this.authorRepository.save(author));
+        return this.authorMapper.toResponseDTO(this.authorRepository.save(author));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AuthorServiceImpl implements AuthorService {
         if(!isAdmin && author.getStatus().equals(StatusEnum.DELETED)){
                 throw new IllegalStateException("Author does not exist");
         }
-        return this.authorMapper.mapAuthorToAuthorResponseDTO(author);
+        return this.authorMapper.toResponseDTO(author);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class AuthorServiceImpl implements AuthorService {
         responseDTO.setPageSize(pageable.getPageSize());
         responseDTO.setTotal(authorPage.getTotalElements());
         responseDTO.setPages(authorPage.getTotalPages());
-        responseDTO.setAuthors(authorPage.stream().map(authorMapper::mapAuthorToAuthorResponseDTO).collect(Collectors.toList()));
+        responseDTO.setAuthors(authorPage.stream().map(authorMapper::toResponseDTO).collect(Collectors.toList()));
         return responseDTO;
     }
 }

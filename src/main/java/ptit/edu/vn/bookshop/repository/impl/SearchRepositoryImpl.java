@@ -12,7 +12,7 @@ import ptit.edu.vn.bookshop.domain.entity.Category;
 import ptit.edu.vn.bookshop.domain.entity.Publisher;
 import ptit.edu.vn.bookshop.repository.SearchRepository;
 import ptit.edu.vn.bookshop.repository.specification.*;
-import ptit.edu.vn.bookshop.service.mapper.BookMapper;
+import ptit.edu.vn.bookshop.mapper.BookMapper;
 
 import java.util.ArrayList;
 import java.util.List;

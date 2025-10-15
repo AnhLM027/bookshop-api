@@ -15,7 +15,7 @@ import ptit.edu.vn.bookshop.repository.UserRepository;
 import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.RegisterService;
-import ptit.edu.vn.bookshop.service.mapper.UserMapper;
+import ptit.edu.vn.bookshop.mapper.UserMapper;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -69,7 +69,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
 
         // Nếu chưa tồn tại, tạo user mới
-        user = this.userMapper.mapperRegisterRequestDtoToUser(registerRequestDTO);
+        user = this.userMapper.fromRegisterDto(registerRequestDTO);
         user.setStatus(StatusEnum.INACTIVE);
         user.setPassword(passwordEncoder.encode(password));
 

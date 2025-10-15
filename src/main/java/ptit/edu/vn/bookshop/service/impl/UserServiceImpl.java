@@ -17,7 +17,7 @@ import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.repository.specification.UserSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.UserService;
-import ptit.edu.vn.bookshop.service.mapper.UserMapper;
+import ptit.edu.vn.bookshop.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         if (userRequestDTO.getEmail() != null && this.userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists");
         }
-        User user = this.userMapper.mapperUserCreateDtoToUser(userRequestDTO);
+        User user = this.userMapper.toEntity(userRequestDTO);
         // kiem tra role
         Optional<Role> roleOptional = this.roleRepository.findById(userRequestDTO.getRole().getId());
         if (!roleOptional.isPresent()) {
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = this.passwordEncoder.encode(userRequestDTO.getPassword());
         user.setPassword(encodedPassword);
 
-        return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
+        return this.userMapper.toResponseDto(this.userRepository.save(user));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         if (userRequestDTO.getGender() != null) user.setGender(userRequestDTO.getGender());
         if (userRequestDTO.getStatus() != null) user.setStatus(userRequestDTO.getStatus());
         if (userRequestDTO.getAvatar() != null) user.setAvatar(userRequestDTO.getAvatar());
-        return this.userMapper.mapperUserToUserResponseDTO(this.userRepository.save(user));
+        return this.userMapper.toResponseDto(this.userRepository.save(user));
     }
 
     @Override
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
         if (!userOptional.isPresent()) {
             throw new IdInvalidException("User not found");
         }
-        return this.userMapper.mapperUserToUserResponseDTO(userOptional.get());
+        return this.userMapper.toResponseDto(userOptional.get());
     }
 
     @Override
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
         response.setPageSize(userPage.getSize());
         response.setPages(userPage.getTotalPages());
         response.setTotal(userPage.getTotalElements());
-        response.setUsers(userPage.getContent().stream().map(userMapper::mapperUserToUserResponseDTO).collect(Collectors.toList()));
+        response.setUsers(userPage.getContent().stream().map(userMapper::toResponseDto).collect(Collectors.toList()));
         return response;
     }
 
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO getUserByEmail(String email) {
         User user = this.userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-        return this.userMapper.mapperUserToUserResponseDTO(user);
+        return this.userMapper.toResponseDto(user);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO getUserByRefreshTokenAndEmail(String refreshToken, String email) {
         User user = this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
-        return this.userMapper.mapperUserToUserResponseDTO(user);
+        return this.userMapper.toResponseDto(user);
     }
 
     @Override
