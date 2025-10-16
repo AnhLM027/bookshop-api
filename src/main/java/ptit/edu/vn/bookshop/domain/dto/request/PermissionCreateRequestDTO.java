@@ -40,7 +40,4 @@ public class PermissionRequestDTO {
             message = "Module name can only contain letters, numbers, underscores, dots, and hyphens"
     )
     private String module;
-
-    @Enumerated(EnumType.STRING)
-    private StatusEnum status;
 }
