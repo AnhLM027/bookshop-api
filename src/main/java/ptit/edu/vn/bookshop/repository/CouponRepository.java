@@ -1,4 +1,7 @@
-package ptit.edu.vn.bookshop.repository.specification;
+package ptit.edu.vn.bookshop.repository;
 
-public class CouponRepository {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CouponRepository {
 }

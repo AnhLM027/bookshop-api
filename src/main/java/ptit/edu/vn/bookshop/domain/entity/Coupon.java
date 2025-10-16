@@ -48,23 +48,18 @@ public class Coupon {
     @Column(name = "usage_limit")
     private Integer usageLimit;
 
-    @Column(name = "used_count", nullable = false)
-    private Integer usedCount = 0;
-
-    @Column(name = "usage_limit_per_customer", nullable = false)
-    private Integer usageLimitPerCustomer = 1;
+    @Column(name = "usage_limit_per_customer")
+    private Integer usageLimitPerCustomer;
 
     // Thời gian hiệu lực - Sử dụng Instant
     @Column(name = "starts_at", nullable = false)
-    private Instant startsAt;
+    private LocalDateTime  startsAt;
 
     @Column(name = "expires_at", nullable = false)
-    private Instant expiresAt;
+    private LocalDateTime  expiresAt;
 
-    // Trạng thái
     @Column(name = "status", nullable = false)
     private StatusEnum status;
-
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -77,6 +72,7 @@ public class Coupon {
 
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
+
 
     @PrePersist
     public void handleBeforeCreate() {

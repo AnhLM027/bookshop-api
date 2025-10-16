@@ -1,8 +1,9 @@
 package ptit.edu.vn.bookshop.service.impl;
 
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
+import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.PasswordChangeRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
@@ -60,41 +61,35 @@ public class UserServiceImpl implements UserService {
     private String baseURI;
 
     @Override
-    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO createUser(UserCreateRequestDTO userCreateRequestDTO) {
         // Kiểm tra email đã tồn tại
-        if (userRequestDTO.getEmail() != null && this.userRepository.existsByEmail(userRequestDTO.getEmail())) {
+        if (userCreateRequestDTO.getEmail() != null && this.userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists");
         }
-        User user = this.userMapper.toEntity(userRequestDTO);
+        User user = this.userMapper.toEntity(userCreateRequestDTO);
         // kiem tra role
-        Optional<Role> roleOptional = this.roleRepository.findById(userRequestDTO.getRole().getId());
+        Optional<Role> roleOptional = this.roleRepository.findById(userCreateRequestDTO.getRole().getId());
         if (!roleOptional.isPresent()) {
             throw new IdInvalidException("Role Id is invalid");
         }
         user.setRole(roleOptional.get());
 
         // Ma hoa password
-        String encodedPassword = this.passwordEncoder.encode(userRequestDTO.getPassword());
+        String encodedPassword = this.passwordEncoder.encode(userCreateRequestDTO.getPassword());
         user.setPassword(encodedPassword);
 
         return this.userMapper.toResponseDto(this.userRepository.save(user));
     }
 
     @Override
-    public UserResponseDTO updateUser(UserRequestDTO userRequestDTO, Long id) {
+    public UserResponseDTO updateUser(UserUpdateRequestDTO userRequestDTO, Long id) {
         Optional<User> userOptional = this.userRepository.findById(id);
         if (!userOptional.isPresent()) {
             throw new IdInvalidException("User not found");
         }
-
         User user = userOptional.get();
 
-        if (userRequestDTO.getEmail() != null && !userRequestDTO.getEmail().equals(user.getEmail()) && this.userRepository.existsByEmail(userRequestDTO.getEmail())) {
-            throw new DataIntegrityViolationException("Email already exists");
-        }
-
         if (userRequestDTO.getName() != null) user.setName(userRequestDTO.getName());
-        if (userRequestDTO.getEmail() != null) user.setEmail(userRequestDTO.getEmail());
         if (userRequestDTO.getDateOfBirth() != null) user.setDateOfBirth(userRequestDTO.getDateOfBirth());
         if (userRequestDTO.getPhone() != null) user.setPhone(userRequestDTO.getPhone());
         if (userRequestDTO.getGender() != null) user.setGender(userRequestDTO.getGender());

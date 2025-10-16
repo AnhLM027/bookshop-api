@@ -4,7 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.client.RestClient;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.RoleRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.RoleCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.RoleUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.RolePageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.RoleResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Permission;
@@ -37,17 +38,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleResponseDTO createRole(RoleRequestDTO roleRequestDTO) {
-        if (this.roleRepository.existsByName(roleRequestDTO.getName())) {
+    public RoleResponseDTO createRole(RoleCreateRequestDTO roleCreateRequestDTO) {
+        if (this.roleRepository.existsByName(roleCreateRequestDTO.getName())) {
             throw new DataIntegrityViolationException("Role already exists with same name!");
         }
-        Role role = this.roleMapper.toEntity(roleRequestDTO);
-        role.setName(roleRequestDTO.getName().toUpperCase());
-        if (roleRequestDTO.getPermissions() != null && !roleRequestDTO.getPermissions().isEmpty()) {
-            List<Long> permissionIds = roleRequestDTO
+        Role role = this.roleMapper.toEntity(roleCreateRequestDTO);
+        role.setName(roleCreateRequestDTO.getName().toUpperCase());
+        if (roleCreateRequestDTO.getPermissions() != null && !roleCreateRequestDTO.getPermissions().isEmpty()) {
+            List<Long> permissionIds = roleCreateRequestDTO
                     .getPermissions()
                     .stream()
-                    .map(RoleRequestDTO.RolePermissionRequestDTO::getId)
+                    .map(RoleCreateRequestDTO.RolePermissionRequestDTO::getId)
                     .collect(Collectors.toList());
 
             List<Permission> dbPermissions = permissionRepository.findByIdIn(permissionIds);
@@ -57,22 +58,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleResponseDTO updateRole(RoleRequestDTO roleRequestDTO, Long id) {
+    public RoleResponseDTO updateRole(RoleUpdateRequestDTO roleRequestDTO, Long id) {
         Optional<Role> roleOptional = this.roleRepository.findById(id);
         if (!roleOptional.isPresent()) {
             throw new IdInvalidException("Role does not exist!");
         }
-        if (this.roleRepository.existsByNameAndIdNot(roleRequestDTO.getName(), id)) {
-            throw new DataIntegrityViolationException("Role already exists with same name!");
-        }
         Role role = roleOptional.get();
-        if (roleRequestDTO.getName() != null) role.setName(roleRequestDTO.getName().toUpperCase());
         if (roleRequestDTO.getDescription() != null) role.setDescription(roleRequestDTO.getDescription());
         if (roleRequestDTO.getStatus() != null) role.setStatus(roleRequestDTO.getStatus());
         if (roleRequestDTO.getPermissions() != null) {
             List<Long> permissions = roleRequestDTO.getPermissions()
                     .stream()
-                    .map(RoleRequestDTO.RolePermissionRequestDTO::getId)
+                    .map(RoleCreateRequestDTO.RolePermissionRequestDTO::getId)
                     .collect(Collectors.toList());
             List<Permission> dbPermissions = permissionRepository.findByIdIn(permissions);
             role.setPermissions(dbPermissions);

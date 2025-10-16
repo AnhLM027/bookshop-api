@@ -1,15 +1,12 @@
 package ptit.edu.vn.bookshop.domain.dto.request;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 
 @Getter
-public class PermissionRequestDTO {
+public class PermissionCreateRequestDTO {
     @NotBlank(message = "Permission name is required")
     @Size(min = 2, max = 50, message = "Permission name must be between 2 and 50 characters")
     @Pattern(

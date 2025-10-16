@@ -3,7 +3,8 @@ package ptit.edu.vn.bookshop.service.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PermissionCreateRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.PermissionUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.PermissionPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.PermissionResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Permission;
@@ -32,19 +33,19 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public PermissionResponseDTO createPermission(PermissionRequestDTO permissionRequestDTO) {
-        if (permissionRequestDTO.getApiPath() != null && !permissionRequestDTO.getApiPath().isEmpty()
-                && permissionRequestDTO.getModule() != null && !permissionRequestDTO.getModule().isEmpty()
-                && permissionRequestDTO.getMethod() != null && !permissionRequestDTO.getMethod().isEmpty()
-                && this.permissionRepository.existsByModuleAndApiPathAndMethod(permissionRequestDTO.getModule(), permissionRequestDTO.getApiPath(), permissionRequestDTO.getMethod())) {
+    public PermissionResponseDTO createPermission(PermissionCreateRequestDTO permissionCreateRequestDTO) {
+        if (permissionCreateRequestDTO.getApiPath() != null && !permissionCreateRequestDTO.getApiPath().isEmpty()
+                && permissionCreateRequestDTO.getModule() != null && !permissionCreateRequestDTO.getModule().isEmpty()
+                && permissionCreateRequestDTO.getMethod() != null && !permissionCreateRequestDTO.getMethod().isEmpty()
+                && this.permissionRepository.existsByModuleAndApiPathAndMethod(permissionCreateRequestDTO.getModule(), permissionCreateRequestDTO.getApiPath(), permissionCreateRequestDTO.getMethod())) {
             throw new DataIntegrityViolationException("Permission already exists with same module, apiPath and method");
         }
-        Permission permission = this.permissonMapper.toEntity(permissionRequestDTO);
+        Permission permission = this.permissonMapper.toEntity(permissionCreateRequestDTO);
         return this.permissonMapper.toResponseDTO(this.permissionRepository.save(permission));
     }
 
     @Override
-    public PermissionResponseDTO updatePermission(PermissionRequestDTO permissionRequestDTO, Long id) {
+    public PermissionResponseDTO updatePermission(PermissionUpdateRequestDTO permissionRequestDTO, Long id) {
         Optional<Permission> permissionOptional = this.permissionRepository.findById(id);
         if (!permissionOptional.isPresent()) {
             throw new IdInvalidException("Permission Id is invalid");
@@ -52,8 +53,6 @@ public class PermissionServiceImpl implements PermissionService {
 
         Permission permission = permissionOptional.get();
         if (permissionRequestDTO.getName() != null) permission.setName(permissionRequestDTO.getName());
-        if (permissionRequestDTO.getApiPath() != null) permission.setApiPath(permissionRequestDTO.getApiPath());
-        if (permissionRequestDTO.getMethod() != null) permission.setMethod(permissionRequestDTO.getMethod());
         if (permissionRequestDTO.getModule() != null) permission.setModule(permissionRequestDTO.getModule());
         if (permissionRequestDTO.getStatus() != null) permission.setStatus(permissionRequestDTO.getStatus());
         return this.permissonMapper.toResponseDTO(this.permissionRepository.save(permission));

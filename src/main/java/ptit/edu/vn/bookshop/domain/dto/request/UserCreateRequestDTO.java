@@ -5,12 +5,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import ptit.edu.vn.bookshop.domain.constant.GenderEnum;
 import lombok.Getter;
-import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 
 import java.time.LocalDate;
 
 @Getter
-public class UserRequestDTO {
+public class UserCreateRequestDTO {
 
     @NotBlank(message = "Full name is required")
     @Size(min = 2, max = 50, message = "Full name must be between 2 and 50 characters")
@@ -44,9 +43,6 @@ public class UserRequestDTO {
     @NotNull(message = "Gender is required")
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
-
-    @Enumerated(EnumType.STRING)
-    private StatusEnum status;
 
     @Size(max = 255, message = "Avatar URL must not exceed 255 characters")
     @Pattern(
