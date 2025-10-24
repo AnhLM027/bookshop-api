@@ -54,10 +54,10 @@ public class User implements Serializable {
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)

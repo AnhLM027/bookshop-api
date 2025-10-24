@@ -46,17 +46,17 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
         Book book = this.bookMapper.mapBookRequestDtoToBook(bookRequestDTO);
-        Long category_id = bookRequestDTO.getCategory().getId();
-        Long author_id = bookRequestDTO.getAuthor().getId();
-        Long publisher_id = bookRequestDTO.getPublisher().getId();
+        Long categoryId = bookRequestDTO.getCategory().getId();
+        Long authorId = bookRequestDTO.getAuthor().getId();
+        Long publisherId = bookRequestDTO.getPublisher().getId();
 
-        Category category = categoryRepository.findById(category_id)
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IdInvalidException("Category does not exist"));
 
-        Author author = authorRepository.findById(author_id)
+        Author author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new IdInvalidException("Author does not exist"));
 
-        Publisher publisher = publisherRepository.findById(publisher_id)
+        Publisher publisher = publisherRepository.findById(publisherId)
                 .orElseThrow(() -> new IdInvalidException("Publisher does not exist"));
 
         if (category.getStatus().equals(StatusEnum.INACTIVE) || author.getStatus().equals(StatusEnum.INACTIVE) ||

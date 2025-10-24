@@ -1,5 +1,6 @@
 package ptit.edu.vn.bookshop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -51,7 +52,6 @@ public class Coupon {
     @Column(name = "usage_limit_per_customer")
     private Integer usageLimitPerCustomer;
 
-    // Thời gian hiệu lực - Sử dụng Instant
     @Column(name = "starts_at", nullable = false)
     private LocalDateTime  startsAt;
 
@@ -64,7 +64,7 @@ public class Coupon {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -74,6 +74,10 @@ public class Coupon {
     private String updatedBy;
 
 
+    @ManyToMany(mappedBy = "coupons",  fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Order> orders;
+
     @PrePersist
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
@@ -81,6 +85,10 @@ public class Coupon {
         if (this.status == null) {
             this.status = StatusEnum.ACTIVE;
         }
+        if(this.usageLimit == null) this.usageLimit = 0;
+        if(this.maximumDiscountAmount == null) this.minimumOrderAmount = BigDecimal.ZERO;
+        if(this.minimumOrderAmount == null) this.maximumDiscountAmount = BigDecimal.ZERO;
+
     }
 
     @PreUpdate

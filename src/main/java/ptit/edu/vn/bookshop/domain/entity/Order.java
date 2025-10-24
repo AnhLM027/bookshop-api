@@ -1,5 +1,6 @@
 package ptit.edu.vn.bookshop.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import ptit.edu.vn.bookshop.domain.constant.OrderStatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -18,7 +19,6 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -69,10 +69,10 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private Instant orderDate;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -81,8 +81,7 @@ public class Order {
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
 
-
-    @Column(name = "notes", columnDefinition = "TEXT")
+    @Column(name = "notes", columnDefinition = "MEDIUMTEXT")
     private String notes;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,6 +92,12 @@ public class Order {
     @JsonIgnore
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"orders"})
+    @JoinTable(name = "order_coupon", joinColumns = @JoinColumn(name = "coupon_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
+    private List<Coupon> coupons;
 
     @PrePersist
     public void handleBeforeCreate() {

@@ -38,10 +38,10 @@ public class Permission implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -49,7 +49,6 @@ public class Permission implements Serializable {
 
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
-
 
     @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     @JsonIgnore

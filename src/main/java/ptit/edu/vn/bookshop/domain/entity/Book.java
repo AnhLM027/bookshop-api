@@ -31,7 +31,7 @@ public class Book implements Serializable{
     @Column(name = "title")
     private String title;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private String description;
 
     @Column(name = "language")
@@ -53,7 +53,7 @@ public class Book implements Serializable{
     @Enumerated(EnumType.STRING)
     private BookStatusEnum status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at")
@@ -64,6 +64,7 @@ public class Book implements Serializable{
 
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
+
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     @JsonIgnore

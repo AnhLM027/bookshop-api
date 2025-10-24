@@ -45,7 +45,7 @@ public class Author implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at")
@@ -56,6 +56,7 @@ public class Author implements Serializable {
 
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
+
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     @JsonIgnore

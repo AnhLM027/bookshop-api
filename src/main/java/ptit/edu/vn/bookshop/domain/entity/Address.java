@@ -51,10 +51,10 @@ public class Address {
     @Column(name = "is_default")
     private Boolean isDefault;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -62,6 +62,7 @@ public class Address {
 
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

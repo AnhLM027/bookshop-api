@@ -16,17 +16,16 @@ public class PublisherRequestDTO {
     private String name;
 
     @Size(max = 255, message = "Address must not exceed 255 characters")
-    private String address; // Không bắt buộc
+    private String address;
 
     @Pattern(
             regexp =  "^0\\d{9}$",
             message = "Invalid Vietnamese phone number format"
     )
-    private String phone; // Không bắt buộc
-
+    private String phone;
     @Email(message = "Invalid email format")
     @Size(max = 100, message = "Email must not exceed 100 characters")
-    private String email; // Không bắt buộc
+    private String email;
 
 
     @Enumerated(EnumType.STRING)

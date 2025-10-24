@@ -31,7 +31,7 @@ public class Category implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at")

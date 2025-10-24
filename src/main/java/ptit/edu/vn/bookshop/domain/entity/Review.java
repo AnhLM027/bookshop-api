@@ -18,6 +18,7 @@ public class Review {
 
     private int rating;
 
+    @Column(name = "comment", columnDefinition = "MEDIUMTEXT")
     private String comment;
 
     @Column(name = "status")

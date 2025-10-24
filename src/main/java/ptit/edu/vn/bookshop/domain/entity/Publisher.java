@@ -41,10 +41,10 @@ public class Publisher implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @Column(name = "created_by", length = 100)
@@ -52,6 +52,7 @@ public class Publisher implements Serializable {
 
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
+
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
     @JsonIgnore
