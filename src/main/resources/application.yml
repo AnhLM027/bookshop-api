@@ -59,3 +59,11 @@ app:
     base64-secret: qoAEABDke07+AVLepXB4aCMtsT0wMAqR5x2VFyldsnx6e75YQkJH2UcZKTjEyoNgG71SBCXfq5N6NVZxWOfsHQ==
     access-token-validity-in-seconds: 8640000     # thời gian sống access token
     refresh-token-validity-in-seconds: 25920000   # thời gian sống refresh token
+
+
+#cloudianry config
+cloudinary:
+  cloud-name: "dunqy8ngo"
+  api-key: "656845335766711"
+  api-secret: "Cqkx6EDeqaiYTiulMT4aFJXNR1w"
+

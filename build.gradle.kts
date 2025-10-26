@@ -38,6 +38,7 @@ dependencies {
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
 	implementation("org.modelmapper:modelmapper:3.1.1")
     implementation("org.mapstruct:mapstruct:1.5.5.Final")
+    implementation("com.cloudinary:cloudinary-http44:1.39.0")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	compileOnly("org.projectlombok:lombok")
