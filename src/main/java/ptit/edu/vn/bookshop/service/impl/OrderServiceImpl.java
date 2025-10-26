@@ -22,6 +22,7 @@ import ptit.edu.vn.bookshop.mapper.OrderMapper;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final BookRepository bookRepository;
     private final AddressRepository addressRepository;
+    private final CouponRepository couponRepository;
 
     public OrderServiceImpl(UserService userService, CartRepository cartRepository, OrderRepository orderRepository,
                             CartItemRepository cartItemRepository, OrderMapper orderMapper, BookRepository bookRepository,
-                            AddressRepository addressRepository) {
+                            AddressRepository addressRepository, CouponRepository couponRepository) {
         this.userService = userService;
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
@@ -49,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         this.orderMapper = orderMapper;
         this.bookRepository = bookRepository;
         this.addressRepository = addressRepository;
+        this.couponRepository = couponRepository;
     }
 
     @Override
@@ -87,7 +90,6 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(Instant.now());
         order.setPaymentMethod("COD");
         order.setNotes(orderRequestDTO.getNote());
-        order.setStatus(OrderStatusEnum.PENDING);
 
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem cartItem : items) {
@@ -102,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
             Book book = cartItem.getBook();
             int newQuantity = book.getQuantity() - cartItem.getQuantity();
             book.setQuantity(Math.max(newQuantity, 0));
-            if(book.getQuantity() <= 0) {
+            if (book.getQuantity() <= 0) {
                 book.setStatus(BookStatusEnum.OUT_OF_STOCK);
             }
         }
@@ -111,9 +113,32 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal totalPrice = orderItems.stream()
                 .map(it -> it.getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        //coupon
+        Coupon coupon = this.couponRepository.findByCode(orderRequestDTO.getCouponCode());
+        BigDecimal discountFee = BigDecimal.ZERO;
+        if (coupon != null) {
+            switch (coupon.getDiscountType()) {
+                case PERCENTAGE -> {
+                    discountFee = totalPrice
+                            .multiply(coupon.getDiscountValue()
+                                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+                    // Giới hạn mức giảm nếu có maximumDiscountAmount
+                    if (coupon.getMaximumDiscountAmount() != null &&
+                            discountFee.compareTo(coupon.getMaximumDiscountAmount()) > 0) {
+                        discountFee = coupon.getMaximumDiscountAmount();
+                    }
+                }
+                case FIXED_AMOUNT -> {
+                    discountFee = coupon.getDiscountValue();
+                    if (discountFee.compareTo(totalPrice) > 0) {
+                        discountFee = totalPrice;
+                    }
+                }
+                default -> discountFee = BigDecimal.ZERO;
+            }
+        }
         //hard code
         BigDecimal shippingFee = BigDecimal.valueOf(10_000);
-        BigDecimal discountFee = totalPrice.multiply(BigDecimal.valueOf(0.1));
         BigDecimal finalPrice = totalPrice.add(shippingFee).subtract(discountFee);
 
         order.setTotalPrice(totalPrice);
@@ -144,25 +169,25 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO updateOrder(OrderUpdateRequestDTO orderRequestDTO, Long id) {
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
-        if(orderRequestDTO.getReceiverName() != null && !orderRequestDTO.getReceiverName().isEmpty()) {
+        if (orderRequestDTO.getReceiverName() != null && !orderRequestDTO.getReceiverName().isEmpty()) {
             order.setReceiverName(orderRequestDTO.getReceiverName());
         }
-        if(orderRequestDTO.getReceiverPhone()!= null && !orderRequestDTO.getReceiverPhone().isEmpty()) {
+        if (orderRequestDTO.getReceiverPhone() != null && !orderRequestDTO.getReceiverPhone().isEmpty()) {
             order.setReceiverPhone(orderRequestDTO.getReceiverPhone());
         }
-        if(orderRequestDTO.getCity() != null && !orderRequestDTO.getCity().isEmpty()) {
+        if (orderRequestDTO.getCity() != null && !orderRequestDTO.getCity().isEmpty()) {
             order.setCity(orderRequestDTO.getCity());
         }
-        if(orderRequestDTO.getDistrict() != null && !orderRequestDTO.getDistrict().isEmpty()) {
+        if (orderRequestDTO.getDistrict() != null && !orderRequestDTO.getDistrict().isEmpty()) {
             order.setDistrict(orderRequestDTO.getDistrict());
         }
-        if(orderRequestDTO.getWard() != null && !orderRequestDTO.getWard().isEmpty()) {
+        if (orderRequestDTO.getWard() != null && !orderRequestDTO.getWard().isEmpty()) {
             order.setWard(orderRequestDTO.getWard());
         }
-        if(orderRequestDTO.getStreet() != null && !orderRequestDTO.getStreet().isEmpty()) {
+        if (orderRequestDTO.getStreet() != null && !orderRequestDTO.getStreet().isEmpty()) {
             order.setStreet(orderRequestDTO.getStreet());
         }
-        if(orderRequestDTO.getNote() != null && !orderRequestDTO.getNote().isEmpty()) {
+        if (orderRequestDTO.getNote() != null && !orderRequestDTO.getNote().isEmpty()) {
             order.setNotes(orderRequestDTO.getNote());
         }
 
@@ -174,7 +199,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrder(Long id) {
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
-        if(order.getStatus() == OrderStatusEnum.PENDING) {
+        if (order.getStatus() == OrderStatusEnum.PENDING) {
             order.setStatus(OrderStatusEnum.CANCELLED);
             this.orderRepository.save(order);
         }
@@ -190,12 +215,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderPageResponseDTO getAllOrders(Pageable pageable, String[] orders) {
         Page<Order> orderPage;
-        if(orders != null && orders.length > 0) {
+        if (orders != null && orders.length > 0) {
             OrderSpecificationBuilder builder = new OrderSpecificationBuilder();
-            for(String order : orders) {
+            for (String order : orders) {
                 Pattern pattern = Pattern.compile("(\\w+?)([:<>~!])(.*)(\\p{Punct}?)(.*)(\\p{Punct}?)");
                 Matcher matcher = pattern.matcher(order);
-                if(matcher.find()) {
+                if (matcher.find()) {
                     builder.with(
                             matcher.group(1),
                             matcher.group(2),

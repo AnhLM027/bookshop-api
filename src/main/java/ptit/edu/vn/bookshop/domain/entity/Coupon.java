@@ -53,10 +53,10 @@ public class Coupon {
     private Integer usageLimitPerCustomer;
 
     @Column(name = "starts_at", nullable = false)
-    private LocalDateTime  startsAt;
+    private LocalDateTime startsAt;
 
     @Column(name = "expires_at", nullable = false)
-    private LocalDateTime  expiresAt;
+    private LocalDateTime expiresAt;
 
     @Column(name = "status", nullable = false)
     private StatusEnum status;
@@ -73,8 +73,7 @@ public class Coupon {
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
 
-
-    @ManyToMany(mappedBy = "coupons",  fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "coupons", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Order> orders;
 
@@ -85,9 +84,9 @@ public class Coupon {
         if (this.status == null) {
             this.status = StatusEnum.ACTIVE;
         }
-        if(this.usageLimit == null) this.usageLimit = 0;
-        if(this.maximumDiscountAmount == null) this.minimumOrderAmount = BigDecimal.ZERO;
-        if(this.minimumOrderAmount == null) this.maximumDiscountAmount = BigDecimal.ZERO;
+        if (this.usageLimit == null) this.usageLimit = 0;
+        if (this.maximumDiscountAmount == null) this.minimumOrderAmount = BigDecimal.ZERO;
+        if (this.minimumOrderAmount == null) this.maximumDiscountAmount = BigDecimal.ZERO;
 
     }
 

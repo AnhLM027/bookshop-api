@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 public class OrderCreateRequestDTO {
     private List<ItemRequestDTO> cartItems;
+    private String couponCode;
 //    private String paymentMethod;
     private String note;
 
