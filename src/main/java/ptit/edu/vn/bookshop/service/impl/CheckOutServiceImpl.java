@@ -7,6 +7,7 @@ import ptit.edu.vn.bookshop.domain.entity.Address;
 import ptit.edu.vn.bookshop.domain.entity.User;
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
 import ptit.edu.vn.bookshop.repository.AddressRepository;
+import ptit.edu.vn.bookshop.repository.CouponRepository;
 import ptit.edu.vn.bookshop.service.CartService;
 import ptit.edu.vn.bookshop.service.CheckOutService;
 import ptit.edu.vn.bookshop.service.UserService;
@@ -22,10 +23,13 @@ public class CheckOutServiceImpl implements CheckOutService {
     private final CartService cartService;
     private final AddressRepository addressRepository;
 
-    public CheckOutServiceImpl(UserService userService, CartService cartService,  AddressRepository addressRepository) {
+
+    public CheckOutServiceImpl(UserService userService, CartService cartService,  AddressRepository addressRepository
+                                ) {
         this.userService = userService;
         this.cartService = cartService;
         this.addressRepository = addressRepository;
+//        this.couponRepository = couponRepository;
     }
 
     @Override
@@ -51,6 +55,8 @@ public class CheckOutServiceImpl implements CheckOutService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(", "));
         shippingAddress.setAddress(fullAddress);
+        // coupon
+//        Coupon coupon = this.couponRepository.findByCode()
 
         CheckOutResponseDTO.SummaryCheckout summaryCheckout = new CheckOutResponseDTO.SummaryCheckout();
         summaryCheckout.setSubtotal(cartResponseDTO.getSummary().getSubtotal());

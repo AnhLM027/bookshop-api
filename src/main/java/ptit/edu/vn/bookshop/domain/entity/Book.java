@@ -28,9 +28,6 @@ public class Book implements Serializable{
     @Column(name = "name", length = 200)
     private String name;
 
-    @Column(name = "title")
-    private String title;
-
     @Column(name = "description", columnDefinition = "MEDIUMTEXT")
     private String description;
 
@@ -46,7 +43,7 @@ public class Book implements Serializable{
     @Column(name = "discount")
     private BigDecimal discount;
 
-    @Column(name = "impage")
+    @Column(name = "image")
     private String image;
 
     @Column(name = "status")
@@ -94,7 +91,6 @@ public class Book implements Serializable{
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
-        this.updatedAt = this.createdAt;
         if (this.status == null) {
             if (this.quantity != null && this.quantity > 0) {
                 this.status = BookStatusEnum.AVAILABLE;

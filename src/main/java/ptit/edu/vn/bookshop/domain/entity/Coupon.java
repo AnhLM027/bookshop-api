@@ -81,6 +81,7 @@ public class Coupon {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
         if (this.status == null) {
             this.status = StatusEnum.ACTIVE;
         }

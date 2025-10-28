@@ -82,7 +82,7 @@ public class BookServiceImpl implements BookService {
         if (book.getDiscount() == null) {
             book.setDiscount(BigDecimal.valueOf(0.0));
         }
-        book.setImage(bookRequestDTO.getImage());
+        book.setImage(bookRequestDTO.getImageUrl());
         book.setCategory(category);
         book.setAuthor(author);
         book.setPublisher(publisher);
@@ -136,14 +136,13 @@ public class BookServiceImpl implements BookService {
             book.setDiscount(BigDecimal.valueOf(0.0));
         }
         if (bookRequestDTO.getName() != null) book.setName(bookRequestDTO.getName());
-        if (bookRequestDTO.getTitle() != null) book.setTitle(bookRequestDTO.getTitle());
         if (bookRequestDTO.getDescription() != null) book.setDescription(bookRequestDTO.getDescription());
         if (bookRequestDTO.getLanguage() != null) book.setLanguage(bookRequestDTO.getLanguage());
         if (bookRequestDTO.getQuantity() != null) book.setQuantity(bookRequestDTO.getQuantity());
         if (bookRequestDTO.getPrice() != null) book.setPrice(bookRequestDTO.getPrice());
         if (bookRequestDTO.getDiscount() != null) book.setDiscount(bookRequestDTO.getDiscount());
         if (bookRequestDTO.getStatus() != null) book.setStatus(bookRequestDTO.getStatus());
-        if (bookRequestDTO.getImage() != null) book.setImage(bookRequestDTO.getImage());
+        if (bookRequestDTO.getImageUrl() != null) book.setImage(bookRequestDTO.getImageUrl());
 
         return this.bookMapper.mapBookToBookResponseDto(this.bookRepository.save(book));
     }

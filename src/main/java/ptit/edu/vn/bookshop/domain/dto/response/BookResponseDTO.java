@@ -20,7 +20,6 @@ import java.time.Instant;
 public class BookResponseDTO {
     private Long id;
     private String name;
-    private String title;
     private String description;
     private String language;
     private Integer quantity;
@@ -29,7 +28,7 @@ public class BookResponseDTO {
     private BigDecimal finalPrice;
     @Enumerated(EnumType.STRING)
     private BookStatusEnum status;
-    private String image;
+    private String imageUrl;
     private Instant createdAt;
     private Instant updateAt;
     private BookCategoryResponseDTO category;

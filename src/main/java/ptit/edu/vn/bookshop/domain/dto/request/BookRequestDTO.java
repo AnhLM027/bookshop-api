@@ -21,10 +21,6 @@ public class BookRequestDTO {
     )
     private String name;
 
-    @NotBlank(message = "Book title is required")
-    @Size(min = 1, max = 500, message = "Book title must be between 1 and 500 characters")
-    private String title;
-
     @Size(max = 2000, message = "Description must not exceed 2000 characters")
     private String description;
 
@@ -57,7 +53,7 @@ public class BookRequestDTO {
             regexp = "^(|https?://.*\\.(?:png|jpg|jpeg|gif|webp|svg))$",
             message = "Image must be a valid image URL or empty"
     )
-    private String image;
+    private String imageUrl;
 
     @NotNull(message = "Category is required")
     @Valid

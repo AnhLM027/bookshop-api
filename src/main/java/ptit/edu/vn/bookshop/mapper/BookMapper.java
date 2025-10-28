@@ -15,13 +15,12 @@ public class BookMapper {
     public Book mapBookRequestDtoToBook(BookRequestDTO requestDTO) {
         Book book = new Book();
         book.setName(requestDTO.getName());
-        book.setTitle(requestDTO.getTitle());
         book.setDescription(requestDTO.getDescription());
         book.setPrice(requestDTO.getPrice());
         book.setLanguage(requestDTO.getLanguage());
         book.setQuantity(requestDTO.getQuantity());
         book.setDiscount(requestDTO.getDiscount());
-        book.setImage(requestDTO.getImage());
+        book.setImage(requestDTO.getImageUrl());
         if (requestDTO.getCategory() != null) {
             Category category = new Category();
             category.setId(requestDTO.getCategory().getId());
@@ -44,7 +43,6 @@ public class BookMapper {
         BookResponseDTO response = new BookResponseDTO();
         response.setId(book.getId());
         response.setName(book.getName());
-        response.setTitle(book.getTitle());
         response.setDescription(book.getDescription());
         response.setPrice(book.getPrice());
         response.setLanguage(book.getLanguage());
@@ -52,7 +50,7 @@ public class BookMapper {
         response.setDiscount(book.getDiscount());
         response.setFinalPrice(book.getPrice().subtract(book.getPrice().multiply(book.getDiscount())).setScale(2, BigDecimal.ROUND_HALF_UP));
         response.setStatus(book.getStatus());
-        response.setImage(book.getImage());
+        response.setImageUrl(book.getImage());
         response.setCreatedAt(book.getCreatedAt());
         response.setUpdateAt(book.getUpdatedAt());
         if (book.getCategory() != null) {

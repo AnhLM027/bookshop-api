@@ -42,6 +42,7 @@ public class CartItem {
     @PrePersist
     public void handleBeforeCreate() {
         this.createdAt = Instant.now();
+        this.updatedAt = createdAt;
     }
 
     @PreUpdate

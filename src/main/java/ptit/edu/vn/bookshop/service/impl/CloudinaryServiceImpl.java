@@ -24,41 +24,52 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File không được rỗng!");
         }
+
+        String original = file.getOriginalFilename();
+        if (original == null || !original.contains(".")) {
+            throw new IllegalArgumentException("Tên file không hợp lệ!");
+        }
+        int dotIndex = original.lastIndexOf('.');
+        String baseName = original.substring(0, dotIndex);
+
+        String folder = "bookshop/books/";
+        String publicId = folder + baseName;
+
         Map<String, Object> options = ObjectUtils.asMap(
-                "resource_type", "auto"
+                "resource_type", "auto",
+                "public_id", publicId,
+                "overwrite", true
         );
+
         Map<?, ?> data = cloudinary.uploader().upload(file.getBytes(), options);
+
         return data.get("secure_url").toString();
     }
 
+
     // Upload multi file
     public List<String> uploadMultipleFiles(MultipartFile[] files) throws IOException {
-        List<String> results = new ArrayList<>();
+        List<String> urls = new ArrayList<>();
+
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
+                String original = file.getOriginalFilename();
+                int dotIndex = original.lastIndexOf('.');
+                String baseName = original.substring(0, dotIndex);
+
+                String folder = "bookshop/books/";
+                String publicId = folder + baseName;
+
                 Map<String, Object> options = ObjectUtils.asMap(
-                        "resource_type", "auto"
+                        "resource_type", "auto",
+                        "public_id", publicId,
+                        "overwrite", true
                 );
+
                 Map<?, ?> data = cloudinary.uploader().upload(file.getBytes(), options);
-                results.add(data.get("secure_url").toString());
+                urls.add(data.get("secure_url").toString());
             }
         }
-        return results;
+        return urls;
     }
-
-
-//    public String uploadFile(MultipartFile file) throws IOException {
-//        Map data = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-//        return data.get("secure_url").toString();
-//    }
-//
-//    public List<String> uploadMultipleFiles(MultipartFile[] files) throws IOException {
-//        List<String> results = new ArrayList<>();
-//        for (MultipartFile file : files) {
-//            Map data = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-//            results.add(data.get("secure_url").toString());
-//        }
-//        return results;
-//    }
-
 }

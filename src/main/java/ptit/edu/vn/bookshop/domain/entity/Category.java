@@ -51,6 +51,7 @@ public class Category implements Serializable {
     public void handleBeforeCreate() {
         this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         this.createdAt = Instant.now();
+        this.updatedAt = createdAt;
         if (this.status == null) {
             this.status = StatusEnum.ACTIVE;
         }
