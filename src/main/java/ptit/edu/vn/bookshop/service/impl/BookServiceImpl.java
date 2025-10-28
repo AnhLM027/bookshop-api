@@ -82,11 +82,7 @@ public class BookServiceImpl implements BookService {
         if (book.getDiscount() == null) {
             book.setDiscount(BigDecimal.valueOf(0.0));
         }
-        // Kiểm tra image
-        if (bookRequestDTO.getImage() != null && !bookRequestDTO.getImage().isEmpty()) {
-            String bookImageUrl = "http://localhost:8080/storage/book/" + bookRequestDTO.getImage();
-            book.setImage(bookImageUrl);
-        }
+        book.setImage(bookRequestDTO.getImage());
         book.setCategory(category);
         book.setAuthor(author);
         book.setPublisher(publisher);

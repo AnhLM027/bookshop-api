@@ -37,8 +37,7 @@ public class CheckOutServiceImpl implements CheckOutService {
         CartResponseDTO cartResponseDTO = this.cartService.getCartItems();
 
         Address address = this.addressRepository.findByUserAndIsDefaultTrue(user)
-                .orElseThrow(() -> new  IllegalStateException("No default address found"));
-
+                .orElseThrow(() -> new IllegalStateException("No default address found"));
 
         CheckOutResponseDTO.ShippingAddress shippingAddress = new CheckOutResponseDTO.ShippingAddress();
         shippingAddress.setName(address.getReceiverName());
