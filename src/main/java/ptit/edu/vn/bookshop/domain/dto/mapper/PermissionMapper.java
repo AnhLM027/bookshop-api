@@ -1,4 +1,4 @@
-package ptit.edu.vn.bookshop.mapper;
+package ptit.edu.vn.bookshop.domain.dto.mapper;
 
 import org.mapstruct.Mapper;
 import ptit.edu.vn.bookshop.domain.dto.request.PermissionCreateRequestDTO;

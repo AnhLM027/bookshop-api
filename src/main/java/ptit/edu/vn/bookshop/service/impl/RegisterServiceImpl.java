@@ -15,7 +15,7 @@ import ptit.edu.vn.bookshop.repository.UserRepository;
 import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.RegisterService;
-import ptit.edu.vn.bookshop.mapper.UserMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.UserMapper;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

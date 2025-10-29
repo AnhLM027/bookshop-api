@@ -12,7 +12,7 @@ import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.PermissionRepository;
 import ptit.edu.vn.bookshop.repository.specification.PermissionSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.PermissionService;
-import ptit.edu.vn.bookshop.mapper.PermissionMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.PermissionMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 

@@ -7,7 +7,7 @@ import ptit.edu.vn.bookshop.domain.dto.request.CouponUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CouponResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Coupon;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
-import ptit.edu.vn.bookshop.mapper.CouponMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.CouponMapper;
 import ptit.edu.vn.bookshop.repository.CouponRepository;
 import ptit.edu.vn.bookshop.service.CouponService;
 

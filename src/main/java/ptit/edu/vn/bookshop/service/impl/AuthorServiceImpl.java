@@ -11,7 +11,7 @@ import ptit.edu.vn.bookshop.domain.entity.Author;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.AuthorRepository;
 import ptit.edu.vn.bookshop.service.AuthorService;
-import ptit.edu.vn.bookshop.mapper.AuthorMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.AuthorMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

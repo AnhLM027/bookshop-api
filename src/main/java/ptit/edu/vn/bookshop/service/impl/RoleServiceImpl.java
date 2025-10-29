@@ -11,7 +11,7 @@ import ptit.edu.vn.bookshop.domain.dto.response.RoleResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Permission;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
-import ptit.edu.vn.bookshop.mapper.RoleMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.RoleMapper;
 import ptit.edu.vn.bookshop.repository.PermissionRepository;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.specification.RoleSpecificationBuilder;

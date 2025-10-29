@@ -11,7 +11,7 @@ import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.CategoryRepository;
 import ptit.edu.vn.bookshop.repository.specification.CategorySpecificationBuilder;
 import ptit.edu.vn.bookshop.service.CategoryService;
-import ptit.edu.vn.bookshop.mapper.CategoryMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.CategoryMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 

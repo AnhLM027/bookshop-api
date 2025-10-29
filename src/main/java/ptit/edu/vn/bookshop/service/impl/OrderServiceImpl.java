@@ -18,7 +18,7 @@ import ptit.edu.vn.bookshop.repository.*;
 import ptit.edu.vn.bookshop.repository.specification.OrderSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.OrderService;
 import ptit.edu.vn.bookshop.service.UserService;
-import ptit.edu.vn.bookshop.mapper.OrderMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.OrderMapper;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.math.BigDecimal;

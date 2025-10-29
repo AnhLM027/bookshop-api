@@ -12,7 +12,7 @@ import ptit.edu.vn.bookshop.repository.PublisherRepository;
 import ptit.edu.vn.bookshop.repository.specification.PublisherSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.PublisherService;
 import org.springframework.stereotype.Service;
-import ptit.edu.vn.bookshop.mapper.PublisherMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.PublisherMapper;
 
 import java.util.Optional;
 import java.util.regex.Matcher;

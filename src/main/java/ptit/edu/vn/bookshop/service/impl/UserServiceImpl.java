@@ -18,7 +18,7 @@ import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.repository.specification.UserSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.UserService;
-import ptit.edu.vn.bookshop.mapper.UserMapper;
+import ptit.edu.vn.bookshop.domain.dto.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
