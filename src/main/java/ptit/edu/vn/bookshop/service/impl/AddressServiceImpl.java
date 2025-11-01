@@ -39,7 +39,7 @@ public class AddressServiceImpl implements AddressService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found."));
         User user = this.userService.getUserByUsername(email);
         Address address = new Address();
-        address.setReceiverName(addressRequestDTO.getName());
+        address.setReceiverName(addressRequestDTO.getReceiverName());
         address.setPhone(addressRequestDTO.getPhone());
         address.setStreet(addressRequestDTO.getStreet());
         address.setWard(addressRequestDTO.getWard());
@@ -74,7 +74,7 @@ public class AddressServiceImpl implements AddressService {
         if (!address.getUser().getId().equals(user.getId())) {
             throw new AccessDeniedException("You do not have permission to update this address.");
         }
-        address.setReceiverName(addressRequestDTO.getName());
+        address.setReceiverName(addressRequestDTO.getReceiverName());
         address.setPhone(addressRequestDTO.getPhone());
         address.setStreet(addressRequestDTO.getStreet());
         address.setWard(addressRequestDTO.getWard());
@@ -144,6 +144,11 @@ public class AddressServiceImpl implements AddressService {
         responseDTO.setAddresses(addressResponseDTOs);
         responseDTO.setTotal(addressResponseDTOs.size());
         return responseDTO;
+    }
+
+    @Override
+    public Address getAddressById(Long id) {
+        return this.addressRepository.findById(id).orElseThrow(()-> new IdInvalidException("Address not found."));
     }
 
 }

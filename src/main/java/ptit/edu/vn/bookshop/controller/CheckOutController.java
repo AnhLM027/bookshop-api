@@ -1,28 +1,28 @@
 package ptit.edu.vn.bookshop.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.response.CheckOutResponseDTO;
-import ptit.edu.vn.bookshop.service.CheckOutService;
+import ptit.edu.vn.bookshop.domain.dto.request.CheckoutRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.response.CheckoutResponseDTO;
+import ptit.edu.vn.bookshop.service.CheckoutService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 
 @RestController
 @RequestMapping("/api/v1")
 public class CheckOutController {
 
-    private final CheckOutService checkOutService;
+    private final CheckoutService checkOutService;
 
-    public CheckOutController(CheckOutService checkOutService) {
+    public CheckOutController(CheckoutService checkOutService) {
         this.checkOutService = checkOutService;
     }
 
     @GetMapping("/checkout")
     @ApiMessage("Checkout information retrieved successfully")
-    public ResponseEntity<CheckOutResponseDTO> checkout(){
-        CheckOutResponseDTO checkOutResponseDTO = this.checkOutService.getCheckOutResponseDTO();
+    public ResponseEntity<CheckoutResponseDTO> checkout(@Valid @RequestBody CheckoutRequestDTO checkoutRequestDTO) {
+        CheckoutResponseDTO checkOutResponseDTO = this.checkOutService.getCheckout(checkoutRequestDTO);
         return ResponseEntity.ok().body(checkOutResponseDTO);
     }
 
-    // con thieu endpint payment_method
-    // discount
 }

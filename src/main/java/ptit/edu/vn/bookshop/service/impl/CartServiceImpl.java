@@ -163,4 +163,10 @@ public class CartServiceImpl implements CartService {
         return this.cartMapper.mapCartToResponseDTO(cart);
     }
 
+    @Override
+    public Cart getCartByUser(Long id) {
+       Cart cart = this.cartRepository.findByUserId(id).orElseThrow(() -> new IdInvalidException("Cart not found"));
+       return cart;
+    }
+
 }

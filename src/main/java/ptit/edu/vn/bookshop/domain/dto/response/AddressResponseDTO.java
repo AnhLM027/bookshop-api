@@ -16,7 +16,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class AddressResponseDTO {
     private Long id;
-    private String name;
+    private String receiverName;
     private String phone;
     private String city;
     private String district;

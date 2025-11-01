@@ -14,7 +14,7 @@ public class AddressRequestDTO {
             regexp = "^[A-Za-zÀ-ỹ0-9\\s.,()-]+$",
             message = "Address name can only contain letters, numbers, spaces, and common punctuation"
     )
-    private String name;
+    private String receiverName;
 
     @NotBlank(message = "Phone number is required")
     @Pattern(

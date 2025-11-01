@@ -76,4 +76,7 @@ public class BookController {
                 null, null, true);
         return ResponseEntity.ok().body(bookPageResponseDTO);
     }
+
+    // home api
+    
 }

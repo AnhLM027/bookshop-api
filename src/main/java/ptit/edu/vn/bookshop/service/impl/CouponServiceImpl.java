@@ -93,4 +93,9 @@ public class CouponServiceImpl implements CouponService {
         return this.couponMapper.toResponseDTO(this.couponRepository.save(coupon));
     }
 
+    @Override
+    public Coupon getCouponByCode(String code) {
+        return this.couponRepository.findByCode(code).orElseThrow(() -> new IdInvalidException("coupon not found"));
+    }
+
 }

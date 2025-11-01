@@ -114,7 +114,8 @@ public class OrderServiceImpl implements OrderService {
                 .map(it -> it.getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         //coupon
-        Coupon coupon = this.couponRepository.findByCode(orderRequestDTO.getCouponCode());
+        Coupon coupon = this.couponRepository.findByCode(orderRequestDTO.getCouponCode())
+                .orElseThrow(() -> new IdInvalidException("Coupon not found"));
         BigDecimal discountFee = BigDecimal.ZERO;
         if (coupon != null) {
             switch (coupon.getDiscountType()) {
