@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class CartMapper {
-
     public CartResponseDTO.CartItemResponseDTO mapCartItemToResponseDTO(CartItem item) {
         CartResponseDTO.CartItemResponseDTO dto = new CartResponseDTO.CartItemResponseDTO();
         dto.setId(item.getId());
@@ -22,21 +21,28 @@ public class CartMapper {
         dto.setProductName(item.getBook().getName());
         dto.setProductStatus(item.getBook().getStatus());
         dto.setImageUrl(item.getBook().getImage());
-        dto.setUnitPrice(item.getUnitPrice());
+        dto.setUnitPrice(item.getUnitPrice().setScale(0, RoundingMode.HALF_UP));
         dto.setQuantity(item.getQuantity());
-        BigDecimal discount = item.getItemDiscount();
+        BigDecimal discount = item.getItemDiscount().setScale(0, RoundingMode.HALF_UP);
         dto.setDiscount(discount);
-        BigDecimal discountedPrice;
+
+        BigDecimal discountedPrice = item.getUnitPrice();
+
         if (discount != null && discount.compareTo(BigDecimal.ZERO) > 0) {
-            // Tính giá sau khi giảm
-            discountedPrice = item.getUnitPrice().multiply(BigDecimal.ONE.subtract(discount));
-        } else {
-            // Không giảm giá
-            discountedPrice = item.getUnitPrice();
+            BigDecimal discountRate = discount.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
+
+            discountedPrice = item.getUnitPrice().multiply(discountRate)
+                    .setScale(0, RoundingMode.HALF_UP);
+            discountedPrice = discountedPrice.max(BigDecimal.ZERO);
         }
+
         dto.setDiscountedPrice(discountedPrice);
-        BigDecimal totalPrice = discountedPrice.multiply(BigDecimal.valueOf(item.getQuantity()));
-        dto.setTotalPrice(totalPrice);
+
+        BigDecimal totalPrice = item.getUnitPrice().subtract(discountedPrice)
+                .setScale(0, RoundingMode.HALF_UP);
+
+        dto.setFinalPrice(totalPrice);
+
         return dto;
     }
 
@@ -47,21 +53,26 @@ public class CartMapper {
                 .collect(Collectors.toList());
 
         CartResponseDTO.CartSummaryDTO summary = new CartResponseDTO.CartSummaryDTO();
-        int totalQuantity = itemDTOs.stream().mapToInt(CartResponseDTO.CartItemResponseDTO::getQuantity).sum();
+
+        int totalQuantity = itemDTOs.stream()
+                .mapToInt(CartResponseDTO.CartItemResponseDTO::getQuantity)
+                .sum();
+
         BigDecimal subtotal = itemDTOs.stream()
-                .map(CartResponseDTO.CartItemResponseDTO::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
+                .map(it -> it.getFinalPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(0, RoundingMode.HALF_UP);
 
         summary.setTotalQuantity(totalQuantity);
         summary.setSubtotal(subtotal);
 
         CartResponseDTO dto = new CartResponseDTO();
         dto.setId(cart.getId());
-//        dto.setStatus(cart.getStatus());
         dto.setCreatedAt(cart.getCreatedAt());
         dto.setUpdatedAt(Instant.now());
         dto.setCartItems(itemDTOs);
         dto.setSummary(summary);
+
         return dto;
     }
 

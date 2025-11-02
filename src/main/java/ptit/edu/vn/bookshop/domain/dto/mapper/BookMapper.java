@@ -48,7 +48,8 @@ public class BookMapper {
         response.setLanguage(book.getLanguage());
         response.setQuantity(book.getQuantity());
         response.setDiscount(book.getDiscount());
-        response.setFinalPrice(book.getPrice().subtract(book.getPrice().multiply(book.getDiscount())).setScale(2, BigDecimal.ROUND_HALF_UP));
+        response.setFinalPrice(book.getPrice().subtract(book.getPrice().multiply(book.getDiscount().divide(BigDecimal.valueOf(100))))
+                .setScale(0, BigDecimal.ROUND_HALF_UP));
         response.setStatus(book.getStatus());
         response.setImageUrl(book.getImage());
         response.setCreatedAt(book.getCreatedAt());

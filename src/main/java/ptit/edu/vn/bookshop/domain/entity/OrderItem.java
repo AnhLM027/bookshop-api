@@ -16,10 +16,10 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
+    @Column(name = "price", precision = 15, scale = 0, nullable = false)
     private BigDecimal price;
 
     @Column(name = "created_at", nullable = false)

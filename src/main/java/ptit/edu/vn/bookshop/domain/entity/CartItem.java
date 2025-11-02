@@ -19,10 +19,10 @@ public class CartItem {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_price", nullable = false)
+    @Column(name = "unit_price", precision = 15, scale = 0, nullable = false)
     private BigDecimal unitPrice;
 
-    @Column(name = "discount", nullable = false)
+    @Column(name = "discount", precision = 15, scale = 0, nullable = false)
     private BigDecimal itemDiscount;
 
     @Column(name = "created_at", nullable = false, updatable = false)

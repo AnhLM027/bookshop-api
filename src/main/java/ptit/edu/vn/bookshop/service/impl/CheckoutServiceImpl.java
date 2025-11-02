@@ -9,6 +9,7 @@ import ptit.edu.vn.bookshop.service.*;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,19 +48,22 @@ public class CheckoutServiceImpl implements CheckoutService {
             itemDTO.setImageUrl(it.getBook().getImage());
             itemDTO.setQuantity(it.getQuantity());
             itemDTO.setUnitPrice(it.getUnitPrice());
-            itemDTO.setTotalPrice(it.getUnitPrice().multiply(BigDecimal.valueOf(it.getQuantity())));
+            BigDecimal discount = it.getItemDiscount().divide(BigDecimal.valueOf(100));
+            BigDecimal finalPrice = it.getUnitPrice().multiply(BigDecimal.valueOf(1).subtract(discount))
+                    .setScale(0, RoundingMode.HALF_UP);
+            itemDTO.setFinalPrice(finalPrice);
             itemDTOS.add(itemDTO);
         }
 
         int quantity = cartItem.stream().mapToInt(CartItem::getQuantity).sum();
-        BigDecimal totalPrice = cartItem
-                .stream()
-                .map(it -> it.getUnitPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
+        BigDecimal totalPrice = itemDTOS.stream()
+                .map(it -> it.getFinalPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         // lấy lên thông tin về địa chỉ
         Address address = this.addressService.getAddressById(checkoutRequest.getAddressId());
 //      // lấy thông tin mã giảm giá
-        Coupon coupon = null;
+        Coupon coupon;
+        BigDecimal discountFee = BigDecimal.ZERO;
         CheckoutResponseDTO.CouponInfo couponInfo = null;
         if(checkoutRequest.getCouponCode() != null) {
             coupon = this.couponService.getCouponByCode(checkoutRequest.getCouponCode());
@@ -68,7 +72,27 @@ public class CheckoutServiceImpl implements CheckoutService {
             couponInfo.setDiscountValue(coupon.getDiscountValue());
             couponInfo.setDiscountType(coupon.getDiscountType());
             couponInfo.setExpiredAt(coupon.getExpiresAt());
+            switch (coupon.getDiscountType()) {
+                case PERCENTAGE -> {
+                    discountFee = totalPrice.multiply(coupon.getDiscountValue()
+                                            .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP))
+                            .setScale(0, RoundingMode.HALF_UP);
+                    // Giới hạn mức giảm nếu có maximumDiscountAmount
+                    if (coupon.getMaximumDiscountAmount() != null &&
+                            discountFee.compareTo(coupon.getMaximumDiscountAmount()) > 0) {
+                        discountFee = coupon.getMaximumDiscountAmount();
+                    }
+                }
+                case FIXED_AMOUNT -> {
+                    discountFee = coupon.getDiscountValue();
+                    if (discountFee.compareTo(totalPrice) > 0) {
+                        discountFee = totalPrice;
+                    }
+                }
+                default -> discountFee = BigDecimal.ZERO;
+            }
         }
+
         CheckoutResponseDTO.ShippingAddress shippingAddress = new CheckoutResponseDTO.ShippingAddress();
         shippingAddress.setName(address.getReceiverName());
         shippingAddress.setPhone(address.getPhone());
@@ -86,12 +110,12 @@ public class CheckoutServiceImpl implements CheckoutService {
         CheckoutResponseDTO.SummaryCheckout summaryCheckout = new CheckoutResponseDTO.SummaryCheckout();
         // hard code
         BigDecimal shippingFee = BigDecimal.valueOf(10_000);
-        BigDecimal finalPrice = totalPrice.add(shippingFee)
-                .subtract(coupon != null ? coupon.getDiscountValue():BigDecimal.ZERO);
+
+        BigDecimal finalPrice = totalPrice.add(shippingFee).subtract(discountFee);
 
         summaryCheckout.setSubtotal(totalPrice);
         summaryCheckout.setTotalQuantity(quantity);
-        summaryCheckout.setCartDiscount(couponInfo != null ? coupon.getDiscountValue() : BigDecimal.ZERO);
+        summaryCheckout.setCartDiscount(discountFee);
         summaryCheckout.setShippingFee(shippingFee);
         summaryCheckout.setGrandTotal(finalPrice);
 

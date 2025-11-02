@@ -35,14 +35,14 @@ public class Coupon {
     @Column(name = "discount_type", nullable = false)
     private DiscountTypeEnum discountType;
 
-    @Column(name = "discount_value", nullable = false, precision = 10, scale = 2)
+    @Column(name = "discount_value", nullable = false, precision = 15, scale = 0)
     private BigDecimal discountValue;
 
     // Điều kiện áp dụng
-    @Column(name = "minimum_order_amount", precision = 12, scale = 2)
+    @Column(name = "minimum_order_amount", precision = 15, scale = 0)
     private BigDecimal minimumOrderAmount;
 
-    @Column(name = "maximum_discount_amount", precision = 12, scale = 2)
+    @Column(name = "maximum_discount_amount", precision = 15, scale = 0)
     private BigDecimal maximumDiscountAmount;
 
     // Giới hạn sử dụng

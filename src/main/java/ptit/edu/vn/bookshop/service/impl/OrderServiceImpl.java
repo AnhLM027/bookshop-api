@@ -114,28 +114,30 @@ public class OrderServiceImpl implements OrderService {
                 .map(it -> it.getPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         //coupon
-        Coupon coupon = this.couponRepository.findByCode(orderRequestDTO.getCouponCode())
-                .orElseThrow(() -> new IdInvalidException("Coupon not found"));
         BigDecimal discountFee = BigDecimal.ZERO;
-        if (coupon != null) {
-            switch (coupon.getDiscountType()) {
-                case PERCENTAGE -> {
-                    discountFee = totalPrice
-                            .multiply(coupon.getDiscountValue()
-                                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
-                    // Giới hạn mức giảm nếu có maximumDiscountAmount
-                    if (coupon.getMaximumDiscountAmount() != null &&
-                            discountFee.compareTo(coupon.getMaximumDiscountAmount()) > 0) {
-                        discountFee = coupon.getMaximumDiscountAmount();
+        if(orderRequestDTO.getCouponCode() != null) {
+            Coupon coupon = this.couponRepository.findByCode(orderRequestDTO.getCouponCode())
+                    .orElseThrow(() -> new IdInvalidException("Coupon not found"));
+            if (coupon != null) {
+                switch (coupon.getDiscountType()) {
+                    case PERCENTAGE -> {
+                        discountFee = totalPrice
+                                .multiply(coupon.getDiscountValue()
+                                        .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_UP));
+                        // Giới hạn mức giảm nếu có maximumDiscountAmount
+                        if (coupon.getMaximumDiscountAmount() != null &&
+                                discountFee.compareTo(coupon.getMaximumDiscountAmount()) > 0) {
+                            discountFee = coupon.getMaximumDiscountAmount();
+                        }
                     }
-                }
-                case FIXED_AMOUNT -> {
-                    discountFee = coupon.getDiscountValue();
-                    if (discountFee.compareTo(totalPrice) > 0) {
-                        discountFee = totalPrice;
+                    case FIXED_AMOUNT -> {
+                        discountFee = coupon.getDiscountValue();
+                        if (discountFee.compareTo(totalPrice) > 0) {
+                            discountFee = totalPrice;
+                        }
                     }
+                    default -> discountFee = BigDecimal.ZERO;
                 }
-                default -> discountFee = BigDecimal.ZERO;
             }
         }
         //hard code

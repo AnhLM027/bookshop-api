@@ -25,7 +25,7 @@ public class Book implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 200)
+    @Column(name = "name", length = 200, nullable = false)
     private String name;
 
     @Column(name = "description", columnDefinition = "MEDIUMTEXT")
@@ -34,13 +34,13 @@ public class Book implements Serializable{
     @Column(name = "language")
     private String language;
 
-    @Column(name = "price")
+    @Column(name = "price", precision = 15, scale = 0, nullable = false)
     private BigDecimal price;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity",  nullable = false)
     private Integer quantity;
 
-    @Column(name = "discount")
+    @Column(name = "discount", precision = 15, scale = 0, nullable = false)
     private BigDecimal discount;
 
     @Column(name = "image")

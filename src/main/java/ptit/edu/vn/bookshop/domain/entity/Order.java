@@ -47,16 +47,16 @@ public class Order {
     @Column(name = "postal_code", length = 20)
     private String postalCode;
 
-    @Column(name = "total_price")
+    @Column(name = "total_price", precision = 15, scale = 0,  nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "discount_total")
+    @Column(name = "discount_total", precision = 15, scale = 0,  nullable = false)
     private BigDecimal discountFee;
 
-    @Column(name = "shipping_fee")
+    @Column(name = "shipping_fee", precision = 15, scale = 0,  nullable = false)
     private BigDecimal shippingFee;
 
-    @Column(name = "final_price")
+    @Column(name = "final_price", precision = 15, scale = 0,  nullable = false)
     private BigDecimal finalPrice;
 
     @Column(name = "payment_method", length = 50)

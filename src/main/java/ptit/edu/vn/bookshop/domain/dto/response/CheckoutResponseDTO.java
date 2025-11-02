@@ -41,7 +41,7 @@ public class CheckoutResponseDTO {
         private String imageUrl;
         private int quantity;
         private BigDecimal unitPrice;
-        private BigDecimal totalPrice;
+        private BigDecimal finalPrice;
     }
 
 

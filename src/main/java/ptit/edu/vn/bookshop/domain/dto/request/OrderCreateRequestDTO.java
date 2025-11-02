@@ -22,7 +22,7 @@ public class OrderCreateRequestDTO {
     public static class ItemRequestDTO {
         private Long id;
         // ho tro Mua Ngay
-        private Long productId;
-        private Integer quantity;
+//        private Long productId;
+//        private Integer quantity;
     }
 }

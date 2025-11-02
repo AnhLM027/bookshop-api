@@ -39,7 +39,7 @@ public class CartResponseDTO {
         private Integer quantity;
         private BigDecimal discount;
         private BigDecimal discountedPrice;
-        private BigDecimal totalPrice;
+        private BigDecimal finalPrice;
     }
 
     @Getter
