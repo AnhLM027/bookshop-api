@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AddressServiceImpl implements AddressService {
+public class
+
+AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final UserService userService;
     private final AddressMapper addressMapper;

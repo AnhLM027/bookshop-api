@@ -21,8 +21,5 @@ public class OrderCreateRequestDTO {
     @AllArgsConstructor
     public static class ItemRequestDTO {
         private Long id;
-        // ho tro Mua Ngay
-//        private Long productId;
-//        private Integer quantity;
     }
 }

@@ -59,7 +59,7 @@ public class CategoryController {
 
     // Admin endpoints
     @GetMapping("/admin/categories/{id}")
-    @ApiMessage("Category details retrieved by admin")
+    @ApiMessage("Category retrieved successfully by admin")
     public ResponseEntity<CategoryResponseDTO> getCategoryByAdmin(@PathVariable Long id){
         CategoryResponseDTO categoryResponseDTO = this.categoryService.fetchCategory(id, true);
         return ResponseEntity.ok().body(categoryResponseDTO);
