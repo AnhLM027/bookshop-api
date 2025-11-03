@@ -28,18 +28,16 @@ public class CartMapper {
 
         BigDecimal discountedPrice = item.getUnitPrice();
 
-        if (discount != null && discount.compareTo(BigDecimal.ZERO) > 0) {
+        if (discount != null && discount.compareTo(BigDecimal.ZERO) >= 0) {
             BigDecimal discountRate = discount.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
 
             discountedPrice = item.getUnitPrice().multiply(discountRate)
                     .setScale(0, RoundingMode.HALF_UP);
-            discountedPrice = discountedPrice.max(BigDecimal.ZERO);
         }
 
         dto.setDiscountedPrice(discountedPrice);
 
-        BigDecimal totalPrice = item.getUnitPrice().subtract(discountedPrice)
-                .setScale(0, RoundingMode.HALF_UP);
+        BigDecimal totalPrice = item.getUnitPrice().subtract(discountedPrice);
 
         dto.setFinalPrice(totalPrice);
 

@@ -6,6 +6,7 @@ import ptit.edu.vn.bookshop.domain.entity.Order;
 import ptit.edu.vn.bookshop.domain.entity.OrderItem;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class OrderMapper {
         // Items
         List<OrderResponseDTO.OrderItemResponse> orderItemResponseList = new ArrayList<>();
         for(OrderItem item : order.getOrderItems()) {
-            OrderResponseDTO.OrderItemResponse orderItemResponse = toOrderItemResponse(item, order);
+            OrderResponseDTO.OrderItemResponse orderItemResponse = toOrderItemResponse(item);
             orderItemResponseList.add(orderItemResponse);
         }
 
@@ -63,7 +64,7 @@ public class OrderMapper {
         return responseDTO;
     }
 
-    public OrderResponseDTO.OrderItemResponse toOrderItemResponse(OrderItem orderItem, Order order) {
+    public OrderResponseDTO.OrderItemResponse toOrderItemResponse(OrderItem orderItem) {
 
         OrderResponseDTO.OrderItemResponse itemResponse = new OrderResponseDTO.OrderItemResponse();
 
@@ -75,11 +76,16 @@ public class OrderMapper {
         itemResponse.setUnitPrice(orderItem.getBook().getPrice());
         itemResponse.setDiscount(orderItem.getBook().getDiscount());
 
+        BigDecimal discountPercent = orderItem.getBook().getDiscount()
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
         BigDecimal discountedPrice = orderItem.getBook().getPrice()
-                .multiply(BigDecimal.ONE.subtract(orderItem.getBook().getDiscount()));
+                .multiply(BigDecimal.ONE.subtract(discountPercent)).setScale(0, RoundingMode.HALF_UP);
+
         itemResponse.setDiscountedPrice(discountedPrice);
 
-        BigDecimal totalPrice = discountedPrice.multiply(BigDecimal.valueOf(orderItem.getQuantity()));
+        BigDecimal totalPrice = discountedPrice.multiply(BigDecimal.valueOf(orderItem.getQuantity()))
+                .setScale(0, RoundingMode.HALF_UP);
         itemResponse.setTotalPrice(totalPrice);
         return itemResponse;
     }

@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ptit.edu.vn.bookshop.domain.constant.DiscountTypeEnum;
 import ptit.edu.vn.bookshop.domain.constant.OrderStatusEnum;
 import ptit.edu.vn.bookshop.domain.entity.OrderItem;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -61,14 +63,4 @@ public class OrderResponseDTO {
         private BigDecimal discountFee;
         private BigDecimal finalPrice;
     }
-    // Mở rộng nếu cần tích hợp thanh toán online
-    // @Getter
-    // @Setter
-    // @AllArgsConstructor
-    // @NoArgsConstructor
-    // public static class PaymentResponse {
-    //     private String transactionId;
-    //     private String status;   // PENDING, SUCCESS, FAILED
-    //     private Instant paidAt;
-    // }
 }

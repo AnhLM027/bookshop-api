@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class CloudinaryServiceImpl implements CloudinaryService {
@@ -32,8 +33,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         int dotIndex = original.lastIndexOf('.');
         String baseName = original.substring(0, dotIndex);
 
-        String folder = "bookshop/books/";
-        String publicId = folder + baseName;
+        String publicId = baseName + "_" + UUID.randomUUID();
 
         Map<String, Object> options = ObjectUtils.asMap(
                 "resource_type", "auto",
@@ -57,8 +57,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 int dotIndex = original.lastIndexOf('.');
                 String baseName = original.substring(0, dotIndex);
 
-                String folder = "bookshop/books/";
-                String publicId = folder + baseName;
+                String publicId = baseName + "_" + UUID.randomUUID();
 
                 Map<String, Object> options = ObjectUtils.asMap(
                         "resource_type", "auto",

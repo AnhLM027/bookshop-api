@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
         if (items.size() != cartItemIds.size()) {
             throw new IllegalArgumentException("Some cart items are invalid or do not belong to the current cart");
         }
-
+        // lấy thông tin địa chỉ
         Address address = this.addressRepository.findByUserAndIsDefaultTrue(user)
                 .orElseThrow(() -> new IllegalArgumentException("Address not found for user"));
 
@@ -95,7 +95,11 @@ public class OrderServiceImpl implements OrderService {
         for (CartItem cartItem : items) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
-            orderItem.setPrice(cartItem.getUnitPrice().multiply(BigDecimal.ONE.subtract(cartItem.getItemDiscount())));
+            BigDecimal discountPercent = cartItem.getItemDiscount()
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+            BigDecimal discountedPrice = cartItem.getUnitPrice()
+                    .multiply(BigDecimal.ONE.subtract(discountPercent)).setScale(0, RoundingMode.HALF_UP);
+            orderItem.setPrice(discountedPrice);
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setBook(cartItem.getBook());
             orderItems.add(orderItem);
@@ -132,17 +136,22 @@ public class OrderServiceImpl implements OrderService {
                     }
                     case FIXED_AMOUNT -> {
                         discountFee = coupon.getDiscountValue();
-                        if (discountFee.compareTo(totalPrice) > 0) {
-                            discountFee = totalPrice;
-                        }
                     }
                     default -> discountFee = BigDecimal.ZERO;
                 }
             }
         }
         //hard code
-        BigDecimal shippingFee = BigDecimal.valueOf(10_000);
+        BigDecimal shippingFee = BigDecimal.valueOf(10000);
+        if (totalPrice.compareTo(shippingFee) < 0) {
+            totalPrice = BigDecimal.ZERO;
+        }
         BigDecimal finalPrice = totalPrice.add(shippingFee).subtract(discountFee);
+        if (finalPrice.compareTo(BigDecimal.ZERO) < 0) {
+            finalPrice = BigDecimal.ZERO;
+        }
+        finalPrice = finalPrice.setScale(0, RoundingMode.HALF_UP);
+
 
         order.setTotalPrice(totalPrice);
         order.setShippingFee(shippingFee);
@@ -164,7 +173,6 @@ public class OrderServiceImpl implements OrderService {
             // Nếu còn items, cập nhật lại cart
             this.cartRepository.save(cart);
         }
-
         return this.orderMapper.toOrderResponseDTO(order);
     }
 
