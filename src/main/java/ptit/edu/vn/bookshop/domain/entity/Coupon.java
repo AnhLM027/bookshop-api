@@ -59,6 +59,7 @@ public class Coupon {
     private LocalDateTime expiresAt;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
     @Column(name = "created_at", nullable = false, updatable = false)

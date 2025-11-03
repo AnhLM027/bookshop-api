@@ -2,6 +2,7 @@ package ptit.edu.vn.bookshop.service.impl;
 
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.bookshop.domain.dto.request.CheckoutRequestDTO;
+import ptit.edu.vn.bookshop.domain.dto.request.OrderCreateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CheckoutResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.*;
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
@@ -38,10 +39,16 @@ public class CheckoutServiceImpl implements CheckoutService {
         User user = this.userService.getUserByUsername(email);
 //         lấy thông tin về giỏ hàng
         Cart cart = this.cartService.getCartByUser(user.getId());
-        List<CartItem> cartItem = cart.getCartItems();
+
+        List<Long> cartItemIds = checkoutRequest.getCartItems().stream()
+                .map(CheckoutRequestDTO.CheckoutCartItemsRequestDTO::getId).toList();
+
+        List<CartItem> cartItems = cart.getCartItems().stream()
+                        .filter(it -> cartItemIds.contains(it.getId())).toList();
 
         List<CheckoutResponseDTO.CheckoutItemDTO> itemDTOS = new ArrayList<>();
-        for (CartItem it : cartItem) {
+
+        for (CartItem it : cartItems) {
             CheckoutResponseDTO.CheckoutItemDTO itemDTO = new CheckoutResponseDTO.CheckoutItemDTO();
             itemDTO.setProductId(it.getBook().getId());
             itemDTO.setProductName(it.getBook().getName());
@@ -55,7 +62,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             itemDTOS.add(itemDTO);
         }
 
-        int quantity = cartItem.stream().mapToInt(CartItem::getQuantity).sum();
+        int quantity = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
         BigDecimal totalPrice = itemDTOS.stream()
                 .map(it -> it.getFinalPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
