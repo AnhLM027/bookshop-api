@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.*;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
+import ptit.edu.vn.bookshop.domain.entity.RedisToken;
 import ptit.edu.vn.bookshop.exception.BadCredentialsException;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.service.RegisterService;
@@ -23,6 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -74,17 +77,13 @@ public class AuthenticationController {
         // create refresh_token
         String refresh_token = this.securityUtil.createRefreshToken(loginRequestDTO.getUsername(), response);
 
-        this.userService.updateUserToken(refresh_token, loginRequestDTO.getUsername());
-        // set cookies
-        ResponseCookie resCookies = ResponseCookie
-                .from("refresh_token", refresh_token)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(refreshTokenExpiration)
-                .build();
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, resCookies.toString()).body(response);
+        RedisToken redisToken = RedisToken.builder()
+                .id(UUID.randomUUID().toString())
+                .accessToken(access_token)
+                .refreshToken(refresh_token)
+                .userId
+                .build();
     }
 
     @GetMapping("/refresh")

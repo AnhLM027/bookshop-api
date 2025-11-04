@@ -162,13 +162,13 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
     }
 
-    @Override
-    public void updateUserToken(String token, String email) {
-        User user = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-        user.setRefreshToken(token);
-        this.userRepository.save(user);
-    }
+//    @Override
+//    public void updateUserToken(String token, String email) {
+//        User user = this.userRepository.findByEmail(email)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+//        user.setRefreshToken(token);
+//        this.userRepository.save(user);
+//    }
 
     @Override
     public UserResponseDTO getUserByRefreshTokenAndEmail(String refreshToken, String email) {
