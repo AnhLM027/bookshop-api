@@ -1,5 +1,6 @@
 package ptit.edu.vn.bookshop.domain.entity;
 
+import lombok.NoArgsConstructor;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,7 +17,15 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "permissions")
+@NoArgsConstructor
 public class Permission implements Serializable {
+
+    public Permission(String name, String apiPath, String method, String module) {
+        this.name = name;
+        this.apiPath = apiPath;
+        this.method = method;
+        this.module = module;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

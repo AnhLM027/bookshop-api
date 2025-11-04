@@ -32,7 +32,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
     }
 
-    @PatchMapping("/orders/{id}")
+    @PutMapping("/orders/{id}")
     @ApiMessage("")
     public ResponseEntity<OrderResponseDTO> getOrder(@Valid @RequestBody OrderUpdateRequestDTO orderUpdateRequestDTO, @PathVariable Long id) {
         OrderResponseDTO orderResponseDTO = this.orderService.updateOrder(orderUpdateRequestDTO, id);

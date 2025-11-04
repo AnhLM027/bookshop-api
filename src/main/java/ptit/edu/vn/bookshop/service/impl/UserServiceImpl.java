@@ -1,5 +1,6 @@
 package ptit.edu.vn.bookshop.service.impl;
 
+import jakarta.transaction.Transactional;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.PasswordChangeRequestDTO;
@@ -61,6 +62,7 @@ public class UserServiceImpl implements UserService {
     private String baseURI;
 
     @Override
+    @Transactional
     public UserResponseDTO createUser(UserCreateRequestDTO userCreateRequestDTO) {
         // Kiểm tra email đã tồn tại
         if (userCreateRequestDTO.getEmail() != null && this.userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {

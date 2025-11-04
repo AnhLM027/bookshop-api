@@ -10,11 +10,11 @@ import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 
 @RestController
 @RequestMapping("/api/v1")
-public class CheckOutController {
+public class CheckoutController {
 
     private final CheckoutService checkOutService;
 
-    public CheckOutController(CheckoutService checkOutService) {
+    public CheckoutController(CheckoutService checkOutService) {
         this.checkOutService = checkOutService;
     }
 
