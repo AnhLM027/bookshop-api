@@ -13,13 +13,7 @@
     "country": "Anh",
     "biography": "Giáo sư thần kinh học và tâm lý học, nổi tiếng với tác phẩm 'Why We Sleep' nghiên cứu về giấc ngủ."
   },
-  {
-    "name": "IIG Viet Nam",
-    "date_of_birth": "2000-01-01",
-    "gender": "ORGANIZATION",
-    "country": "Việt Nam",
-    "biography": "Tổ chức giáo dục và khảo thí đại diện ETS tại Việt Nam, nổi bật trong lĩnh vực TOEIC và TOEFL."
-  },
+
   {
     "name": "Vương Đào",
     "date_of_birth": "1968-07-11",
@@ -35,7 +29,7 @@
     "biography": "Nhà hóa sinh và tác giả sách 'Glucose Revolution' về khoa học dinh dưỡng và sức khỏe."
   },
   {
-    "name": "Dịch Dương, Phan Trách Bân, Lý Thế Minh",
+    "name": "Dịch Dương",
     "date_of_birth": "1975-05-15",
     "gender": "MALE",
     "country": "Trung Quốc",
@@ -49,7 +43,7 @@
     "biography": "Nhà nghiên cứu và tác giả người Việt, được biết đến với các công trình về y học và triết lý sống xanh."
   },
   {
-    "name": "Cao Ngọc Vĩ, Quách Tu Bình, Trần Cốc Siêu",
+    "name": "Cao Ngọc Vĩ",
     "date_of_birth": "1978-06-09",
     "gender": "MALE",
     "country": "Trung Quốc",
@@ -75,13 +69,6 @@
     "gender": "MALE",
     "country": "Mỹ",
     "biography": "Hai cha con nhà khoa học nổi tiếng, đồng tác giả nghiên cứu 'The China Study' về dinh dưỡng và sức khỏe."
-  },
-  {
-    "name": "IIG Việt Nam",
-    "date_of_birth": "2000-01-01",
-    "gender": "ORGANIZATION",
-    "country": "Việt Nam",
-    "biography": "Tổ chức giáo dục hàng đầu trong lĩnh vực kiểm tra và đánh giá năng lực ngoại ngữ tại Việt Nam."
   },
   {
     "name": "Dr. Gleb Tsipursky",
@@ -119,14 +106,7 @@
     "biography": "Nhóm tác giả người Trung Quốc, chuyên biên soạn các sách về giáo dục, văn hóa và nghiên cứu xã hội học đương đại."
   },
   {
-    "name": "Nhiều Tác Giả",
-    "date_of_birth": "2000-01-01",
-    "gender": "ORGANIZATION",
-    "country": "Quốc tế",
-    "biography": "Tập hợp các tác giả trong và ngoài nước đóng góp bài viết cho bộ sách tổng hợp kiến thức đa lĩnh vực."
-  },
-  {
-    "name": "Hoàng Văn Vân, Vũ Hải Hà, Chu Quang Bình, Hoàng Thị Hồng Hải, Nguyễn Thị Kim Phượng",
+    "name": "Hoàng Văn Vân",
     "date_of_birth": "1960-03-18",
     "gender": "MALE",
     "country": "Việt Nam",
@@ -146,20 +126,7 @@
     "country": "Việt Nam",
     "biography": "Cơ quan quản lý giáo dục quốc gia Việt Nam, chịu trách nhiệm tổ chức và phát triển chương trình giảng dạy trên toàn quốc."
   },
-  {
-    "name": "Khương Lệ Bình, Vương Phương, Vương Phong, Lưu Lệ Bình",
-    "date_of_birth": "1978-05-11",
-    "gender": "FEMALE",
-    "country": "Trung Quốc",
-    "biography": "Nhóm tác giả người Trung Quốc chuyên sáng tác và biên soạn các ấn phẩm thiếu nhi, văn học giáo dục và kỹ năng sống."
-  },
-  {
-    "name": "Khương Lệ Bình",
-    "date_of_birth": "1979-02-09",
-    "gender": "FEMALE",
-    "country": "Trung Quốc",
-    "biography": "Tác giả nữ người Trung Quốc, được biết đến qua các tác phẩm văn học và truyện thiếu nhi nhân văn."
-  },
+
   {
     "name": "Khương Lệ bình",
     "date_of_birth": "1979-02-09",
@@ -168,18 +135,11 @@
     "biography": "Tác giả nữ người Trung Quốc, chuyên viết sách giáo dục và tâm lý học dành cho thanh thiếu niên."
   },
   {
-    "name": "Tô Anh Hà, Kim Phi Phi, Vương Lôi",
+    "name": "Tô Anh Hà",
     "date_of_birth": "1980-06-22",
     "gender": "FEMALE",
     "country": "Trung Quốc",
     "biography": "Nhóm tác giả người Trung Quốc, nổi bật với các tác phẩm dành cho thiếu nhi và sách giáo dục văn học."
-  },
-  {
-    "name": "Tô Anh Hà, Kim Phi Phi, Vương Lôi, Thái Nam",
-    "date_of_birth": "1981-08-17",
-    "gender": "FEMALE",
-    "country": "Trung Quốc",
-    "biography": "Nhóm biên soạn sách thiếu nhi và kỹ năng sống, được yêu thích tại nhiều quốc gia châu Á."
   },
   {
     "name": "Khương Lệ Bình, Vương Phong, Lưu Lệ Bình, Vương Phương",

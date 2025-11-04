@@ -107,12 +107,12 @@
     "email": "info@ctqg.vn",
     "phone": "02437562608"
   },
-  {
-    "name": "NXB Văn Học",
-    "address": "18 Hàng Chuối, Hai Bà Trưng, Hà Nội",
-    "email": "office@vanhoc.vn",
-    "phone": "02438223704"
-  },
+ , {
+  "name": "NXB Văn Học",
+  "address": "18 Hàng Chuối, Hai Bà Trưng, Hà Nội",
+  "email": "office@vanhoc.vn",
+  "phone": "02438223704"
+},
   {
     "name": "NXB Khoa Học Xã Hội",
     "address": "26 Lý Thái Tổ, Hoàn Kiếm, Hà Nội",

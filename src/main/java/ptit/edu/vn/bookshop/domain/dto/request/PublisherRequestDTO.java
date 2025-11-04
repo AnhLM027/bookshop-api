@@ -18,10 +18,7 @@ public class PublisherRequestDTO {
     @Size(max = 255, message = "Address must not exceed 255 characters")
     private String address;
 
-    @Pattern(
-            regexp =  "^0\\d{9}$",
-            message = "Invalid Vietnamese phone number format"
-    )
+
     private String phone;
     @Email(message = "Invalid email format")
     @Size(max = 100, message = "Email must not exceed 100 characters")
