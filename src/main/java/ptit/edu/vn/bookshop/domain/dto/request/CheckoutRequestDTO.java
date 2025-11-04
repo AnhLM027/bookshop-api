@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 public class CheckoutRequestDTO {
-    private Long addressId;
     private List<CheckoutCartItemsRequestDTO> cartItems;
     private String couponCode;
 

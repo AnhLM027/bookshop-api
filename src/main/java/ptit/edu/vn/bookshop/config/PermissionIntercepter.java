@@ -3,6 +3,7 @@ package ptit.edu.vn.bookshop.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -15,6 +16,7 @@ import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.util.List;
 
+@Service
 public class PermissionIntercepter implements HandlerInterceptor {
     @Autowired
     private UserService userService;
