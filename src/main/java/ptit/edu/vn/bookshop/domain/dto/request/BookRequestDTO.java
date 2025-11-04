@@ -26,10 +26,6 @@ public class BookRequestDTO {
 
     @NotBlank(message = "Language is required")
     @Size(max = 50, message = "Language must not exceed 50 characters")
-    @Pattern(
-            regexp = "^[A-Za-z\\s-]+$",
-            message = "Language can only contain letters, spaces and hyphens"
-    )
     private String language;
 
     @NotNull(message = "Quantity is required")
