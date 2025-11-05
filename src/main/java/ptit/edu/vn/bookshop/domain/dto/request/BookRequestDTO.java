@@ -15,10 +15,6 @@ public class BookRequestDTO {
 
     @NotBlank(message = "Book name is required")
     @Size(min = 1, max = 255, message = "Book name must be between 1 and 255 characters")
-    @Pattern(
-            regexp = "^[A-Za-zÀ-ỹ0-9\\s&.,!?():;'\"-]+$",
-            message = "Book name contains invalid characters"
-    )
     private String name;
 
     @Size(max = 2000, message = "Description must not exceed 2000 characters")
