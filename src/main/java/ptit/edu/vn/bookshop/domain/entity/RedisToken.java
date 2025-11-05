@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
@@ -12,7 +14,7 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @RedisHash("redisToken")
-public class RedisToken {
+public class RedisToken implements Serializable {
     private String id;
     private Long userId;
     private String accessToken;

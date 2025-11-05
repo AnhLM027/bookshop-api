@@ -15,6 +15,7 @@ public class RedisTokenServiceImpl implements RedisTokenService {
 
     @Override
     public void saveToken(RedisToken token) {
-        this.redisTokenRepository.save(token);
+        redisTokenRepository.save(token);
     }
+
 }
