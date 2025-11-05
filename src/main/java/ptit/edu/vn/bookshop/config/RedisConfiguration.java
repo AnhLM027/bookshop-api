@@ -21,10 +21,10 @@ public class RedisConfiguration {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
-        jedisConFactory.setHostName("localhost");
-        jedisConFactory.setPort(6379);
-        return jedisConFactory;
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
 
 
@@ -34,8 +34,9 @@ public class RedisConfiguration {
                template.setConnectionFactory(jedisConnectionFactory());
 
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer()); //lưu object JSON trong Redis
-
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
     }
 }
