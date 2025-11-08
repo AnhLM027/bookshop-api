@@ -85,6 +85,7 @@ public class AuthenticationController {
 
         RedisToken redisToken = RedisToken.builder()
                 .id(UUID.randomUUID().toString())
+                .userId(user.getId())
                 .accessToken(access_token)
                 .refreshToken(refresh_token)
                 .build();
@@ -92,7 +93,7 @@ public class AuthenticationController {
         // save token redis
         this.redisTokenService.saveToken(redisToken);
 
-       return  ResponseEntity.ok(response);
+       return ResponseEntity.ok(response);
     }
 
     @GetMapping("/refresh")
@@ -120,16 +121,15 @@ public class AuthenticationController {
         // create refresh_token
         String new_refresh_token = this.securityUtil.createRefreshToken(email, response);
 
-//        this.userService.updateUserToken(new_refresh_token, email);
-//        this.redisTokenService.saveToken(refreshToken);
-        ResponseCookie responseCookie = ResponseCookie
-                .from("refresh_token", new_refresh_token)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(refreshTokenExpiration)
+        RedisToken redisToken = RedisToken.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(user.getId())
+                .accessToken(access_token)
+                .refreshToken(new_refresh_token)
                 .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).body(response);
+
+        this.redisTokenService.saveToken(redisToken);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/register")
@@ -154,23 +154,17 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     @ApiMessage("user logout")
-    public ResponseEntity<Void> logout() {
-        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
-
-        if (email.equals("")) {
-            throw new BadCredentialsException("Invalid email");
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new BadCredentialsException("Invalid token");
         }
-        // update refreshtoken = null
-//        this.userService.updateUserToken(null, email);
 
-        ResponseCookie deleteCookie = ResponseCookie
-                .from("refresh_token", null)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, deleteCookie.toString()).body(null);
+        String refreshToken = authHeader.replace("Bearer ", "");
+
+        // Xóa token khỏi Redis
+        this.redisTokenService.logout(refreshToken);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/password-change")
