@@ -7,6 +7,8 @@ import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
 import ptit.edu.vn.bookshop.exception.BadCredentialsException;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
+
+import ptit.edu.vn.bookshop.service.RedisTokenService;
 import ptit.edu.vn.bookshop.service.RegisterService;
 import ptit.edu.vn.bookshop.service.ResetPasswordService;
 import ptit.edu.vn.bookshop.service.UserService;
@@ -24,6 +26,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
@@ -32,15 +36,21 @@ public class AuthenticationController {
     private final UserService userService;
     private final RegisterService registerService;
     private final ResetPasswordService resetPasswordService;
+    private final RedisTokenService redisTokenService;
+
+
     @Value("${app.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
-    public AuthenticationController(ResetPasswordService resetPasswordService, AuthenticationManager authenticationManager, SecurityUtil securityUtil, UserService userService, RegisterService registerService) {
+    public AuthenticationController(ResetPasswordService resetPasswordService, AuthenticationManager authenticationManager,
+                                    SecurityUtil securityUtil, UserService userService, RegisterService registerService,
+                                    RedisTokenService redisTokenService) {
         this.authenticationManager = authenticationManager;
         this.securityUtil = securityUtil;
         this.userService = userService;
         this.registerService = registerService;
         this.resetPasswordService = resetPasswordService;
+        this.redisTokenService = redisTokenService;
     }
 
     @PostMapping("/login")
@@ -73,6 +83,10 @@ public class AuthenticationController {
 
         // create refresh_token
         String refresh_token = this.securityUtil.createRefreshToken(loginRequestDTO.getUsername(), response);
+
+        this.redisTokenService.storeAccessToken(user.getId(), access_token, 900);
+        this.redisTokenService.storeRefreshToken(user.getId(), refresh_token, 4000);
+
 
         this.userService.updateUserToken(refresh_token, loginRequestDTO.getUsername());
         // set cookies

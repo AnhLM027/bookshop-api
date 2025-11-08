@@ -28,6 +28,10 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true
+    redis:
+      host: redis
+      port: 6379
+
 
   mail:
     host: smtp.gmail.com
@@ -66,4 +70,5 @@ cloudinary:
   cloud-name: "dunqy8ngo"
   api-key: "656845335766711"
   api-secret: "Cqkx6EDeqaiYTiulMT4aFJXNR1w"
+
 
