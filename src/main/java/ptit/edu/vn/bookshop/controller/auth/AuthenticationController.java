@@ -5,8 +5,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.*;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
+import ptit.edu.vn.bookshop.domain.entity.RedisToken;
 import ptit.edu.vn.bookshop.exception.BadCredentialsException;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
+import ptit.edu.vn.bookshop.repository.RedisTokenRepository;
+import ptit.edu.vn.bookshop.service.RedisTokenService;
 import ptit.edu.vn.bookshop.service.RegisterService;
 import ptit.edu.vn.bookshop.service.ResetPasswordService;
 import ptit.edu.vn.bookshop.service.UserService;
@@ -24,6 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
@@ -32,15 +37,19 @@ public class AuthenticationController {
     private final UserService userService;
     private final RegisterService registerService;
     private final ResetPasswordService resetPasswordService;
+    private final RedisTokenService redisTokenService;
     @Value("${app.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
-    public AuthenticationController(ResetPasswordService resetPasswordService, AuthenticationManager authenticationManager, SecurityUtil securityUtil, UserService userService, RegisterService registerService) {
+    public AuthenticationController(ResetPasswordService resetPasswordService, AuthenticationManager authenticationManager,
+                                    SecurityUtil securityUtil, UserService userService, RegisterService registerService,
+                                    RedisTokenService redisTokenService    ) {
         this.authenticationManager = authenticationManager;
         this.securityUtil = securityUtil;
         this.userService = userService;
         this.registerService = registerService;
         this.resetPasswordService = resetPasswordService;
+        this.redisTokenService = redisTokenService;
     }
 
     @PostMapping("/login")
@@ -74,17 +83,17 @@ public class AuthenticationController {
         // create refresh_token
         String refresh_token = this.securityUtil.createRefreshToken(loginRequestDTO.getUsername(), response);
 
-        this.userService.updateUserToken(refresh_token, loginRequestDTO.getUsername());
-        // set cookies
-        ResponseCookie resCookies = ResponseCookie
-                .from("refresh_token", refresh_token)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(refreshTokenExpiration)
+        RedisToken redisToken = RedisToken.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(user.getId())
+                .accessToken(access_token)
+                .refreshToken(refresh_token)
                 .build();
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, resCookies.toString()).body(response);
+        // save token redis
+        this.redisTokenService.saveToken(redisToken);
+
+       return ResponseEntity.ok(response);
     }
 
     @GetMapping("/refresh")
@@ -112,15 +121,15 @@ public class AuthenticationController {
         // create refresh_token
         String new_refresh_token = this.securityUtil.createRefreshToken(email, response);
 
-        this.userService.updateUserToken(new_refresh_token, email);
-        ResponseCookie responseCookie = ResponseCookie
-                .from("refresh_token", new_refresh_token)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(refreshTokenExpiration)
+        RedisToken redisToken = RedisToken.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(user.getId())
+                .accessToken(access_token)
+                .refreshToken(new_refresh_token)
                 .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, responseCookie.toString()).body(response);
+
+        this.redisTokenService.saveToken(redisToken);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/register")
@@ -145,23 +154,17 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     @ApiMessage("user logout")
-    public ResponseEntity<Void> logout() {
-        String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
-
-        if (email.equals("")) {
-            throw new BadCredentialsException("Invalid email");
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new BadCredentialsException("Invalid token");
         }
-        // update refreshtoken = null
-        this.userService.updateUserToken(null, email);
 
-        ResponseCookie deleteCookie = ResponseCookie
-                .from("refresh_token", null)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(0)
-                .build();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, deleteCookie.toString()).body(null);
+        String refreshToken = authHeader.replace("Bearer ", "");
+
+        // Xóa token khỏi Redis
+        this.redisTokenService.logout(refreshToken);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/password-change")
