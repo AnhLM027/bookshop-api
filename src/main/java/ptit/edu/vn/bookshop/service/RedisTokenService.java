@@ -4,7 +4,12 @@ import ptit.edu.vn.bookshop.domain.entity.RedisToken;
 
 public interface RedisTokenService {
     void saveToken(RedisToken token);
+
     void removeToken(String id);
+
     RedisToken getTokenById(String id);
+
     void logout(String refreshToken);
+
+    void storeAccessToken(Long userId, String token, long ttlSeconds);
 }
