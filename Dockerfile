@@ -4,7 +4,7 @@ WORKDIR /backend
 COPY . .
 RUN gradle clean bootJar -x test --no-daemon
 
-# Stage 2: Run (runtime image nhỏ)
+# Stage 2: Run
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 EXPOSE 8080

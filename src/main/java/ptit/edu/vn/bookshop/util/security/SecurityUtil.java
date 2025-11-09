@@ -63,7 +63,6 @@ public class SecurityUtil {
         // tao phan header goi ra thuat toan
         JwsHeader jwtHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwtHeader, claims)).getTokenValue();
-
     }
 
     public String createRefreshToken(String email, LoginResponseDTO dto) {

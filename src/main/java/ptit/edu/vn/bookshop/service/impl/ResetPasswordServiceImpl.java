@@ -4,17 +4,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.constant.TokenType;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.ForgotPasswordRequestDTO;
 import ptit.edu.vn.bookshop.domain.entity.User;
-import ptit.edu.vn.bookshop.domain.entity.UserToken;
+import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.UserRepository;
-import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.service.EmailService;
+import ptit.edu.vn.bookshop.service.RedisTokenService;
 import ptit.edu.vn.bookshop.service.ResetPasswordService;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -24,18 +21,18 @@ import java.util.UUID;
 public class ResetPasswordServiceImpl implements ResetPasswordService {
 
     private final UserRepository userRepository;
-    private final UserTokenRepository userTokenRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final RedisTokenService redisTokenService;
 
     public ResetPasswordServiceImpl(UserRepository userRepository,
-                                    UserTokenRepository userTokenRepository,
                                     EmailService emailService,
-                                    PasswordEncoder passwordEncoder) {
+                                    PasswordEncoder passwordEncoder,
+                                    RedisTokenService redisTokenService) {
         this.userRepository = userRepository;
-        this.userTokenRepository = userTokenRepository;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.redisTokenService = redisTokenService;
     }
 
     @Override
@@ -47,19 +44,15 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
         if (user.getStatus().equals(StatusEnum.INACTIVE)) {
             throw new IllegalArgumentException("User account is not active");
         }
-        // Xóa OTP cũ nếu còn tồn tại
-        this.userTokenRepository.deleteByUserIdAndTokenType(user.getId(), TokenType.OTP);
+
+        // Xóa các token cũ nếu còn tồn tại
+//        this.userTokenRepository.deleteByUserIdAndTokenType(user.getId(), TokenType.OTP);
+        this.redisTokenService.deleteToken(user.getId().toString());
 
         // Tạo OTP mới
         String otp = String.format("%06d", new Random().nextInt(999999));
-        UserToken otpToken = new UserToken();
-        otpToken.setUser(user);
-        otpToken.setTokenType(TokenType.OTP);
-        otpToken.setTokenValue(otp);
-        otpToken.setVerified(false);
-        otpToken.setExpiryTime(Instant.now().plus(2, ChronoUnit.MINUTES));
-        userTokenRepository.save(otpToken);
 
+        this.redisTokenService.storeOtp(user.getId().toString(),otp, 120L);
         // Gửi email OTP
         Map<String, Object> variables = new HashMap<>();
         variables.put("otp", otp);
@@ -75,58 +68,38 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
 
     @Override
     public String otpVerification(String otp) {
-        UserToken userToken = userTokenRepository.findByTokenValue(otp)
-                .orElseThrow(() -> new RuntimeException("Invalid OTP"));
-
-        // Kiểm tra OTP hết hạn
-        if (userToken.getExpiryTime() == null || userToken.getExpiryTime().isBefore(Instant.now())) {
-            userTokenRepository.delete(userToken);
-            throw new RuntimeException("OTP has expired");
-        }
-        User user = userToken.getUser();
-        if (user.getStatus().equals(StatusEnum.INACTIVE)) {
-            throw new IllegalArgumentException("User account is not active");
+        String userId = this.redisTokenService.getOtp(otp);
+        if (userId == null) {
+            throw new IdInvalidException("Invalid or expired OTP");
         }
         // Xóa OTP sau khi xác thực thành công
-        userTokenRepository.delete(userToken);
+        this.redisTokenService.deleteOtp(otp);
 
         // Tạo ResetToken
         String resetTokenValue = UUID.randomUUID().toString();
-        UserToken resetToken = new UserToken();
-        resetToken.setUser(user);
-        resetToken.setTokenType(TokenType.RESET);
-        resetToken.setTokenValue(resetTokenValue);
-        resetToken.setVerified(false);
-        resetToken.setExpiryTime(Instant.now().plus(10  , ChronoUnit.MINUTES));
-        userTokenRepository.save(resetToken);
-
+        this.redisTokenService.storeResetToken(userId, resetTokenValue, 600L);
         return resetTokenValue;
     }
 
     @Override
     public String resetPassword(String newPassword, String confirmNewPassword, String resetTokenValue) {
-        UserToken resetToken = userTokenRepository.findByTokenValue(resetTokenValue)
-                .orElseThrow(() -> new RuntimeException("Invalid reset token"));
+        String userId = this.redisTokenService.getResetToken(resetTokenValue);
 
-        if (resetToken.getTokenType() != TokenType.RESET) {
-            throw new RuntimeException("Invalid token type for reset password");
-        }
-
-        if (resetToken.getExpiryTime() == null || resetToken.getExpiryTime().isBefore(Instant.now())) {
-            userTokenRepository.delete(resetToken);
-            throw new RuntimeException("Reset token has expired");
+        if (userId == null) {
+            throw new RuntimeException("Invalid or expired reset token");
         }
 
         if (!newPassword.equals(confirmNewPassword)) {
             throw new RuntimeException("New password and confirmation do not match");
         }
+        // Lấy user
+        User user = userRepository.findById(Long.valueOf(userId))
+                .orElseThrow(() -> new IdInvalidException("User not found"));
 
-        User user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        this.userRepository.save(user);
 
-        resetToken.setVerified(true);
-        userTokenRepository.save(resetToken);
+        this.redisTokenService.deleteResetToken(resetTokenValue);
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("username", user.getName());

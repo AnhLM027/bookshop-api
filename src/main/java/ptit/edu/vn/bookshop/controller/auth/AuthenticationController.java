@@ -38,6 +38,10 @@ public class AuthenticationController {
     private final RegisterService registerService;
     private final ResetPasswordService resetPasswordService;
     private final RedisTokenService redisTokenService;
+
+    @Value("${app.jwt.access-token-validity-in-seconds}")
+    private Long accessTokenExpiration;
+
     @Value("${app.jwt.refresh-token-validity-in-seconds}")
     private Long refreshTokenExpiration;
 
@@ -75,30 +79,23 @@ public class AuthenticationController {
         }
 
         //create access_token
-        String access_token = this.securityUtil.createAccessToken(authentication.getName(), response);
+        String accessToken = this.securityUtil.createAccessToken(authentication.getName(), response);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        response.setAccessToken(access_token);
+        this.redisTokenService.storeAccessToken(accessToken, user.getId().toString());
+        response.setAccessToken(accessToken);
 
         // create refresh_token
-        String refresh_token = this.securityUtil.createRefreshToken(loginRequestDTO.getUsername(), response);
-
-        RedisToken redisToken = RedisToken.builder()
-                .id(UUID.randomUUID().toString())
-                .userId(user.getId())
-                .accessToken(access_token)
-                .refreshToken(refresh_token)
-                .build();
-
-        // save token redis
-        this.redisTokenService.saveToken(redisToken);
-
+        String refreshToken = this.securityUtil.createRefreshToken(loginRequestDTO.getUsername(), response);
+        this.redisTokenService.storeRefreshToken(refreshToken, user.getId().toString());
+        response.setRefreshToken(refreshToken);
        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     @ApiMessage("get refresh")
-    public ResponseEntity<LoginResponseDTO> getRefreshToken(@CookieValue(name = "refresh_token", defaultValue = "fake_token") String refreshToken) throws IdInvalidException {
+    public ResponseEntity<LoginResponseDTO> getRefreshToken(
+            @RequestHeader("refresh-token") String refreshToken) throws IdInvalidException {
+
         if (refreshToken.equals("fake_token")) {
             throw new BadCredentialsException("Invalid refresh token");
         }
@@ -106,29 +103,29 @@ public class AuthenticationController {
         Jwt decodeToken = this.securityUtil.checkValidRefreshToken(refreshToken);
         String email = decodeToken.getSubject();
 
-        UserResponseDTO user = this.userService.getUserByRefreshTokenAndEmail(refreshToken, email);
+        UserResponseDTO user = this.userService.getUserByEmail(email);
         if (user == null) {
             throw new IdInvalidException("refresh token is invalid");
         }
+        // lấy refresh_token trong redis
+        String redisRefreshToken = this.redisTokenService.getRefreshToken(user.getId().toString());
+        if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) {
+            throw new BadCredentialsException("Refresh token invalid or expired");
+        }
+
         LoginResponseDTO response = new LoginResponseDTO();
         LoginResponseDTO.UserLogin userLogin = new LoginResponseDTO.UserLogin(user.getId(), user.getName(), user.getEmail(), user.getStatus(), user.getRole());
         response.setUser(userLogin);
 
         //create access_token
-        String access_token = this.securityUtil.createAccessToken(email, response);
-        response.setAccessToken(access_token);
+        String newAccessToken  = this.securityUtil.createAccessToken(email, response);
+        this.redisTokenService.storeAccessToken(newAccessToken , user.getId().toString());
+        response.setAccessToken(newAccessToken);
 
         // create refresh_token
-        String new_refresh_token = this.securityUtil.createRefreshToken(email, response);
-
-        RedisToken redisToken = RedisToken.builder()
-                .id(UUID.randomUUID().toString())
-                .userId(user.getId())
-                .accessToken(access_token)
-                .refreshToken(new_refresh_token)
-                .build();
-
-        this.redisTokenService.saveToken(redisToken);
+        String newRefreshToken  = this.securityUtil.createRefreshToken(email, response);
+        this.redisTokenService.storeRefreshToken(newRefreshToken , user.getId().toString());
+        response.setRefreshToken(newRefreshToken);
         return ResponseEntity.ok().body(response);
     }
 
@@ -154,16 +151,9 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     @ApiMessage("user logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new BadCredentialsException("Invalid token");
-        }
-
-        String refreshToken = authHeader.replace("Bearer ", "");
-
+    public ResponseEntity<Void> logout() {
         // Xóa token khỏi Redis
-        this.redisTokenService.logout(refreshToken);
-
+        this.redisTokenService.logout();
         return ResponseEntity.ok().build();
     }
 

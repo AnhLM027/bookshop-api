@@ -29,7 +29,8 @@ spring:
       pageable:
         one-indexed-parameters: true
     redis:
-      host: redis
+#      host: redis
+      host: localhost
       port: 6379
 
 
@@ -61,7 +62,7 @@ app:
 
   jwt:                           # cấu hình token JWT
     base64-secret: qoAEABDke07+AVLepXB4aCMtsT0wMAqR5x2VFyldsnx6e75YQkJH2UcZKTjEyoNgG71SBCXfq5N6NVZxWOfsHQ==
-    access-token-validity-in-seconds: 8640000     # thời gian sống access token
+    access-token-validity-in-seconds: 900     # thời gian sống access token
     refresh-token-validity-in-seconds: 25920000   # thời gian sống refresh token
 
 

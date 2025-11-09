@@ -15,6 +15,7 @@ import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 @NoArgsConstructor
 public class LoginResponseDTO {
     private String accessToken;
+    private String refreshToken;
     private UserLogin user;
 
 

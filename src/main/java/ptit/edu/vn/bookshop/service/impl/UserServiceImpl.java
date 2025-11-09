@@ -17,7 +17,6 @@ import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
 import ptit.edu.vn.bookshop.repository.RedisTokenRepository;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.UserRepository;
-import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.repository.specification.UserSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.UserService;
@@ -48,18 +47,16 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final EmailService emailService;
-    private final UserTokenRepository userTokenRepository;
     private final RedisTokenRepository redisTokenRepository;
 
     public UserServiceImpl(EmailService emailService, UserRepository userRepository, RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder, UserMapper userMapper, UserTokenRepository userTokenRepository,
+                           PasswordEncoder passwordEncoder, UserMapper userMapper,
                              RedisTokenRepository redisTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.emailService = emailService;
-        this.userTokenRepository = userTokenRepository;
         this.redisTokenRepository = redisTokenRepository;
     }
 

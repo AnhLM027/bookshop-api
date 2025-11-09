@@ -169,9 +169,9 @@ public class BookServiceImpl implements BookService {
     public BookPageResponseDTO fetchAllBooks(Pageable pageable, String[] book, String[] category, String[] author, String[] publisher, boolean isAdmin) {
         Page<Book> bookPage;
         // tim kiem book voi cac thành phần liên quan
-        if (book != null && book.length > 0 && (category != null && category.length > 0 ||
+        if (category != null && category.length > 0 ||
                                                 author != null && author.length > 0 ||
-                                                publisher != null && publisher.length > 0)) {
+                                                publisher != null && publisher.length > 0){
             return this.searchRepository.searchBooksWithFilters(pageable, book, category, author, publisher);
         }
         // TH4: tim kiem theo book,

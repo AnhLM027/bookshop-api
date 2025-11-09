@@ -82,10 +82,6 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<UserToken> userTokens;
-
     @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Address> addresses;
