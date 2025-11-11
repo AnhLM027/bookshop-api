@@ -1,5 +1,4 @@
 .git
-gradle
 .gradle
 mvn
 .target
