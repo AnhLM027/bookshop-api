@@ -69,6 +69,8 @@ public class SecurityConfigutation {
                 .csrf(c -> c.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(whiteList).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/books").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/coupons").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.disable()) // tắt form login mặc định

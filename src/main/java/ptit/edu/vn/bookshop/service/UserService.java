@@ -16,7 +16,7 @@ public interface UserService {
     UserResponseDTO fetchUser(Long id);
     UserPageResponseDTO fetchAllUsers(Pageable pageable, String[] user) ;
     UserResponseDTO getUserByEmail(String email);
-    void updateUserToken(String token, String email);
+//    void updateUserToken(String token, String email);
     UserResponseDTO getUserByRefreshTokenAndEmail(String refreshToken, String email);
     User getUserByUsername(String email);
     LoginResponseDTO.UserLogin getCurrentUserAccount();

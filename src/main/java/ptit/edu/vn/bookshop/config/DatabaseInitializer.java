@@ -95,10 +95,9 @@ public class DatabaseInitializer implements CommandLineRunner {
             permissions.add(new Permission("Get a address", "/api/v1/addresses/{id}", "GET", "ADDRESSES"));
             permissions.add(new Permission("Get all addresses", "/api/v1/addresses", "GET", "ADDRESSES"));
             // cart
-            permissions.add(new Permission("Create a cart", "/api/v1/carts", "POST", "CARTS"));
-            permissions.add(new Permission("Update a cart", "/api/v1/carts/{id}", "PUT", "CARTS"));
-            permissions.add(new Permission("Delete a cart", "/api/v1/carts/{id}", "DELETE", "CARTS"));
-            permissions.add(new Permission("Get a cart", "/api/v1/carts/{id}", "GET", "CARTS"));
+            permissions.add(new Permission("Create a cart", "/api/v1/items/carts", "POST", "CARTS"));
+            permissions.add(new Permission("Update a cart", "/api/v1/carts/items/{id}", "PUT", "CARTS"));
+            permissions.add(new Permission("Delete a cart", "/api/v1/carts/items/{id}", "DELETE", "CARTS"));
             permissions.add(new Permission("Get all carts", "/api/v1/carts", "GET", "CARTS"));
             // checkout
             permissions.add(new Permission("check out", "/api/v1/checkout", "GET", "CHECKOUTS"));

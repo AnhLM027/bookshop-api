@@ -18,14 +18,14 @@
     "description": "Ngữ Văn 12 - Tập 1 (Chân Trời) (Chuẩn)\nSách sẽ giới thiệu đến các em các nội dung hay, bổ ích về môn Ngữ Văn 12. Sách thuộc bộ sách Chân trời sáng tạo.\nVới cách thể hiện phong phú và lôi cuốn, hình thức trình bày hấp dẫn và thân thiện, cuốn sách được biên soạn theo định hướng phát triển phẩm chất và năng lực học sinh. Các kiến thức trong sách sẽ đến với các em học sinh một cách tự nhiên, bắt nguồn từ thực tế đời sống và giúp các em biết cách giải quyết những vấn đề đặt ra trong cuộc sống."
   },
   {
-    "name": "Bộ Toán 12 - Tập 2 (Chân Trời) (Chuẩn)",
-    "price": "14000",
-    "quantity": 139,
-    "discount": 8,
-    "language": "Tiếng Việt",
-    "image_url": "https://res.cloudinary.com/dunqy8ngo/image/upload/v1762140099/003_3cbb970b-b9a5-43b4-a33d-8755c1e3d7dd.jpg",
-    "description": "Toán 12 - Tập 2 (Chân Trời) (Chuẩn)\nSách biên soạn theo chương trình giáo dục phổ thông mới. Các kiến thức trong sách được chủ yếu xuất phát từ những tình huống của cuộc sống quanh ta và trở lại giúp ta giải quyết những vấn đề của cuộc sống. Vì thế, khi học Toán theo cuốn sách này, các em sẽ cảm nhận được rằng, Toán học thật là gần gũi.\nCung cấp cho các em những kiến thức chuyên sâu, bổ ích, lí thú và thiết thực, giúp các em hình thành kĩ năng thực hành, khả năng logic, kĩ năng vận dụng kiến thức toán học vào giải quyết vấn đề thực tế."
-  },
+      "name": "Bộ Toán 12 - Tập 2 (Chân Trời) (Chuẩn)",
+      "price": "14000",
+      "quantity": 139,
+      "discount": 8,
+      "language": "Tiếng Việt",
+      "image_url": "https://res.cloudinary.com/dunqy8ngo/image/upload/v1762140099/003_3cbb970b-b9a5-43b4-a33d-8755c1e3d7dd.jpg",
+      "description": "Toán 12 - Tập 2 (Chân Trời) (Chuẩn)\nSách biên soạn theo chương trình giáo dục phổ thông mới. Các kiến thức trong sách được chủ yếu xuất phát từ những tình huống của cuộc sống quanh ta và trở lại giúp ta giải quyết những vấn đề của cuộc sống. Vì thế, khi học Toán theo cuốn sách này, các em sẽ cảm nhận được rằng, Toán học thật là gần gũi.\nCung cấp cho các em những kiến thức chuyên sâu, bổ ích, lí thú và thiết thực, giúp các em hình thành kĩ năng thực hành, khả năng logic, kĩ năng vận dụng kiến thức toán học vào giải quyết vấn đề thực tế."
+    },
   {
     "name": "Bộ Ngữ Văn 12 - Tập 2 (Chân Trời) (Chuẩn)",
     "price": "19000",
@@ -144,14 +144,14 @@
     "description": "VBT Toán 1/2 (Chân Trời Sáng Tạo) (2023)"
   },
   {
-    "name": "Bộ Tập Viết 2 - Tập 1 (Chân Trời Sáng Tạo) (Chuẩn)",
-    "price": "6000",
-    "quantity": 115,
-    "discount": 16,
-    "language": "Tiếng Việt",
-    "image_url": "https://res.cloudinary.com/dunqy8ngo/image/upload/v1762140128/017_8da3f7c0-95e5-47b3-aed5-bb5e30be3e87.jpg",
-    "description": "Tập Viết 2/1 (Chân Trời Sáng Tạo) (2023)"
-  },
+      "name": "Bộ Tập Viết 2 - Tập 1 (Chân Trời Sáng Tạo) (Chuẩn)",
+      "price": "6000",
+      "quantity": 115,
+      "discount": 16,
+      "language": "Tiếng Việt",
+      "image_url": "https://res.cloudinary.com/dunqy8ngo/image/upload/v1762140128/017_8da3f7c0-95e5-47b3-aed5-bb5e30be3e87.jpg",
+      "description": "Tập Viết 2/1 (Chân Trời Sáng Tạo) (2023)"
+    },
   {
     "name": "Vật Lí 12 (Kết Nối) (Chuẩn)",
     "price": "17000",

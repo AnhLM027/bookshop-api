@@ -21,9 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class
+public class AddressServiceImpl implements AddressService {
 
-AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final UserService userService;
     private final AddressMapper addressMapper;
@@ -149,8 +148,13 @@ AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address getAddressById(Long id) {
-        return this.addressRepository.findById(id).orElseThrow(()-> new IdInvalidException("Address not found."));
+    public Address getAddressByIsDefault() {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found."));
+        User user = this.userService.getUserByUsername(email);
+        Address address = this.addressRepository.findByUserAndIsDefaultTrue(user)
+                .orElseThrow(() -> new IllegalArgumentException("Address not found for user"));
+        return address;
     }
 
 }

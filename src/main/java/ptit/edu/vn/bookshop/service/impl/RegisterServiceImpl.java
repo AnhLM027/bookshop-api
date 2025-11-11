@@ -4,21 +4,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.constant.TokenType;
 import ptit.edu.vn.bookshop.domain.dto.request.auth.RegisterRequestDTO;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
-import ptit.edu.vn.bookshop.domain.entity.UserToken;
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.UserRepository;
-import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.service.EmailService;
+import ptit.edu.vn.bookshop.service.RedisTokenService;
 import ptit.edu.vn.bookshop.service.RegisterService;
 import ptit.edu.vn.bookshop.domain.dto.mapper.UserMapper;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -29,19 +25,20 @@ public class RegisterServiceImpl implements RegisterService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserTokenRepository userTokenRepository;
     private final UserMapper userMapper;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final RedisTokenService redisTokenService;
 
-    public RegisterServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserTokenRepository userTokenRepository,
-                               UserMapper userMapper, EmailService emailService, PasswordEncoder passwordEncoder) {
+    public RegisterServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+                               UserMapper userMapper, EmailService emailService, PasswordEncoder passwordEncoder,
+                               RedisTokenService redisTokenService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.userTokenRepository = userTokenRepository;
         this.userMapper = userMapper;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.redisTokenService = redisTokenService;
     }
 
     @Override
@@ -86,28 +83,14 @@ public class RegisterServiceImpl implements RegisterService {
 
 
     private void sendVerificationEmail(User user) {
-        Optional<UserToken> existingTokenOpt = this.userTokenRepository
-                .findByUserIdAndTokenTypeAndVerifiedFalse(user.getId(), TokenType.VERIFICATION);
-        UserToken userToken;
-        if (existingTokenOpt.isPresent()) {
-            userToken = existingTokenOpt.get();
-            if (userToken.getExpiryTime().isAfter(Instant.now())) {
-                // Token còn hạn → dùng lại token cũ, gửi lại email
-            } else {
-                // Token hết hạn → xóa và tạo token mới
-                userTokenRepository.delete(userToken);
-                userToken = createNewToken(user);
-            }
-        } else {
-            // Không có token → tạo mới
-            userToken = createNewToken(user);
-        }
+        String token = UUID.randomUUID().toString();
+        // TTL 10 minutes
+        this.redisTokenService.storeVerificationToken(token, user.getId().toString(), 600L);
 
-        String verifyUrl = "http://localhost:8080/api/v1/auth/verify?token=" + userToken.getTokenValue();
+        String verifyUrl = "http://localhost:8080/api/v1/auth/verify?token=" + token;
         Map<String, Object> variables = new HashMap<>();
         variables.put("confirmationLink", verifyUrl);
-
-        emailService.sendEmailFromTemplateSync(
+        this.emailService.sendEmailFromTemplateSync(
                 user.getEmail(),
                 "Please confirm account.",
                 "registerConfirmation",
@@ -115,35 +98,23 @@ public class RegisterServiceImpl implements RegisterService {
         );
     }
 
-    private UserToken createNewToken(User user) {
-        UserToken token = new UserToken();
-        token.setUser(user);
-        token.setTokenType(TokenType.VERIFICATION);
-        token.setTokenValue(UUID.randomUUID().toString());
-        token.setExpiryTime(Instant.now().plus(10, ChronoUnit.MINUTES));
-        token.setVerified(false);
-        return userTokenRepository.save(token);
-    }
-
     @Override
     @Transactional
     public String verifyUser(String token) {
-        UserToken userToken = this.userTokenRepository.findByTokenValue(token)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid verification token"));
-
-        if (userToken.getExpiryTime() == null || userToken.getExpiryTime().isBefore(Instant.now())) {
-            throw new IllegalArgumentException("Verification token has expired");
+        String userId = this.redisTokenService.getUserIdFromVerificationToken(token);
+        if (userId == null) {
+            throw new IllegalArgumentException("Invalid or expired verification token");
         }
-        if (userToken.isVerified()) {
+        User user = this.userRepository.findById(Long.valueOf(userId))
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        if (user.getStatus().equals(StatusEnum.ACTIVE)) {
             return "Account already verified";
         }
-        User user = userToken.getUser();
         user.setStatus(StatusEnum.ACTIVE);
-
-        userToken.setVerified(true);
-        this.userTokenRepository.save(userToken);
-
         this.userRepository.save(user);
+        redisTokenService.deleteVerificationToken(token);
         return "Account verified successfully";
     }
+
+
 }

@@ -8,14 +8,15 @@ import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
+import ptit.edu.vn.bookshop.domain.entity.RedisToken;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
+import ptit.edu.vn.bookshop.repository.RedisTokenRepository;
 import ptit.edu.vn.bookshop.repository.RoleRepository;
 import ptit.edu.vn.bookshop.repository.UserRepository;
-import ptit.edu.vn.bookshop.repository.UserTokenRepository;
 import ptit.edu.vn.bookshop.repository.specification.UserSpecificationBuilder;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.UserService;
@@ -46,16 +47,17 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final EmailService emailService;
-    private final UserTokenRepository userTokenRepository;
+    private final RedisTokenRepository redisTokenRepository;
 
     public UserServiceImpl(EmailService emailService, UserRepository userRepository, RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder, UserMapper userMapper, UserTokenRepository userTokenRepository) {
+                           PasswordEncoder passwordEncoder, UserMapper userMapper,
+                             RedisTokenRepository redisTokenRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.emailService = emailService;
-        this.userTokenRepository = userTokenRepository;
+        this.redisTokenRepository = redisTokenRepository;
     }
 
     @Value("${app.upload-file.base-path}")
@@ -164,18 +166,22 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
     }
 
-    @Override
-    public void updateUserToken(String token, String email) {
-        User user = this.userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-        user.setRefreshToken(token);
-        this.userRepository.save(user);
-    }
+//    @Override
+//    public void updateUserToken(String token, String email) {
+//        User user = this.userRepository.findByEmail(email)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+//        user.setRefreshToken(token);
+//        this.userRepository.save(user);
+//    }
 
     @Override
     public UserResponseDTO getUserByRefreshTokenAndEmail(String refreshToken, String email) {
-        User user = this.userRepository.findByRefreshTokenAndEmail(refreshToken, email);
-        return this.userMapper.toResponseDto(user);
+        RedisToken token = this.redisTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new IdInvalidException("refresh token is invalid"));
+        Long userId = token.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IdInvalidException("User not found"));
+        return userMapper.toResponseDto(user);
     }
 
     @Override

@@ -67,7 +67,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 .map(it -> it.getFinalPrice().multiply(BigDecimal.valueOf(it.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         // lấy lên thông tin về địa chỉ
-        Address address = this.addressService.getAddressById(checkoutRequest.getAddressId());
+        Address address = this.addressService.getAddressByIsDefault();
 //      // lấy thông tin mã giảm giá
         Coupon coupon;
         BigDecimal discountFee = BigDecimal.ZERO;

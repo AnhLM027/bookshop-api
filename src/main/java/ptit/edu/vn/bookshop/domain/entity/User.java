@@ -66,9 +66,6 @@ public class User implements Serializable {
     @Column(name = "updated_by", length = 100)
     private String updatedBy;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String refreshToken;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -84,10 +81,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Review> reviews;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<UserToken> userTokens;
 
     @OneToMany(mappedBy = "user",  fetch = FetchType.LAZY)
     @JsonIgnore

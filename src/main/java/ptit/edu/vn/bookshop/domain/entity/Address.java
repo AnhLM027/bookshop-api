@@ -38,12 +38,6 @@ public class Address {
     @Column(name = "city", length = 100)
     private String city;
 
-//    @Column(name = "province", length = 100)
-//    private String province;
-//
-//    @Column(name = "postal_code", length = 20)
-//    private String postalCode;
-
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusEnum status;

@@ -13,5 +13,5 @@ public interface AddressService {
     void deleteAddress(Long id) ;
     AddressResponseDTO getAddress(Long id);
     AddressPageResponseDTO getAllAddresses();
-    Address getAddressById(Long id);
+    Address getAddressByIsDefault();
 }
