@@ -50,6 +50,16 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponseDTO> getReviewsByBook(Long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
+        return reviewRepository.findByBookAndStatus(book, StatusEnum.ACTIVE)
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReviewResponseDTO> getAllReviewsByBookForAdmin(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
         return reviewRepository.findByBook(book)
                 .stream()
                 .map(this::toResponse)
@@ -62,13 +72,23 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new RuntimeException("Review not found"));
         review.setRating(request.getRating());
         review.setComment(request.getComment());
-        review = reviewRepository.save(review);
-        return toResponse(review);
+        Review updated = reviewRepository.save(review);
+        return toResponse(updated);
+    }
+
+    @Override
+    public void hardDeleteReview(Long id) {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+        reviewRepository.delete(review);
     }
 
     @Override
     public void deleteReview(Long id) {
-        reviewRepository.deleteById(id);
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+        review.setStatus(StatusEnum.DELETED);
+        reviewRepository.save(review);
     }
 
     private ReviewResponseDTO toResponse(Review review) {

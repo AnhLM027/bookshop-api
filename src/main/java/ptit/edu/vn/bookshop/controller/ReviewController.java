@@ -29,9 +29,16 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews/book/{bookId}")
-    @ApiMessage("Get all reviews by book ID")
+    @ApiMessage("Get active reviews by book ID")
     public ResponseEntity<List<ReviewResponseDTO>> getReviewsByBook(@PathVariable Long bookId) {
         List<ReviewResponseDTO> reviews = reviewService.getReviewsByBook(bookId);
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/admin/reviews/book/{bookId}")
+    @ApiMessage("Get all reviews by book ID (for admin)")
+    public ResponseEntity<List<ReviewResponseDTO>> getAllReviewsByBookForAdmin(@PathVariable Long bookId) {
+        List<ReviewResponseDTO> reviews = reviewService.getAllReviewsByBookForAdmin(bookId);
         return ResponseEntity.ok(reviews);
     }
 
@@ -44,8 +51,15 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/admin/reviews/{id}")
+    @ApiMessage("Hard delete review (admin only)")
+    public ResponseEntity<Void> hardDeleteReview(@PathVariable Long id) {
+        reviewService.hardDeleteReview(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/reviews/{id}")
-    @ApiMessage("Delete review")
+    @ApiMessage("Soft delete review (set status to DELETED)")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.noContent().build();
