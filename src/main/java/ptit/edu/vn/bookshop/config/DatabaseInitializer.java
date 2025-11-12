@@ -130,7 +130,14 @@ public class DatabaseInitializer implements CommandLineRunner {
             permissions.add(new Permission("create file",  "/api/v1/files", "POST", "FILES"));
             permissions.add(new Permission("upload single file to cloud", "/api/v1/cloudinary/upload",  "POST", "FILES"));
             permissions.add(new Permission("Upload multi file to cloud", "/api/v1/cloudinary/upload-multiple", " POST", "FILES"));
-
+            // review
+            permissions.add(new Permission("Create review", "/api/v1/reviews", "POST", "REVIEWS"));
+            permissions.add(new Permission("Get active reviews by book ID", "/api/v1/reviews/book/{bookId}", "GET", "REVIEWS"));
+            permissions.add(new Permission("Update review", "/api/v1/reviews/{id}", "PUT", "REVIEWS"));
+            permissions.add(new Permission("Soft delete review", "/api/v1/reviews/{id}", "DELETE", "REVIEWS"));
+            // review for ADMIN
+            permissions.add(new Permission("Get all reviews by book (admin)", "/api/v1/admin/reviews/book/{bookId}", "GET", "REVIEWS"));
+            permissions.add(new Permission("Hard delete review (admin)", "/api/v1/admin/reviews/{id}", "DELETE", "REVIEWS"));
 
             this.permissionRepository.saveAll(permissions);
         }
