@@ -38,8 +38,9 @@ public class SearchRepositoryImpl implements SearchRepository {
 
         Pattern pattern = Pattern.compile("(\\w+?)([:<>~!])(.*)(\\p{Punct}?)(.*)(\\p{Punct}?)");
         List<Predicate> relationPredicates = new ArrayList<>();
-
-        // Chỉ cần 1 trong category/author/publisher khác null
+        if (book != null && book.length > 0) {
+            relationPredicates.add(buildPredicates(builder, root, book, pattern));
+        }
         if (category != null && category.length > 0) {
             Join<Book, Category> categoryJoin = root.join("category");
             relationPredicates.add(buildPredicates(builder, categoryJoin, category, pattern));
@@ -80,6 +81,9 @@ public class SearchRepositoryImpl implements SearchRepository {
 
         Pattern pattern = Pattern.compile("(\\w+?)([:<>~!])(.*)(\\p{Punct}?)(.*)(\\p{Punct}?)");
         List<Predicate> relationPredicates = new ArrayList<>();
+        if (book != null && book.length > 0) {
+            relationPredicates.add(buildPredicates(builder, root, book, pattern));
+        }
 
         if (category != null && category.length > 0) {
             Join<Book, Category> categoryJoin = root.join("category");
@@ -132,6 +136,6 @@ public class SearchRepositoryImpl implements SearchRepository {
         }
         return predicates.isEmpty()
                 ? builder.conjunction()
-                : builder.or(predicates.toArray(new Predicate[0]));
+                : builder.and(predicates.toArray(new Predicate[0]));
     }
 }

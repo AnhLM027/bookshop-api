@@ -3,11 +3,10 @@ version: '3.8'
 services:
   db-mysql:
     image: mysql:8
-    container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bookshop
+      MYSQL_DATABASE: root
     ports:
       - "3307:3306"
     expose:
@@ -24,11 +23,10 @@ services:
 
   backend-spring:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-      - "5005:5005"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/bookshop
       SPRING_DATASOURCE_USERNAME: root
@@ -37,7 +35,6 @@ services:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
       upload-file.base-path: file:///uploads/
-      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     depends_on:
       - db-mysql
       - redis
