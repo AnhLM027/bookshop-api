@@ -21,7 +21,6 @@ public class Review {
     @Column(name = "comment", columnDefinition = "MEDIUMTEXT")
     private String comment;
 
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
