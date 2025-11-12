@@ -41,12 +41,6 @@ public class Order {
     @Column(name = "city", length = 100)
     private String city;
 
-    @Column(name = "province", length = 100)
-    private String province;
-
-    @Column(name = "postal_code", length = 20)
-    private String postalCode;
-
     @Column(name = "total_price", precision = 15, scale = 0,  nullable = false)
     private BigDecimal totalPrice;
 
