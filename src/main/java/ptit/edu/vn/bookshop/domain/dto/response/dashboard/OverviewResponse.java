@@ -17,7 +17,5 @@ public class OverviewResponse {
     private long totalBooks;
     private long outOfStockBooks;
     private long totalOrders;
-    private long shippingOrders;
-    private long deliveryOrders;
     private BigDecimal totalRevenue;
 }

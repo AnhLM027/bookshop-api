@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ptit.edu.vn.bookshop.domain.dto.request.BookRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.BookResponseDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.page.BookPageResponseDTO;
+import ptit.edu.vn.bookshop.domain.entity.Book;
 import ptit.edu.vn.bookshop.service.BookService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 
@@ -78,5 +79,17 @@ public class BookController {
     }
 
     // home api
-    
+    @GetMapping("/books/newest")
+    @ApiMessage("")
+    public ResponseEntity<BookPageResponseDTO> getNewestBooks(Pageable pageable) {
+        BookPageResponseDTO res = this.bookService.getNewestBooks(pageable);
+        return ResponseEntity.ok().body(res);
+    }
+
+    @GetMapping("books/discount")
+    @ApiMessage("")
+    public ResponseEntity<BookPageResponseDTO> getDiscountBooks(Pageable pageable) {
+        BookPageResponseDTO res = this.bookService.getDiscountBooks(pageable);
+        return ResponseEntity.ok().body(res);
+    }
 }

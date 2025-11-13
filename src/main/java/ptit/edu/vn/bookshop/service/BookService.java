@@ -11,4 +11,7 @@ public interface BookService {
     void deleteBook(Long id);
     BookResponseDTO getBook(Long id, boolean isAdmin);
     BookPageResponseDTO fetchAllBooks(Pageable pageable,String[] book, String[] category, String[] author, String[] publisher,boolean isAdmin);
+    BookPageResponseDTO getNewestBooks(Pageable pageable);
+    BookPageResponseDTO getDiscountBooks(Pageable pageable);
+
 }

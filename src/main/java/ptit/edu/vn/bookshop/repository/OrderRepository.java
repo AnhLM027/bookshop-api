@@ -9,26 +9,22 @@ import ptit.edu.vn.bookshop.domain.entity.Order;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> , JpaSpecificationExecutor<Order> {
 
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'SHIPPED'")
-   long countShippedOrders();
-
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'DELIVERED'")
-    long countDeliveredOrders();
-
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.status = 'DELIVERED'")
     BigDecimal getTotalPrice();
 
-    @Query("SELECT new ptit.edu.vn.bookshop.domain.dto.response.dashboard.RevenueByMonthResponse(" +
-            "FUNCTION('YEAR', o.orderDate), FUNCTION('MONTH', o.orderDate), SUM(o.totalPrice)) " +
+    @Query("SELECT YEAR(o.orderDate), MONTH(o.orderDate), SUM(o.totalPrice) " +
             "FROM Order o " +
-            "WHERE o.status = ptit.edu.vn.bookshop.domain.constant.OrderStatusEnum.DELIVERED " +
-            "GROUP BY FUNCTION('YEAR', o.orderDate), FUNCTION('MONTH', o.orderDate) " +
-            "ORDER BY FUNCTION('YEAR', o.orderDate), FUNCTION('MONTH', o.orderDate)")
-    List<RevenueByMonthResponse> getRevenueByMonth();
+            "GROUP BY  YEAR(o.orderDate), MONTH(o.orderDate)")
+    List<Object[]> getRevenueByMonth();
+
+
+    @Query("SELECT o.status, COUNT(o) FROM Order o GROUP BY o.status")
+    List<Object[]> getOrderStatusStatistic();
 
 
 

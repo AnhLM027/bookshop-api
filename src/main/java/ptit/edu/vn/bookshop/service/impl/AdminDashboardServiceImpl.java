@@ -1,6 +1,8 @@
 package ptit.edu.vn.bookshop.service.impl;
 
 import org.springframework.stereotype.Service;
+import ptit.edu.vn.bookshop.domain.constant.OrderStatusEnum;
+import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OrderStatusStatisticResponse;
 import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OverviewResponse;
 import ptit.edu.vn.bookshop.domain.dto.response.dashboard.RevenueByMonthResponse;
 import ptit.edu.vn.bookshop.repository.BookRepository;
@@ -32,8 +34,6 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
         long totalBooks = this.bookRepository.count();
         long outOfStockBooks = this.bookRepository.countBookOutOfStock();
         long totalOrders = this.orderRepository.count();
-        long shippingOrders = this.orderRepository.countShippedOrders();
-        long deliveredOrders = this.orderRepository.countDeliveredOrders();
         BigDecimal totalPrice = this.orderRepository.getTotalPrice();
         OverviewResponse overviewResponse = new OverviewResponse();
         overviewResponse.setTotalUsers(totalUsers);
@@ -41,15 +41,32 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
         overviewResponse.setTotalBooks(totalBooks);
         overviewResponse.setOutOfStockBooks(outOfStockBooks);
         overviewResponse.setTotalOrders(totalOrders);
-        overviewResponse.setShippingOrders(shippingOrders);
-        overviewResponse.setDeliveryOrders(deliveredOrders);
         overviewResponse.setTotalRevenue(totalPrice);
         return overviewResponse;
     }
 
     @Override
     public List<RevenueByMonthResponse> getRevenueByMonth() {
-        List<RevenueByMonthResponse> revenueByMonth = this.orderRepository.getRevenueByMonth();
+        List<Object[]> results = orderRepository.getRevenueByMonth();
+        List<RevenueByMonthResponse> revenueByMonth = new ArrayList<>();
+        for (Object[] row : results) {
+            int year = ((Number) row[0]).intValue();
+            int month = ((Number) row[1]).intValue();
+            BigDecimal totalRevenue = (BigDecimal) row[2];
+            revenueByMonth.add(new RevenueByMonthResponse(year, month, totalRevenue));
+        }
         return revenueByMonth;
+    }
+
+    @Override
+    public List<OrderStatusStatisticResponse> getOrderStatusStatistic() {
+        List<Object[]> results = this.orderRepository.getOrderStatusStatistic();
+        List<OrderStatusStatisticResponse> list = new ArrayList<>();
+        for (Object[] row : results) {
+            OrderStatusEnum orderStatus = (OrderStatusEnum) row[0];
+            Long count = ((Number) row[1]).longValue();
+            list.add(new OrderStatusStatisticResponse(orderStatus, count));
+        }
+        return list;
     }
 }

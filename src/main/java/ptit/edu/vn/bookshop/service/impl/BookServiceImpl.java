@@ -205,4 +205,28 @@ public class BookServiceImpl implements BookService {
         return bookPageResponseDTO;
     }
 
+    @Override
+    public BookPageResponseDTO getNewestBooks(Pageable pageable) {
+        Page<Book> bookPage = this.bookRepository.findNewBooks(pageable);
+        BookPageResponseDTO bookPageResponseDTO = new BookPageResponseDTO();
+        bookPageResponseDTO.setPage(pageable.getPageNumber() + 1);
+        bookPageResponseDTO.setPageSize(pageable.getPageSize());
+        bookPageResponseDTO.setPages(bookPage.getTotalPages());
+        bookPageResponseDTO.setTotal(bookPage.getTotalElements());
+        bookPageResponseDTO.setBooks(bookPage.stream().map(bookMapper::mapBookToBookResponseDto).collect(Collectors.toList()));
+        return bookPageResponseDTO;
+    }
+
+    @Override
+    public BookPageResponseDTO getDiscountBooks(Pageable pageable) {
+        Page<Book> bookPage = this.bookRepository.findBooksByHighestDiscount(pageable);
+        BookPageResponseDTO bookPageResponseDTO = new BookPageResponseDTO();
+        bookPageResponseDTO.setPage(pageable.getPageNumber() + 1);
+        bookPageResponseDTO.setPageSize(pageable.getPageSize());
+        bookPageResponseDTO.setPages(bookPage.getTotalPages());
+        bookPageResponseDTO.setTotal(bookPage.getTotalElements());
+        bookPageResponseDTO.setBooks(bookPage.stream().map(bookMapper::mapBookToBookResponseDto).collect(Collectors.toList()));
+        return bookPageResponseDTO;
+    }
+
 }

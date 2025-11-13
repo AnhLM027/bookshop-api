@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OrderStatusStatisticResponse;
 import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OverviewResponse;
 import ptit.edu.vn.bookshop.domain.dto.response.dashboard.RevenueByMonthResponse;
 import ptit.edu.vn.bookshop.service.AdminDashboardService;
@@ -28,10 +29,17 @@ public class DashboardController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/admin/dashboard/static/revenue-by-month")
+    @GetMapping("/admin/dashboard/statistics/revenue-by-month")
     @ApiMessage("")
     public ResponseEntity<List<RevenueByMonthResponse>> getRevenueByMonth() {
         List<RevenueByMonthResponse> revenueByMonthResponse = this.adminDashboardService.getRevenueByMonth();
         return ResponseEntity.ok().body(revenueByMonthResponse);
+    }
+
+    @GetMapping("/admin/dashboard/statistics/orders/status")
+    @ApiMessage("")
+    public ResponseEntity<List<OrderStatusStatisticResponse>>  getOrderStatusStatistic() {
+        List<OrderStatusStatisticResponse> response = this.adminDashboardService.getOrderStatusStatistic();
+        return ResponseEntity.ok().body(response);
     }
 }
