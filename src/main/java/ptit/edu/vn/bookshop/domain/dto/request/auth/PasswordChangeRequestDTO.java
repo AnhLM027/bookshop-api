@@ -25,7 +25,6 @@ public class PasswordChangeRequestDTO {
     @Size(min = 8, max = 64, message = "Confirm new password must be between 8 and 64 characters")
     private String confirmNewPassword;
 
-    // Custom validation for password confirmation
     @AssertTrue(message = "New password and confirm new password must match")
     public boolean isNewPasswordMatching() {
         if (newPassword == null || confirmNewPassword == null) {
@@ -34,7 +33,6 @@ public class PasswordChangeRequestDTO {
         return newPassword.equals(confirmNewPassword);
     }
 
-    // Security: Prevent using the same password as current
     @AssertFalse(message = "New password must be different from current password")
     public boolean isNewPasswordSameAsCurrent() {
         if (currentPassword == null || newPassword == null) {
@@ -43,7 +41,6 @@ public class PasswordChangeRequestDTO {
         return currentPassword.equals(newPassword);
     }
 
-    // Security: Prevent common passwords
     @AssertFalse(message = "New password is too common or weak")
     public boolean isNewPasswordCommon() {
         if (newPassword == null) return false;

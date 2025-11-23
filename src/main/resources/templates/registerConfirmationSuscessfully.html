@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký thành công</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff7ed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 40px 50px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+        }
+        .icon {
+            width: 90px;
+            height: 90px;
+            background: #ffedd5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+        }
+        .icon svg {
+            width: 48px;
+            height: 48px;
+            stroke: #f97316;
+            stroke-width: 2.5;
+            fill: none;
+        }
+        h2 {
+            color: #b45309;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #5f5f5f;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #f97316;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+        a:hover {
+            background: #ea580c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <!-- Orange Check Icon -->
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M8 12.5l2.2 2.2L16 9"></path>
+            </svg>
+        </div>
+
+        <h2>Đăng ký thành công!</h2>
+        <p>Tài khoản của bạn đã được tạo thành công.<br>Hãy quay lại Bookshop để hoàn tất quá trình đăng nhập.</p>
+
+        <a th:href="@{/login}">Quay về Bookshop</a>
+    </div>
+</body>
+</html>

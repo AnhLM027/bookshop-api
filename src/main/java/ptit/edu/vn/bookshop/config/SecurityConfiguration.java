@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfigutation {
+public class SecurityConfiguration{
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -71,9 +71,13 @@ public class SecurityConfigutation {
                         .requestMatchers(whiteList).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/books").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/coupons").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/v1/reviews").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/authors").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/publishers").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable()) // tắt form login mặc định
+                .formLogin(form -> form.disable())
                 .exceptionHandling(
                         exceptions -> exceptions
                                 .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())

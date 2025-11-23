@@ -2,7 +2,6 @@ package ptit.edu.vn.bookshop.service.impl;
 
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.bookshop.domain.dto.request.CheckoutRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.OrderCreateRequestDTO;
 import ptit.edu.vn.bookshop.domain.dto.response.CheckoutResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.*;
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;

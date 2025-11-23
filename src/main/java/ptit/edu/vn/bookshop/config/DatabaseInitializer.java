@@ -94,7 +94,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             permissions.add(new Permission("Delete a address", "/api/v1/addresses/{id}", "DELETE", "ADDRESSES"));
             permissions.add(new Permission("Get a address", "/api/v1/addresses/{id}", "GET", "ADDRESSES"));
             permissions.add(new Permission("Get all addresses", "/api/v1/addresses", "GET", "ADDRESSES"));
-            // cart
+             //cart
             permissions.add(new Permission("Create a cart", "/api/v1/items/carts", "POST", "CARTS"));
             permissions.add(new Permission("Update a cart", "/api/v1/carts/items/{id}", "PUT", "CARTS"));
             permissions.add(new Permission("Delete a cart", "/api/v1/carts/items/{id}", "DELETE", "CARTS"));
@@ -155,7 +155,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             adminUser.setEmail("admin@gmail.com");
             adminUser.setName("admin");
             adminUser.setPhone("0987654321");
-            adminUser.setPassword(this.passwordEncoder.encode("12345678"));
+            adminUser.setPassword(this.passwordEncoder.encode("123456"));
             Role adminRole = this.roleRepository.findByName("ADMIN")
                     .orElseThrow(() -> new IllegalStateException("role not found"));
             if(adminUser != null){

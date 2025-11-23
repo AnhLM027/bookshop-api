@@ -87,7 +87,7 @@ public class RegisterServiceImpl implements RegisterService {
         // TTL 10 minutes
         this.redisTokenService.storeVerificationToken(token, user.getId().toString(), 600L);
 
-        String verifyUrl = "http://localhost:8080/api/v1/auth/verify?token=" + token;
+        String verifyUrl = "http://www.ptit.dpdns.org:8080/api/v1/auth/verify?token=" + token;
         Map<String, Object> variables = new HashMap<>();
         variables.put("confirmationLink", verifyUrl);
         this.emailService.sendEmailFromTemplateSync(

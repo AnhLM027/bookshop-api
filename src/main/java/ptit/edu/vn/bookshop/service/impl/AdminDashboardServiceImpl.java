@@ -47,7 +47,7 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
 
     @Override
     public List<RevenueByMonthResponse> getRevenueByMonth() {
-        List<Object[]> results = orderRepository.getRevenueByMonth();
+        List<Object[]> results = this.orderRepository.getRevenueByMonth();
         List<RevenueByMonthResponse> revenueByMonth = new ArrayList<>();
         for (Object[] row : results) {
             int year = ((Number) row[0]).intValue();

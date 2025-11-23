@@ -17,9 +17,9 @@ public interface OrderRepository extends JpaRepository<Order,Long> , JpaSpecific
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.status = 'DELIVERED'")
     BigDecimal getTotalPrice();
 
-    @Query("SELECT YEAR(o.orderDate), MONTH(o.orderDate), SUM(o.totalPrice) " +
+    @Query("SELECT YEAR(o.orderReceivedDate), MONTH(o.orderReceivedDate), SUM(o.totalPrice) " +
             "FROM Order o " +
-            "GROUP BY  YEAR(o.orderDate), MONTH(o.orderDate)")
+            "GROUP BY  YEAR(o.orderReceivedDate), MONTH(o.orderReceivedDate)")
     List<Object[]> getRevenueByMonth();
 
 

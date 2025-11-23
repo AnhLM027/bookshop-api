@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         order.setWard(address.getWard());
         order.setStreet(address.getStreet());
 
-        order.setOrderDate(Instant.now());
+        order.setOrderReceivedDate(null);
         order.setPaymentMethod("COD");
         order.setNotes(orderRequestDTO.getNote());
 
@@ -257,6 +257,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO updateOrderStatus(UpdateStatusRequestDTO updateStatusRequestDTO, Long id) {
         Order order = this.orderRepository.findById(id).orElseThrow(() -> new IdInvalidException("Order not found"));
         order.setStatus(updateStatusRequestDTO.getStatus());
+        if(updateStatusRequestDTO.getStatus() == OrderStatusEnum.DELIVERED) {
+            order.setOrderReceivedDate(Instant.now());
+        }
         return this.orderMapper.toOrderResponseDTO(this.orderRepository.save(order));
     }
 }

@@ -11,6 +11,7 @@ import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +61,8 @@ public class Order {
     @Column(name = "status", nullable = false, length = 30)
     private OrderStatusEnum status;
 
-    @Column(name = "order_date", nullable = false)
-    private Instant orderDate;
+    @Column(name = "order_received_date")
+    private Instant orderReceivedDate;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

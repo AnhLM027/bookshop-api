@@ -26,6 +26,8 @@ public class PermissionIntercepter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         String httpMethod = request.getMethod();
+        System.out.println(">>>>>>>>>>>>" + path);
+        System.out.println( ">>>>>>>>>>>>>>" + httpMethod);
         // check permission
         String email = SecurityUtil.getCurrentUserLogin().isPresent() ? SecurityUtil.getCurrentUserLogin().get() : "";
         if (email != null && !email.isEmpty()) {
