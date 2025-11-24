@@ -1,5 +1,7 @@
 package ptit.edu.vn.bookshop.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +16,8 @@ import java.util.Objects;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> , JpaSpecificationExecutor<Order> {
 
+    Page<Order> findByUserId(Long userId, Pageable pageable);
+
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.status = 'DELIVERED'")
     BigDecimal getTotalPrice();
 
@@ -25,10 +29,5 @@ public interface OrderRepository extends JpaRepository<Order,Long> , JpaSpecific
 
     @Query("SELECT o.status, COUNT(o) FROM Order o GROUP BY o.status")
     List<Object[]> getOrderStatusStatistic();
-
-
-
-
-
 
 }

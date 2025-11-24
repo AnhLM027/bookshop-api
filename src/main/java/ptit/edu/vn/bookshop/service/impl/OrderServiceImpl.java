@@ -178,8 +178,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO updateOrder(OrderUpdateRequestDTO orderRequestDTO, Long id) {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = userService.getUserByUsername(email);
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        if (!order.getUser().getId().equals(currentUser.getId())) {
+            throw new IdInvalidException("Access denied");
+        }
         if (orderRequestDTO.getReceiverName() != null && !orderRequestDTO.getReceiverName().isEmpty()) {
             order.setReceiverName(orderRequestDTO.getReceiverName());
         }
@@ -208,8 +214,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long id) {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = userService.getUserByUsername(email);
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        if(!order.getUser().getId().equals(currentUser.getId())) {
+            throw new IdInvalidException("Access denied");
+        }
         if (order.getStatus() == OrderStatusEnum.PENDING) {
             order.setStatus(OrderStatusEnum.CANCELLED);
             this.orderRepository.save(order);
@@ -218,32 +230,30 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO getOrder(Long id) {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = userService.getUserByUsername(email);
         Order order = this.orderRepository.findById(id)
                 .orElseThrow(() -> new IdInvalidException("Order not found"));
+        if (!order.getUser().getId().equals(currentUser.getId())) {
+            throw new IdInvalidException("Access denied");
+        }
         return this.orderMapper.toOrderResponseDTO(order);
     }
 
     @Override
     public OrderPageResponseDTO getAllOrders(Pageable pageable, String[] orders) {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = userService.getUserByUsername(email);
         Page<Order> orderPage;
-        if (orders != null && orders.length > 0) {
-            OrderSpecificationBuilder builder = new OrderSpecificationBuilder();
-            for (String order : orders) {
-                Pattern pattern = Pattern.compile("(\\w+?)([:<>~!])(.*)(\\p{Punct}?)(.*)(\\p{Punct}?)");
-                Matcher matcher = pattern.matcher(order);
-                if (matcher.find()) {
-                    builder.with(
-                            matcher.group(1),
-                            matcher.group(2),
-                            matcher.group(3),
-                            matcher.group(4),
-                            matcher.group(5));
-                }
-            }
-            orderPage = this.orderRepository.findAll(builder.build(), pageable);
+        boolean isAdmin = currentUser.getRole().equals("ADMIN");
+        if (isAdmin) {
+            orderPage = getOrderPageByFilter(pageable, orders);
         } else {
-            orderPage = this.orderRepository.findAll(pageable);
+            orderPage = getOrderPageByUserAndFilter(currentUser.getId(), pageable, orders);
         }
+
         OrderPageResponseDTO orderPageResponseDTO = new OrderPageResponseDTO();
         orderPageResponseDTO.setPage(orderPage.getNumber() + 1);
         orderPageResponseDTO.setTotal(orderPage.getTotalElements());
@@ -253,9 +263,64 @@ public class OrderServiceImpl implements OrderService {
         return orderPageResponseDTO;
     }
 
+    private Page<Order> getOrderPageByFilter(Pageable pageable, String[] orders) {
+        if (orders != null && orders.length > 0) {
+            OrderSpecificationBuilder builder = new OrderSpecificationBuilder();
+            for (String order : orders) {
+                Matcher matcher = Pattern.compile("(\\w+?)([:<>~!])(.*)(\\p{Punct}?)(.*)(\\p{Punct}?)")
+                        .matcher(order);
+                if (matcher.find()) {
+                    builder.with(
+                            matcher.group(1),
+                            matcher.group(2),
+                            matcher.group(3),
+                            matcher.group(4),
+                            matcher.group(5)
+                    );
+                }
+            }
+            return this.orderRepository.findAll(builder.build(), pageable);
+        } else {
+            return this.orderRepository.findAll(pageable);
+        }
+    }
+
+    private Page<Order> getOrderPageByUserAndFilter(Long userId, Pageable pageable, String[] orders) {
+        if (orders != null && orders.length > 0) {
+            OrderSpecificationBuilder builder = new OrderSpecificationBuilder();
+            for (String order : orders) {
+                Matcher matcher = Pattern.compile("(\\w+?)([:<>~!])(.*)(\\p{Punct}?)(.*)(\\p{Punct}?)")
+                        .matcher(order);
+                if (matcher.find()) {
+                    builder.with(
+                            matcher.group(1),
+                            matcher.group(2),
+                            matcher.group(3),
+                            matcher.group(4),
+                            matcher.group(5)
+                    );
+                }
+            }
+            builder.with("user.id", ":", userId.toString(), "", "");
+            return this.orderRepository.findAll(builder.build(), pageable);
+        } else {
+            return this.orderRepository.findByUserId(userId, pageable);
+        }
+    }
+
+
     @Override
     public OrderResponseDTO updateOrderStatus(UpdateStatusRequestDTO updateStatusRequestDTO, Long id) {
+        String email = SecurityUtil.getCurrentUserLogin()
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = userService.getUserByUsername(email);
+
+        if (!currentUser.getRole().equals("ADMIN") && !currentUser.getRole().equals("MANAGER")) {
+            throw new IdInvalidException("Access denied");
+        }
+
         Order order = this.orderRepository.findById(id).orElseThrow(() -> new IdInvalidException("Order not found"));
+
         order.setStatus(updateStatusRequestDTO.getStatus());
         if(updateStatusRequestDTO.getStatus() == OrderStatusEnum.DELIVERED) {
             order.setOrderReceivedDate(Instant.now());

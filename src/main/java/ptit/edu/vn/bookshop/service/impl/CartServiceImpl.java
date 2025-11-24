@@ -142,6 +142,13 @@ public class CartServiceImpl implements CartService {
         Cart cart = this.cartRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
 
+        CartItem cartItem = this.cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+
+        if (!cartItem.getCart().getId().equals(cart.getId())) {
+            throw new IllegalArgumentException("Access denied");
+        }
+
         int deleted = this.cartItemRepository.deleteByIdAndCartId(cartItemId, cart.getId());
         if (deleted == 0) {
             throw new IllegalArgumentException("Cart item not found");
@@ -165,6 +172,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart getCartByUser(Long id) {
+        String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User currentUser = this.userService.getUserByUsername(email);
+        if (!currentUser.getId().equals(id)) {
+            throw new IdInvalidException("Access denied");
+        }
        Cart cart = this.cartRepository.findByUserId(id).orElseThrow(() -> new IdInvalidException("Cart not found"));
        return cart;
     }
