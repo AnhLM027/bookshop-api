@@ -1,15 +1,12 @@
 package ptit.edu.vn.bookshop.domain.entity;
 
-import jakarta.validation.constraints.NotBlank;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import ptit.edu.vn.bookshop.domain.constant.GenderEnum;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.Instant;

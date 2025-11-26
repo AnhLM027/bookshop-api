@@ -1,9 +1,9 @@
 package ptit.edu.vn.bookshop.service;
 
 import org.springframework.data.domain.Pageable;
-import ptit.edu.vn.bookshop.domain.dto.request.BookRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.BookResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.BookPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.BookRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.BookResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.BookPageResponseDTO;
 
 public interface BookService {
     BookResponseDTO createBook(BookRequestDTO bookRequestDTO);

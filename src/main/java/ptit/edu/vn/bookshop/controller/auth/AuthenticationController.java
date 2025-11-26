@@ -2,13 +2,11 @@ package ptit.edu.vn.bookshop.controller.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.*;
-import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
-import ptit.edu.vn.bookshop.domain.entity.RedisToken;
+import ptit.edu.vn.bookshop.dto.request.auth.*;
+import ptit.edu.vn.bookshop.dto.response.LoginResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.UserResponseDTO;
 import ptit.edu.vn.bookshop.exception.BadCredentialsException;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
-import ptit.edu.vn.bookshop.repository.RedisTokenRepository;
 import ptit.edu.vn.bookshop.service.RedisTokenService;
 import ptit.edu.vn.bookshop.service.RegisterService;
 import ptit.edu.vn.bookshop.service.ResetPasswordService;
@@ -17,8 +15,6 @@ import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,8 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/auth")

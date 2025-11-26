@@ -5,8 +5,8 @@ import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.AddCartItemRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.CartResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.AddCartItemRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.CartResponseDTO;
 import ptit.edu.vn.bookshop.service.CartService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.ReviewRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.ReviewResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.ReviewRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.ReviewResponseDTO;
 import ptit.edu.vn.bookshop.service.ReviewService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

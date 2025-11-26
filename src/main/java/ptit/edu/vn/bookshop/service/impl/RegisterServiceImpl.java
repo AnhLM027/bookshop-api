@@ -4,7 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.RegisterRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.auth.RegisterRequestDTO;
 import ptit.edu.vn.bookshop.domain.entity.Role;
 import ptit.edu.vn.bookshop.domain.entity.User;
 import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
@@ -13,7 +13,7 @@ import ptit.edu.vn.bookshop.repository.UserRepository;
 import ptit.edu.vn.bookshop.service.EmailService;
 import ptit.edu.vn.bookshop.service.RedisTokenService;
 import ptit.edu.vn.bookshop.service.RegisterService;
-import ptit.edu.vn.bookshop.domain.dto.mapper.UserMapper;
+import ptit.edu.vn.bookshop.mapper.UserMapper;
 
 import java.util.HashMap;
 import java.util.Map;

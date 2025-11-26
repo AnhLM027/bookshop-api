@@ -5,14 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.CouponCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.CouponUpdateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.CouponResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.CouponPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.CouponCreateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.CouponUpdateRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.CouponResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.CouponPageResponseDTO;
 import ptit.edu.vn.bookshop.service.CouponService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")

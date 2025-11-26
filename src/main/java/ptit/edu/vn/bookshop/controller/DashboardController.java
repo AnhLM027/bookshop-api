@@ -4,9 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OrderStatusStatisticResponse;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OverviewResponse;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.RevenueByMonthResponse;
+import ptit.edu.vn.bookshop.dto.response.dashboard.OrderStatusStatisticResponse;
+import ptit.edu.vn.bookshop.dto.response.dashboard.OverviewResponse;
+import ptit.edu.vn.bookshop.dto.response.dashboard.RevenueByMonthResponse;
 import ptit.edu.vn.bookshop.service.AdminDashboardService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

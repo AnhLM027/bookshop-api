@@ -2,9 +2,9 @@ package ptit.edu.vn.bookshop.service.impl;
 
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.bookshop.domain.constant.OrderStatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OrderStatusStatisticResponse;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.OverviewResponse;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.RevenueByMonthResponse;
+import ptit.edu.vn.bookshop.dto.response.dashboard.OrderStatusStatisticResponse;
+import ptit.edu.vn.bookshop.dto.response.dashboard.OverviewResponse;
+import ptit.edu.vn.bookshop.dto.response.dashboard.RevenueByMonthResponse;
 import ptit.edu.vn.bookshop.repository.BookRepository;
 import ptit.edu.vn.bookshop.repository.OrderRepository;
 import ptit.edu.vn.bookshop.repository.UserRepository;

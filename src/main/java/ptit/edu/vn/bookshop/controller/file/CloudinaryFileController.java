@@ -3,7 +3,7 @@ package ptit.edu.vn.bookshop.controller.file;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.FileResponseDTO;
 import ptit.edu.vn.bookshop.exception.StorageException;
 import ptit.edu.vn.bookshop.service.CloudinaryService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;

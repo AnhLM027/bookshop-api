@@ -1,6 +1,6 @@
 package ptit.edu.vn.bookshop.util.security;
 
-import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.LoginResponseDTO;
 import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;

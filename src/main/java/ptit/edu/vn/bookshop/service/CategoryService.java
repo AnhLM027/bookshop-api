@@ -1,9 +1,9 @@
 package ptit.edu.vn.bookshop.service;
 
 import org.springframework.data.domain.Pageable;
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.CategoryResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.CategoryPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.CategoryRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.CategoryResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.CategoryPageResponseDTO;
 
 public interface CategoryService {
     CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO);

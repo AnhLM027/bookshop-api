@@ -3,8 +3,8 @@ package ptit.edu.vn.bookshop.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.CheckoutRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.CheckoutResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.CheckoutRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.CheckoutResponseDTO;
 import ptit.edu.vn.bookshop.service.CheckoutService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

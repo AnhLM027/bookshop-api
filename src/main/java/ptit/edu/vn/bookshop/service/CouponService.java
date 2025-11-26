@@ -2,10 +2,10 @@ package ptit.edu.vn.bookshop.service;
 
 
 import org.springframework.data.domain.Pageable;
-import ptit.edu.vn.bookshop.domain.dto.request.CouponCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.CouponUpdateRequestDTO;;
-import ptit.edu.vn.bookshop.domain.dto.response.CouponResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.CouponPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.CouponCreateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.CouponUpdateRequestDTO;;
+import ptit.edu.vn.bookshop.dto.response.CouponResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.CouponPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Coupon;
 
 

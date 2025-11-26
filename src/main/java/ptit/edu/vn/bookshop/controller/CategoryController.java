@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.CategoryRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.CategoryResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.CategoryPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.CategoryRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.CategoryResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.CategoryPageResponseDTO;
 import ptit.edu.vn.bookshop.service.CategoryService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

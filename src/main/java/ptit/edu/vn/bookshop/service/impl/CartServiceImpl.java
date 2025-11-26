@@ -3,8 +3,8 @@ package ptit.edu.vn.bookshop.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.edu.vn.bookshop.domain.constant.BookStatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.AddCartItemRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.CartResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.AddCartItemRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.CartResponseDTO;
 
 import ptit.edu.vn.bookshop.domain.entity.Book;
 import ptit.edu.vn.bookshop.domain.entity.Cart;
@@ -15,7 +15,7 @@ import ptit.edu.vn.bookshop.exception.UsernameNotFoundException;
 import ptit.edu.vn.bookshop.repository.*;
 import ptit.edu.vn.bookshop.service.CartService;
 import ptit.edu.vn.bookshop.service.UserService;
-import ptit.edu.vn.bookshop.domain.dto.mapper.CartMapper;
+import ptit.edu.vn.bookshop.mapper.CartMapper;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 
 import java.util.ArrayList;

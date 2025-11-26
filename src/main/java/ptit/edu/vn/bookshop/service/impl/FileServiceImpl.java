@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.service.impl;
 
 import net.coobird.thumbnailator.Thumbnails;
-import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.FileResponseDTO;
 import ptit.edu.vn.bookshop.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,5 @@
 package ptit.edu.vn.bookshop.domain.entity;
 
-import jakarta.validation.constraints.NotBlank;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
 import ptit.edu.vn.bookshop.util.security.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;

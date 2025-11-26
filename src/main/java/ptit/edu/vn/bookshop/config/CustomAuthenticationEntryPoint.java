@@ -1,6 +1,6 @@
 package ptit.edu.vn.bookshop.config;
 
-import ptit.edu.vn.bookshop.domain.dto.response.ApiResponse;
+import ptit.edu.vn.bookshop.dto.response.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json;charset=UTF-8");
         ApiResponse<Object> res = new ApiResponse<>();
         res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
-        res.setError(authException.getCause().getMessage());
+        res.setError(
+                authException.getCause() != null
+                        ? authException.getCause().getMessage()
+                        : authException.getMessage()
+        );
         res.setMessage("Token khong hop le...........");
         mapper.writeValue(response.getWriter(), res);
     }

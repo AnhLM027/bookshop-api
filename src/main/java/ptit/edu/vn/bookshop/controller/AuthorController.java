@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.AuthorResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.AuthorPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.AuthorRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.AuthorResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.AuthorPageResponseDTO;
 import ptit.edu.vn.bookshop.service.AuthorService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

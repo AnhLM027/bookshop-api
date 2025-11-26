@@ -5,14 +5,14 @@ import jakarta.persistence.criteria.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import ptit.edu.vn.bookshop.domain.dto.response.page.BookPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.BookPageResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.Author;
 import ptit.edu.vn.bookshop.domain.entity.Book;
 import ptit.edu.vn.bookshop.domain.entity.Category;
 import ptit.edu.vn.bookshop.domain.entity.Publisher;
 import ptit.edu.vn.bookshop.repository.SearchRepository;
 import ptit.edu.vn.bookshop.repository.specification.*;
-import ptit.edu.vn.bookshop.domain.dto.mapper.BookMapper;
+import ptit.edu.vn.bookshop.mapper.BookMapper;
 
 import java.util.ArrayList;
 import java.util.List;

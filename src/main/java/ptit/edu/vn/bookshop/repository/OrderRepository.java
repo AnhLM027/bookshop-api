@@ -6,12 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ptit.edu.vn.bookshop.domain.dto.response.dashboard.RevenueByMonthResponse;
 import ptit.edu.vn.bookshop.domain.entity.Order;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> , JpaSpecificationExecutor<Order> {

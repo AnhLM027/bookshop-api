@@ -1,11 +1,11 @@
 package ptit.edu.vn.bookshop.service;
 
-import ptit.edu.vn.bookshop.domain.dto.request.UserUpdateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.PasswordChangeRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UserCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.LoginResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.UserPageResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.UserResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.UserUpdateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.auth.PasswordChangeRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.UserCreateRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.LoginResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.UserPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.UserResponseDTO;
 import ptit.edu.vn.bookshop.domain.entity.User;
 import org.springframework.data.domain.Pageable;
 

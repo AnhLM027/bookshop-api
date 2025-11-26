@@ -1,11 +1,11 @@
 package ptit.edu.vn.bookshop.service;
 
 import org.springframework.data.domain.Pageable;
-import ptit.edu.vn.bookshop.domain.dto.request.OrderCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.OrderUpdateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.UpdateStatusRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.OrderResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.OrderPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.OrderCreateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.OrderUpdateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.UpdateStatusRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.OrderResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.OrderPageResponseDTO;
 
 public interface OrderService {
     OrderResponseDTO createOrder(OrderCreateRequestDTO orderRequestDTO);

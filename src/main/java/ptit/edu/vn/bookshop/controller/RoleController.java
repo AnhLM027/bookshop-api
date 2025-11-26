@@ -5,10 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.edu.vn.bookshop.domain.dto.request.RoleCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.RoleUpdateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.RoleResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.RolePageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.RoleCreateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.RoleUpdateRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.RoleResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.RolePageResponseDTO;
 import ptit.edu.vn.bookshop.service.RoleService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 

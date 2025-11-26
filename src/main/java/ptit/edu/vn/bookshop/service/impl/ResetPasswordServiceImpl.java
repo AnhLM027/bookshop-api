@@ -4,7 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.edu.vn.bookshop.domain.constant.StatusEnum;
-import ptit.edu.vn.bookshop.domain.dto.request.auth.ForgotPasswordRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.auth.ForgotPasswordRequestDTO;
 import ptit.edu.vn.bookshop.domain.entity.User;
 import ptit.edu.vn.bookshop.exception.IdInvalidException;
 import ptit.edu.vn.bookshop.repository.UserRepository;

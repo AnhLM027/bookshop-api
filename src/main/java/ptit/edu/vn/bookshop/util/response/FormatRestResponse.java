@@ -1,6 +1,6 @@
 package ptit.edu.vn.bookshop.util.response;
 
-import ptit.edu.vn.bookshop.domain.dto.response.ApiResponse;
+import ptit.edu.vn.bookshop.dto.response.ApiResponse;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.MethodParameter;

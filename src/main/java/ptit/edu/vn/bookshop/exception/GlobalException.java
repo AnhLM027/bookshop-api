@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.exception;
 
 
-import ptit.edu.vn.bookshop.domain.dto.response.ApiResponse;
+import ptit.edu.vn.bookshop.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

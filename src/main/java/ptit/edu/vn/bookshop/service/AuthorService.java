@@ -1,9 +1,9 @@
 package ptit.edu.vn.bookshop.service;
 
 import org.springframework.data.domain.Pageable;
-import ptit.edu.vn.bookshop.domain.dto.request.AuthorRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.AuthorResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.AuthorPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.AuthorRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.AuthorResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.page.AuthorPageResponseDTO;
 
 public interface AuthorService {
     AuthorResponseDTO createAuthor(AuthorRequestDTO authorRequestDTO);

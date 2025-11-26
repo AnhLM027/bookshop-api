@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.FileResponseDTO;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

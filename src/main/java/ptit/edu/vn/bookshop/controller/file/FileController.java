@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ptit.edu.vn.bookshop.domain.dto.response.FileResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.FileResponseDTO;
 import ptit.edu.vn.bookshop.exception.StorageException;
 import ptit.edu.vn.bookshop.service.FileService;
 import ptit.edu.vn.bookshop.util.anotation.ApiMessage;

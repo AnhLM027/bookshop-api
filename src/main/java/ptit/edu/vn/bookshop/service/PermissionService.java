@@ -1,10 +1,10 @@
 package ptit.edu.vn.bookshop.service;
 
 import org.springframework.data.domain.Pageable;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionCreateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.request.PermissionUpdateRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.page.PermissionPageResponseDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.PermissionResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.PermissionCreateRequestDTO;
+import ptit.edu.vn.bookshop.dto.request.PermissionUpdateRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.page.PermissionPageResponseDTO;
+import ptit.edu.vn.bookshop.dto.response.PermissionResponseDTO;
 
 
 

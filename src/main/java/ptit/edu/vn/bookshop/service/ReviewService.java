@@ -1,7 +1,7 @@
 package ptit.edu.vn.bookshop.service;
 
-import ptit.edu.vn.bookshop.domain.dto.request.ReviewRequestDTO;
-import ptit.edu.vn.bookshop.domain.dto.response.ReviewResponseDTO;
+import ptit.edu.vn.bookshop.dto.request.ReviewRequestDTO;
+import ptit.edu.vn.bookshop.dto.response.ReviewResponseDTO;
 
 import java.util.List;
 
